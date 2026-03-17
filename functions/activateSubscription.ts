@@ -24,9 +24,14 @@ Deno.serve(async (req) => {
       if (subs.length > 0) {
         const now = new Date();
         const paidUntil = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000); // +30 días
+        const paymentData = data?.data?.payment_source || {};
+        
         await base44.asServiceRole.entities.Subscription.update(subs[0].id, {
           is_active: true,
           paid_until: paidUntil.toISOString(),
+          payment_token: paymentData.id || null,
+          auto_renew: true,
+          last_renewal_date: now.toISOString(),
         });
       }
       return Response.json({ success: true, status: 'APPROVED' });
