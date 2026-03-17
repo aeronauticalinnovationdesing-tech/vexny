@@ -19,16 +19,16 @@ Deno.serve(async (req) => {
 
     // 1. Invite the user to the app (gives them access)
     try {
-      await base44.asServiceRole.users.inviteUser(email, "user");
+      await base44.users.inviteUser(email, "user");
       results.invited = true;
     } catch (err) {
       // User might already exist — not a hard error
       results.errors.push(`invite: ${err.message}`);
     }
 
-    // 2. Send invitation email
+    // 2. Send invitation email (using user-scoped integrations)
     try {
-      await base44.asServiceRole.integrations.Core.SendEmail({
+      await base44.integrations.Core.SendEmail({
         to: email,
         subject: `🗡️ Has sido invitado al proyecto "${projectName}" en VEXNY`,
         body: `
