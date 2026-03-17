@@ -106,8 +106,8 @@ export default function TraderTrades() {
           <h1 className="text-2xl font-bold tracking-tight">Bitácora de Trades</h1>
         </div>
         <div className="flex gap-2 flex-wrap">
-          <ReportExporter transactions={transactions} trades={filtered} />
-          <Button onClick={() => setShowForm(true)} className="gap-2 bg-emerald-600 hover:bg-emerald-700">
+           <ReportExporter transactions={trades} trades={filtered} />
+           <Button onClick={() => setShowForm(true)} className="gap-2 bg-emerald-600 hover:bg-emerald-700">
             <Plus className="w-4 h-4" /> Registrar Trade
           </Button>
         </div>
