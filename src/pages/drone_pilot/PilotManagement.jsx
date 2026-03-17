@@ -16,11 +16,14 @@ export default function PilotManagement() {
   const [editingPilot, setEditingPilot] = useState(null);
   const [form, setForm] = useState({
     full_name: "",
+    cipu: "",
     license_number: "",
     license_category: "operador_remoto",
+    rac_100_phase: "solicitud",
     rac_100_expiry_date: "",
     email: "",
     phone: "",
+    sms_manager: "",
     role: "piloto",
     status: "activo",
   });
