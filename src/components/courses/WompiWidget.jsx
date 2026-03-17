@@ -9,28 +9,50 @@ export default function WompiWidget({
   redirectUrl
 }) {
   const containerRef = useRef(null);
+  const initAttempted = useRef(false);
 
   useEffect(() => {
-    if (!containerRef.current || !signature) return;
+    if (!containerRef.current || !signature || initAttempted.current) return;
+    
+    initAttempted.current = true;
 
-    // Cargar script de Wompi
+    const initWidget = () => {
+      if (!window.WidgetCheckout) {
+        // Reintentar en 100ms si aún no está listo
+        setTimeout(initWidget, 100);
+        return;
+      }
+
+      try {
+        console.log('Initializing Wompi Widget with:', {
+          publicKey,
+          reference,
+          amountInCents,
+          signature,
+          customerEmail
+        });
+
+        new window.WidgetCheckout({
+          currency: 'COP',
+          amountInCents: String(amountInCents),
+          reference: String(reference),
+          publicKey: String(publicKey),
+          customerEmail: String(customerEmail),
+          redirectUrl: String(redirectUrl),
+          signature: String(signature)
+        });
+      } catch (error) {
+        console.error('Widget initialization error:', error);
+      }
+    };
+
+    // Crear el script de Wompi
     const script = document.createElement('script');
     script.src = 'https://checkout.wompi.co/widget.js';
     script.async = true;
-
-    // Cuando el script esté listo, inicializar el widget
-    script.onload = () => {
-      if (window.WidgetCheckout) {
-        new window.WidgetCheckout({
-          currency: 'COP',
-          amountInCents,
-          reference,
-          publicKey,
-          customerEmail,
-          redirectUrl,
-          signature
-        });
-      }
+    script.onload = initWidget;
+    script.onerror = () => {
+      console.error('Failed to load Wompi widget script');
     };
 
     containerRef.current.appendChild(script);
