@@ -97,17 +97,65 @@ export default function Profile() {
           <h1 className="text-2xl font-bold">Mi Perfil</h1>
         </div>
         
-        <Card className="p-6 space-y-4">
-          <div>
-            <p className="text-sm text-muted-foreground">Nombre</p>
-            <p className="text-lg font-semibold">{user?.full_name || "Usuario"}</p>
+        <Card className="p-6 space-y-5">
+          <div className="flex items-start justify-between">
+            <div className="flex-1">
+              <p className="text-sm text-muted-foreground mb-1">Nombre</p>
+              {editing ? (
+                <Input
+                  value={editName}
+                  onChange={(e) => setEditName(e.target.value)}
+                  className="text-lg font-semibold"
+                  placeholder="Tu nombre"
+                />
+              ) : (
+                <p className="text-lg font-semibold">{user?.full_name || "Usuario"}</p>
+              )}
+            </div>
+            {editing ? (
+              <div className="flex gap-2 ml-3">
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  onClick={handleSaveName}
+                  className="text-emerald-600 hover:bg-emerald-500/10"
+                  title="Guardar"
+                >
+                  <Check className="w-4 h-4" />
+                </Button>
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  onClick={() => {
+                    setEditing(false);
+                    setEditName(user?.full_name || "");
+                  }}
+                  className="text-muted-foreground hover:bg-muted"
+                  title="Cancelar"
+                >
+                  <X className="w-4 h-4" />
+                </Button>
+              </div>
+            ) : (
+              <Button
+                size="icon"
+                variant="ghost"
+                onClick={() => setEditing(true)}
+                className="text-muted-foreground hover:bg-muted ml-3"
+                title="Editar nombre"
+              >
+                <Edit2 className="w-4 h-4" />
+              </Button>
+            )}
           </div>
-          <div>
-            <p className="text-sm text-muted-foreground">Email</p>
+          
+          <div className="border-t border-border/50 pt-4">
+            <p className="text-sm text-muted-foreground mb-1">Email</p>
             <p className="text-lg font-semibold">{user?.email}</p>
           </div>
-          <div>
-            <p className="text-sm text-muted-foreground">Rol</p>
+          
+          <div className="border-t border-border/50 pt-4">
+            <p className="text-sm text-muted-foreground mb-1">Rol</p>
             <p className="text-lg font-semibold capitalize">{user?.role || "usuario"}</p>
           </div>
         </Card>
