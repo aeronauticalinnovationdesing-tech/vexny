@@ -77,7 +77,9 @@ export default function PriceManager() {
   const user = useCurrentUser();
   const queryClient = useQueryClient();
 
-  if (user?.role !== "admin") return null;
+  if (user?.role !== "admin") {
+    return null;
+  }
 
   const { data: allSubs = [] } = useQuery({
     queryKey: ["all-subscriptions-admin"],
