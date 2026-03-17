@@ -11,7 +11,8 @@ Deno.serve(async (req) => {
     const integritySecret = Deno.env.get('WOMPI_INTEGRITY_SECRET');
     const publicKey = Deno.env.get('WOMPI_PUBLIC_KEY');
 
-    const cadena = `${reference}${amountInCents}${currency}${integritySecret}`;
+    // Wompi requiere el monto como string entero en la concatenación
+    const cadena = `${reference}${String(amountInCents)}${currency}${integritySecret}`;
     const encoded = new TextEncoder().encode(cadena);
     const hashBuffer = await crypto.subtle.digest('SHA-256', encoded);
     const hashArray = Array.from(new Uint8Array(hashBuffer));
