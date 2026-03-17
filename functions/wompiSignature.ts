@@ -39,6 +39,12 @@ Deno.serve(async (req) => {
     console.log('Generated signature:', signature);
 
     const publicKey = Deno.env.get('WOMPI_PUBLIC_KEY');
+    console.log('Public Key from env:', publicKey);
+    
+    if (!publicKey) {
+      return Response.json({ error: 'Missing WOMPI_PUBLIC_KEY' }, { status: 500 });
+    }
+    
     return Response.json({ signature, publicKey });
   } catch (error) {
     console.error('Signature error:', error.message);
