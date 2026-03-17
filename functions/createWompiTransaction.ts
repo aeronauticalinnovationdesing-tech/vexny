@@ -15,17 +15,24 @@ Deno.serve(async (req) => {
 
     const publicKey = Deno.env.get('WOMPI_PUBLIC_KEY');
     
-    // Construir URL como en versión anterior que funcionaba
-    const wompiCheckoutUrl = new URL('https://checkout.wompi.co/p');
-    wompiCheckoutUrl.searchParams.set('public-key', publicKey);
-    wompiCheckoutUrl.searchParams.set('currency', currency);
-    wompiCheckoutUrl.searchParams.set('amount-in-cents', amountInCents.toString());
-    wompiCheckoutUrl.searchParams.set('reference', reference);
-    wompiCheckoutUrl.searchParams.set('customer-email', customerEmail);
-    wompiCheckoutUrl.searchParams.set('redirect-url', redirectUrl);
-    wompiCheckoutUrl.searchParams.set('signature:integrity', signature);
+    // Construir URL manualmente para evitar encoding de ":" en signature:integrity
+    const params = new URLSearchParams();
+    params.set('public-key', publicKey);
+    params.set('currency', currency);
+    params.set('amount-in-cents', amountInCents.toString());
+    params.set('reference', reference);
+    params.set('customer-email', customerEmail);
+    params.set('redirect-url', redirectUrl);
     
-    const checkoutUrl = wompiCheckoutUrl.toString();
+    let checkoutUrl = `https://checkout.wompi.co/p?${params.toString()}`;
+    // Agregar signature:integrity sin URL-encoding el colon
+    checkoutUrl += `&signature:integrity=${signature}`;
+
+    console.log('✅ Wompi Checkout URL generated');
+    console.log('   Public Key:', publicKey?.substring(0, 20) + '...');
+    console.log('   Reference:', reference);
+    console.log('   Amount:', amountInCents);
+    console.log('   Signature:', signature.substring(0, 20) + '...');
 
     return Response.json({ 
       processingUrl: checkoutUrl
