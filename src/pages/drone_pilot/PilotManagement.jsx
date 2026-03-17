@@ -162,8 +162,12 @@ export default function PilotManagement() {
                   </div>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
                     <div>
+                      <p className="text-muted-foreground">CIPU</p>
+                      <p className="font-mono text-xs">{pilot.cipu || "—"}</p>
+                    </div>
+                    <div>
                       <p className="text-muted-foreground">Licencia</p>
-                      <p className="font-mono">{pilot.license_number}</p>
+                      <p className="font-mono text-xs">{pilot.license_number}</p>
                     </div>
                     <div>
                       <p className="text-muted-foreground">Categoría</p>
@@ -171,11 +175,22 @@ export default function PilotManagement() {
                     </div>
                     <div>
                       <p className="text-muted-foreground">Email</p>
-                      <p>{pilot.email}</p>
+                      <p className="text-xs">{pilot.email}</p>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3 text-sm mt-3">
+                    <div>
+                      <p className="text-muted-foreground">Fase RAC 100</p>
+                      <p className="font-semibold text-blue-600 dark:text-blue-400">{getPhaseLabel(pilot.rac_100_phase)}</p>
                     </div>
                     <div>
                       <p className="text-muted-foreground">Horas de Vuelo</p>
                       <p className="font-semibold">{pilot.hours_flown}h</p>
+                    </div>
+                    <div>
+                      <p className="text-muted-foreground">Gerente SMS</p>
+                      <p className="text-xs">{pilot.sms_manager || "—"}</p>
                     </div>
                   </div>
 
