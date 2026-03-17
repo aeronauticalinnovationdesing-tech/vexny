@@ -24,6 +24,7 @@ export const PROFILES = [
       { icon: Calendar, label: 'Calendario', path: '/Calendar' },
       { icon: Bot, label: 'Secretaria IA', path: '/Secretary' },
       { icon: BookOpen, label: 'Cursos', path: '/Courses' },
+      { icon: CreditCard, label: 'Suscripciones', path: '/Subscription' },
     ]
   },
   {
