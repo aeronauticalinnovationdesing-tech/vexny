@@ -88,29 +88,37 @@ export default function TrialBanner({ profile }) {
   const handlePay = async () => {
     if (!sub || !sub.monthly_price_cop || sub.monthly_price_cop <= 0) return;
     setPaying(true);
-    const reference = `VEXNY-SUB-${profile}-${user.email}-${Date.now()}`;
-    const amountInCents = Math.round(sub.monthly_price_cop * 100);
+    try {
+      const currentUser = await base44.auth.me();
+      const email = currentUser?.email || "unknown";
+      const reference = `VEXNY-SUB-${profile}-${Date.now()}`;
+      const amountInCents = Math.round(sub.monthly_price_cop * 100);
 
-    const res = await base44.functions.invoke("wompiSignature", {
-      reference,
-      amountInCents,
-      currency: "COP",
-    });
+      const res = await base44.functions.invoke("wompiSignature", {
+        reference,
+        amountInCents,
+        currency: "COP",
+      });
 
-    const { signature, publicKey } = res.data;
-    const redirectUrl = `${window.location.origin}/Dashboard?sub_ref=${reference}`;
+      const { signature, publicKey } = res.data;
+      const redirectUrl = `${window.location.origin}/Dashboard`;
 
-    const params = new URLSearchParams({
-      "public-key": publicKey,
-      currency: "COP",
-      "amount-in-cents": String(amountInCents),
-      reference,
-      "signature:integrity": signature,
-      "redirect-url": redirectUrl,
-    });
+      const params = new URLSearchParams({
+        "public-key": publicKey,
+        currency: "COP",
+        "amount-in-cents": String(amountInCents),
+        reference,
+        "signature:integrity": signature,
+        "redirect-url": redirectUrl,
+      });
 
-    setPaying(false);
-    window.open(`https://checkout.wompi.co/p/?${params.toString()}`, "_blank");
+      window.location.href = `https://checkout.wompi.co/p/?${params.toString()}`;
+    } catch (err) {
+      console.error("Error iniciando pago:", err);
+      alert("Error al iniciar el pago. Intenta de nuevo.");
+    } finally {
+      setPaying(false);
+    }
   };
 
   if (!sub && !user) return null;
