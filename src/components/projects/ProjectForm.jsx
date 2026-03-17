@@ -172,6 +172,7 @@ export default function ProjectForm({ open, onOpenChange, onSave, project }) {
             <TabsContent value="team" className="space-y-5">
               <div>
                 <Label className="mb-2 block">Miembros del Equipo</Label>
+                <p className="text-xs text-muted-foreground mb-2 flex items-center gap-1"><Mail className="w-3 h-3" /> Si ingresas un email, se enviará una invitación automáticamente.</p>
                 <div className="flex gap-2 mb-2">
                   <Input value={newMember} onChange={e => setNewMember(e.target.value)} onKeyDown={e => e.key === "Enter" && (e.preventDefault(), addMember())} placeholder="Nombre o email..." className="flex-1" />
                   <Button type="button" size="sm" onClick={addMember} variant="outline" disabled={sendingEmail}>
