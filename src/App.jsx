@@ -70,6 +70,10 @@ const AuthenticatedApp = () => {
         <Route path="/Courses" element={<Courses />} />
         <Route path="/Subscription" element={<Subscription />} />
         <Route path="/Admin" element={<Admin />} />
+        <Route path="/PilotManagement" element={<PilotManagement />} />
+        <Route path="/DroneRegistry" element={<DroneRegistry />} />
+        <Route path="/SMSReporting" element={<SMSReporting />} />
+        <Route path="/MaintenanceManagement" element={<MaintenanceManagement />} />
       </Route>
       <Route path="*" element={<PageNotFound />} />
     </Routes>
