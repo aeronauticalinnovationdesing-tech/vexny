@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
 import { base44 } from "@/api/base44Client";
 import { Loader2, CreditCard } from "lucide-react";
 import WompiWidget from "./WompiWidget";
@@ -15,51 +14,48 @@ export default function WompiCheckout({ open, onClose, course, userEmail, onPurc
     }
   }, [open, course]);
 
-
-
   const prepareCheckout = async () => {
-      setLoading(true);
-      const reference = `VEXNY-${course.id}-${Date.now()}`;
-      const amountInCents = Math.round((course.price || 0) * 100);
+    setLoading(true);
+    const reference = `VEXNY-${course.id}-${Date.now()}`;
+    const amountInCents = Math.round((course.price || 0) * 100);
+    const redirectUrl = `${window.location.origin}/Courses?wompi_ref=${reference}`;
 
-      const redirectUrl = `${window.location.origin}/Courses?wompi_ref=${reference}`;
+    try {
+      // Generar firma
+      const sigRes = await base44.functions.invoke('wompiSignature', {
+        reference,
+        amountInCents,
+        currency: 'COP'
+      });
 
-      try {
-        // Generar firma
-        const sigRes = await base44.functions.invoke('wompiSignature', {
-          reference,
-          amountInCents,
-          currency: 'COP'
-        });
+      const { signature, publicKey } = sigRes.data;
 
-        const { signature, publicKey } = sigRes.data;
+      // Registrar la compra como pendiente
+      await base44.entities.CoursePurchase.create({
+        course_id: course.id,
+        course_title: course.title,
+        user_email: userEmail,
+        amount: course.price,
+        wompi_reference: reference,
+        status: 'pending'
+      });
 
-        // Registrar la compra como pendiente
-        await base44.entities.CoursePurchase.create({
-          course_id: course.id,
-          course_title: course.title,
-          user_email: userEmail,
-          amount: course.price,
-          wompi_reference: reference,
-          status: 'pending'
-        });
+      onPurchaseCreated();
 
-        onPurchaseCreated();
-
-        setCheckoutData({ 
-          reference, 
-          amountInCents, 
-          signature,
-          publicKey,
-          redirectUrl,
-          customerEmail: userEmail
-        });
-      } catch (error) {
-        console.error('Error preparing checkout:', error);
-        alert('Error al preparar el pago. Intenta nuevamente.');
-      }
-      setLoading(false);
-    };
+      setCheckoutData({
+        reference,
+        amountInCents,
+        signature,
+        publicKey,
+        redirectUrl,
+        customerEmail: userEmail
+      });
+    } catch (error) {
+      console.error('Error preparing checkout:', error);
+      alert('Error al preparar el pago. Intenta nuevamente.');
+    }
+    setLoading(false);
+  };
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
@@ -73,7 +69,7 @@ export default function WompiCheckout({ open, onClose, course, userEmail, onPurc
             <p className="text-2xl font-bold text-primary">${(course?.price || 0).toLocaleString()} COP</p>
           </div>
           <p className="text-sm text-muted-foreground text-center">
-            Serás redirigido al checkout seguro de Wompi para completar el pago.
+            Completa tu pago de forma segura con Wompi.
           </p>
           {loading ? (
             <div className="flex items-center justify-center py-4">
