@@ -13,35 +13,20 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Missing WOMPI_PRIVATE_KEY' }, { status: 500 });
     }
 
-    // Crear transacción en Wompi API
-    const response = await fetch('https://api.wompi.co/v1/transactions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${privateKey}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        reference,
-        amount_in_cents: parseInt(amountInCents),
-        currency,
-        signature,
-        customer_email: customerEmail,
-        payment_source: {
-          type: 'CARD'
-        },
-        redirect_url: redirectUrl
-      })
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      return Response.json({ error: data.message || 'Failed to create transaction' }, { status: response.status });
-    }
+    // Wompi redirige directamente al checkout, no crea transacción via API
+    // El flujo es: generar firma → redirigir a checkout.wompi.co con parámetros
+    const publicKey = Deno.env.get('WOMPI_PUBLIC_KEY');
+    
+    const checkoutUrl = new URL('https://checkout.wompi.co/p/');
+    checkoutUrl.searchParams.append('public-key', publicKey);
+    checkoutUrl.searchParams.append('currency', currency);
+    checkoutUrl.searchParams.append('amount-in-cents', parseInt(amountInCents));
+    checkoutUrl.searchParams.append('reference', reference);
+    checkoutUrl.searchParams.append('signature:integrity', signature);
+    checkoutUrl.searchParams.append('redirect-url', redirectUrl);
 
     return Response.json({ 
-      transaction: data.data,
-      processingUrl: data.data?.links?.payment_link || null
+      processingUrl: checkoutUrl.toString()
     });
 
   } catch (error) {
