@@ -192,10 +192,9 @@ export default function Notes() {
                   <Pin className="w-3.5 h-3.5 text-primary absolute top-3 right-3 fill-primary" />
                 )}
                 <h3 className="font-semibold text-sm mb-1 pr-5 line-clamp-2">{note.title}</h3>
-                <div
-                  className="text-xs text-muted-foreground line-clamp-4 flex-1 prose prose-xs max-w-none"
-                  dangerouslySetInnerHTML={{ __html: note.content || "" }}
-                />
+                <p className="text-xs text-muted-foreground line-clamp-4 flex-1 whitespace-pre-wrap">
+                  {note.content || ""}
+                </p>
                 <div className="flex items-center justify-between mt-3">
                   <Badge className={cn("text-xs border", categoryColors[note.category] || categoryColors.general)}>
                     {categoryLabels[note.category] || "General"}
