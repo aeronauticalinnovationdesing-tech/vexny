@@ -3,10 +3,11 @@ import { base44 } from "@/api/base44Client";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { PROFILES } from "@/lib/ProfileContext";
-import { CheckCircle, AlertTriangle, CreditCard, Loader2, User, LogOut } from "lucide-react";
+import { CheckCircle, AlertTriangle, CreditCard, Loader2, User, LogOut, Edit2, Check, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 
 function useCountdown(endDateISO) {
   const [remaining, setRemaining] = useState(null);
