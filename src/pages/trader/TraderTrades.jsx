@@ -139,18 +139,18 @@ export default function TraderTrades() {
       {/* Advanced Analytics Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
         <div className="lg:col-span-2 space-y-5">
-          <ProfitLossChart transactions={transactions} />
-          <WinRateAnalysis trades={transactions} />
+          <ProfitLossChart transactions={trades} />
+          <WinRateAnalysis trades={trades} />
         </div>
         <div>
-          <AlertsPanel transactions={transactions} />
+          <AlertsPanel transactions={trades} />
         </div>
       </div>
 
       {/* Performance Metrics */}
       <div>
         <h2 className="font-semibold text-lg mb-4">Análisis de Desempeño</h2>
-        <PerformanceMetrics transactions={transactions} />
+        <PerformanceMetrics transactions={trades} />
       </div>
 
       {/* Filter */}
