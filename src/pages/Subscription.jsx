@@ -7,17 +7,18 @@ import { CheckCircle, Clock, AlertTriangle, CreditCard, Loader2, Zap } from "luc
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
-function useCountdown(trialStartISO) {
+function useCountdown(endDateISO) {
   const [remaining, setRemaining] = useState(null);
   useEffect(() => {
-    if (!trialStartISO) return;
-    const trialEnd = new Date(trialStartISO).getTime() + 48 * 60 * 60 * 1000;
+    if (!endDateISO) return;
+    const endTime = new Date(endDateISO).getTime();
     const tick = () => {
-      const diff = trialEnd - Date.now();
-      if (diff <= 0) setRemaining({ expired: true, h: 0, m: 0, s: 0 });
+      const diff = endTime - Date.now();
+      if (diff <= 0) setRemaining({ expired: true, h: 0, m: 0, s: 0, d: 0 });
       else setRemaining({
         expired: false,
-        h: Math.floor(diff / 3600000),
+        d: Math.floor(diff / 86400000),
+        h: Math.floor((diff % 86400000) / 3600000),
         m: Math.floor((diff % 3600000) / 60000),
         s: Math.floor((diff % 60000) / 1000),
       });
@@ -25,7 +26,7 @@ function useCountdown(trialStartISO) {
     tick();
     const id = setInterval(tick, 1000);
     return () => clearInterval(id);
-  }, [trialStartISO]);
+  }, [endDateISO]);
   return remaining;
 }
 
