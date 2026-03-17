@@ -51,7 +51,7 @@ export default function WompiCheckout({ open, onClose, course, userEmail, onPurc
     const params = new URLSearchParams({
       'public-key': publicKey,
       'currency': 'COP',
-      'amount-in-cents': String(amountInCents),
+      'amount-in-cents': amountInCents,
       'reference': reference,
       'signature:integrity': signature,
       'redirect-url': redirectUrl,
