@@ -95,6 +95,25 @@ export default function PilotManagement() {
     return { status: "vigente", color: "text-emerald-600", icon: CheckCircle };
   };
 
+  const getPhaseLabel = (phase) => {
+    const labels = {
+      solicitud: "Solicitud",
+      evaluacion: "Evaluación",
+      capacitacion: "Capacitación",
+      examen: "Examen",
+      certificacion: "Certificación",
+      licencia_emitida: "Licencia Emitida"
+    };
+    return labels[phase] || phase;
+  };
+
+  // Alertas
+  const alerts = pilots.filter(p => {
+    const expiry = getExpiryStatus(p.rac_100_expiry_date);
+    const medicalExpiry = p.medical_certificate_expiry ? getExpiryStatus(p.medical_certificate_expiry) : null;
+    return expiry.status !== "vigente" || (medicalExpiry && medicalExpiry.status !== "vigente") || p.status === "suspendido";
+  });
+
   return (
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">
@@ -103,6 +122,26 @@ export default function PilotManagement() {
           <Plus className="w-4 h-4" /> Agregar Piloto
         </Button>
       </div>
+
+      {/* Sección de Alertas */}
+      {alerts.length > 0 && (
+        <div className="bg-gradient-to-r from-red-50 to-orange-50 dark:from-red-950 dark:to-orange-950 border border-red-200 dark:border-red-800 rounded-lg p-4 space-y-2">
+          <div className="flex items-center gap-2">
+            <AlertTriangle className="w-5 h-5 text-red-600 dark:text-red-400" />
+            <h3 className="font-semibold text-red-900 dark:text-red-100">{alerts.length} Alerta{alerts.length !== 1 ? 's' : ''} Activa{alerts.length !== 1 ? 's' : ''}</h3>
+          </div>
+          <ul className="space-y-1 text-sm text-red-800 dark:text-red-200">
+            {alerts.map(pilot => (
+              <li key={pilot.id} className="flex items-center gap-2">
+                <span className="w-1.5 h-1.5 bg-red-600 dark:bg-red-400 rounded-full" />
+                <strong>{pilot.full_name}</strong>
+                {pilot.status === "suspendido" && <span>- Estado suspendido</span>}
+                {pilot.status !== "suspendido" && getExpiryStatus(pilot.rac_100_expiry_date).status !== "vigente" && <span>- RAC 100 {getExpiryStatus(pilot.rac_100_expiry_date).status}</span>}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       <div className="grid gap-4">
         {pilots.map((pilot) => {
