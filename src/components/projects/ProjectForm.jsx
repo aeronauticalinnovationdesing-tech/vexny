@@ -20,6 +20,7 @@ const defaults = {
 export default function ProjectForm({ open, onOpenChange, onSave, project }) {
   const [form, setForm] = useState(defaults);
   const [newMember, setNewMember] = useState("");
+  const [sendingEmail, setSendingEmail] = useState(false);
   const [newTag, setNewTag] = useState("");
   const [newMilestone, setNewMilestone] = useState({ title: "", date: "" });
 
