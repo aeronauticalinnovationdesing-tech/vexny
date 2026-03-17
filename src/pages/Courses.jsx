@@ -185,7 +185,10 @@ export default function Courses() {
       {selectedCourse && (
         <WompiCheckout
           open={!!selectedCourse}
-          onClose={() => setSelectedCourse(null)}
+          onClose={() => {
+            setSelectedCourse(null);
+            setPaymentResult(null);
+          }}
           course={selectedCourse}
           userEmail={user?.email}
           onPurchaseCreated={() => queryClient.invalidateQueries(['purchases'])}
