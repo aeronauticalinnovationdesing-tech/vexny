@@ -63,6 +63,7 @@ export const PROFILES = [
       { icon: Bot, label: 'Secretaria IA', path: '/Secretary' },
       { icon: FileText, label: 'Informes', path: '/Reports' },
       { icon: BookOpen, label: 'Cursos', path: '/Courses' },
+      { icon: CreditCard, label: 'Suscripciones', path: '/Subscription' },
     ]
   },
   {
