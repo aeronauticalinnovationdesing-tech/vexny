@@ -23,7 +23,8 @@ import Admin from './pages/Admin';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
-  const { activeProfileId, loading: profileLoading } = useProfile();
+  const profileContext = useProfile();
+  const { activeProfileId = null, loading: profileLoading = true } = profileContext || {};
 
   if (isLoadingPublicSettings || isLoadingAuth || profileLoading) {
     return (
