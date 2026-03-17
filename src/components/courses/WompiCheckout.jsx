@@ -15,21 +15,7 @@ export default function WompiCheckout({ open, onClose, course, userEmail, onPurc
     }
   }, [open, course]);
 
-  useEffect(() => {
-    if (checkoutData && open) {
-      // Cargar script de Wompi cuando tengamos los datos
-      const script = document.createElement('script');
-      script.src = 'https://checkout.wompi.co/widget.js';
-      script.async = true;
-      document.head.appendChild(script);
 
-      return () => {
-        if (document.head.contains(script)) {
-          document.head.removeChild(script);
-        }
-      };
-    }
-  }, [checkoutData, open]);
 
   const prepareCheckout = async () => {
       setLoading(true);
