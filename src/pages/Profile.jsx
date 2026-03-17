@@ -38,6 +38,8 @@ export default function Profile() {
   const user = useCurrentUser();
   const queryClient = useQueryClient();
   const [canceling, setCanceling] = useState(null);
+  const [editing, setEditing] = useState(false);
+  const [editName, setEditName] = useState(user?.full_name || "");
 
   const { data: allSubs = [] } = useQuery({
     queryKey: ["all-subscriptions"],
