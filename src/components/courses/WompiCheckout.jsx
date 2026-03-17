@@ -92,12 +92,16 @@ export default function WompiCheckout({ open, onClose, course, userEmail, onPurc
             <div className="flex items-center justify-center py-4">
               <Loader2 className="w-6 h-6 animate-spin text-primary" />
             </div>
-          ) : (
-            <Button onClick={handlePay} className="w-full gap-2" disabled={!checkoutData}>
-              <CreditCard className="w-4 h-4" />
-              Pagar con Wompi
-            </Button>
-          )}
+          ) : checkoutData ? (
+            <WompiWidget
+              publicKey={checkoutData.publicKey}
+              reference={checkoutData.reference}
+              amountInCents={checkoutData.amountInCents}
+              signature={checkoutData.signature}
+              customerEmail={checkoutData.customerEmail}
+              redirectUrl={checkoutData.redirectUrl}
+            />
+          ) : null}
         </div>
       </DialogContent>
     </Dialog>
