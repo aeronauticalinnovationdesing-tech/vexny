@@ -17,8 +17,7 @@ export default function WompiCheckout({ open, onClose, course, userEmail, onPurc
   const prepareCheckout = async () => {
     setLoading(true);
     const reference = `VEXNY-${course.id}-${Date.now()}`;
-    const amountInCents = Math.round((course.price || 0) * 100);
-    // amountInCents debe ser string para que coincida exactamente con la firma
+    const amountInCents = String(Math.round((course.price || 0) * 100));
 
     const res = await base44.functions.invoke('wompiSignature', {
       reference,
