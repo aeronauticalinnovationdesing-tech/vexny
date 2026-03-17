@@ -247,15 +247,29 @@ export default function CalendarPage() {
 
             {/* Google Meet */}
             <div>
-              <Label className="flex items-center gap-1.5">
+              <Label className="flex items-center gap-1.5 mb-1.5">
                 <Video className="w-3.5 h-3.5 text-blue-500" />
                 Link de Google Meet <span className="text-muted-foreground font-normal">(opcional)</span>
               </Label>
-              <Input
-                placeholder="https://meet.google.com/xxx-xxxx-xxx"
-                value={form.meet_link}
-                onChange={e => setForm({ ...form, meet_link: e.target.value })}
-              />
+              <div className="flex gap-2">
+                <Input
+                  placeholder="https://meet.google.com/xxx-xxxx-xxx"
+                  value={form.meet_link}
+                  onChange={e => setForm({ ...form, meet_link: e.target.value })}
+                  className="flex-1"
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={generateMeetLink}
+                  disabled={generatingMeet || !form.title || !form.date}
+                  className="whitespace-nowrap border-blue-300 text-blue-700 hover:bg-blue-50"
+                >
+                  {generatingMeet ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Video className="w-3.5 h-3.5" />}
+                  {generatingMeet ? "Generando..." : "Generar"}
+                </Button>
+              </div>
             </div>
 
             <div>
