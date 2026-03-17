@@ -7,6 +7,8 @@ import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 
 import AppLayout from './components/layout/AppLayout';
+import { ProfileProvider, useProfile } from './lib/ProfileContext';
+import ProfileSelect from './pages/ProfileSelect';
 import Dashboard from './pages/Dashboard';
 import Projects from './pages/Projects';
 import Tasks from './pages/Tasks';
