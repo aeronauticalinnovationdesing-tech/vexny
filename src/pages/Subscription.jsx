@@ -151,8 +151,12 @@ export default function Subscription() {
   const [canceling, setCanceling] = useState(null);
 
   const { data: allSubs = [] } = useQuery({
-    queryKey: ["all-subscriptions"],
-    queryFn: () => base44.entities.Subscription.list(),
+    queryKey: ["all-subscriptions", user?.email],
+    queryFn: () => {
+      if (!user?.email) return [];
+      return base44.entities.Subscription.filter({ created_by: user.email });
+    },
+    enabled: !!user?.email,
   });
 
   // Check for Wompi redirect with transaction
