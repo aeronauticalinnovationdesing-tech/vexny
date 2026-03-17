@@ -15,17 +15,18 @@ Deno.serve(async (req) => {
 
     const publicKey = Deno.env.get('WOMPI_PUBLIC_KEY');
     
-    // Construir URL con los parámetros correctos
-    const params = new URLSearchParams({
-      'public-key': publicKey,
-      'currency': currency,
-      'amount-in-cents': parseInt(amountInCents).toString(),
-      'reference': reference,
-      'signature:integrity': signature,
-      'redirect-url': redirectUrl,
-    });
+    // Construir URL manualmente para preservar signature:integrity sin codificación
+    const baseUrl = 'https://checkout.wompi.co/p/';
+    const urlParams = [
+      `public-key=${publicKey}`,
+      `currency=${currency}`,
+      `amount-in-cents=${parseInt(amountInCents).toString()}`,
+      `reference=${reference}`,
+      `signature:integrity=${signature}`,
+      `redirect-url=${encodeURIComponent(redirectUrl)}`
+    ].join('&');
     
-    const checkoutUrl = `https://checkout.wompi.co/p/?${params.toString()}`;
+    const checkoutUrl = `${baseUrl}?${urlParams}`;
 
     return Response.json({ 
       processingUrl: checkoutUrl
