@@ -102,9 +102,8 @@ export default function Notes() {
   const improveWithAI = async () => {
     if (!form.content) return toast.error("Escribe algo primero");
     setAiLoading(true);
-    const plainText = form.content.replace(/<[^>]+>/g, "");
     const result = await base44.integrations.Core.InvokeLLM({
-      prompt: `Mejora y enriquece el siguiente texto de una nota personal. Hazlo más claro, organizado y profesional. Mantén el idioma original (español). Devuelve SOLO el texto mejorado en HTML básico (usa <p>, <strong>, <ul>, <li> si aplica). Texto original:\n\n${plainText}`,
+      prompt: `Mejora y enriquece el siguiente texto de una nota personal. Hazlo más claro, organizado y profesional. Mantén el idioma original (español). Devuelve SOLO el texto mejorado sin formato HTML. Texto original:\n\n${form.content}`,
     });
     setForm(f => ({ ...f, content: result }));
     setAiLoading(false);
