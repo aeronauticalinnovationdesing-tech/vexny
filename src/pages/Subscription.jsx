@@ -173,10 +173,8 @@ export default function Subscription() {
   const handlePay = async (profileId, monthlyPrice) => {
     setPaying(profileId);
     try {
-      const currentUser = await base44.auth.me();
-      const email = currentUser?.email || "unknown";
       const reference = `VEXNY-SUB-${profileId}-${Date.now()}`;
-      const amountInCents = Math.round(monthlyPrice * 100);
+      const amountInCents = monthlyPrice * 100;
 
       const res = await base44.functions.invoke("wompiSignature", {
         reference,
@@ -185,26 +183,21 @@ export default function Subscription() {
       });
 
       const { signature, publicKey } = res.data;
-      if (!signature || !publicKey) {
-        throw new Error('Missing signature or publicKey');
-      }
-
       const redirectUrl = `${window.location.origin}/Subscription`;
 
-      setCheckoutData({
-        profileId,
+      const params = new URLSearchParams({
+        "public-key": publicKey,
+        currency: "COP",
+        "amount-in-cents": String(amountInCents),
         reference,
-        amountInCents,
-        signature,
-        publicKey,
-        email,
-        redirectUrl,
+        "signature:integrity": signature,
+        "redirect-url": redirectUrl,
       });
-      setDialogOpen(true);
+
+      window.location.href = `https://checkout.wompi.co/p/?${params.toString()}`;
     } catch (err) {
-      console.error("Error iniciando pago:", err);
+      console.error(err);
       alert("Error al iniciar el pago. Intenta de nuevo.");
-    } finally {
       setPaying(null);
     }
   };
