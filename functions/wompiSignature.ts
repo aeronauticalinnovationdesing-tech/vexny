@@ -6,13 +6,23 @@ Deno.serve(async (req) => {
     const user = await base44.auth.me();
     if (!user) return Response.json({ error: 'Unauthorized' }, { status: 401 });
 
-    const { reference, amountInCents, currency } = await req.json();
+    const { reference, amountInCents, currency, expirationTime } = await req.json();
 
     const integritySecret = Deno.env.get('WOMPI_INTEGRITY_SECRET');
     const publicKey = Deno.env.get('WOMPI_PUBLIC_KEY');
 
-    // Wompi requiere el monto como string entero en la concatenación
-    const cadena = `${reference}${String(amountInCents)}${currency}${integritySecret}`;
+    if (!integritySecret || !publicKey) {
+      return Response.json({ error: 'Missing WOMPI configuration' }, { status: 500 });
+    }
+
+    // Concatenación según documentación Wompi:
+    // reference + amountInCents (as string) + currency + [expirationTime] + integritySecret
+    let cadena = `${reference}${amountInCents}${currency}`;
+    if (expirationTime) {
+      cadena += expirationTime;
+    }
+    cadena += integritySecret;
+
     const encoded = new TextEncoder().encode(cadena);
     const hashBuffer = await crypto.subtle.digest('SHA-256', encoded);
     const hashArray = Array.from(new Uint8Array(hashBuffer));
