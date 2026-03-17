@@ -119,34 +119,45 @@ export default function Sidebar({ mobileOpen, onMobileClose }) {
       {/* Profile Section */}
       <div className="border-t border-sidebar-border p-3 flex-shrink-0">
         {!collapsed ? (
-          <div className="flex items-center gap-3 px-2 py-2">
-            <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
-              <span className="text-xs font-bold text-primary">{initials}</span>
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-xs font-semibold text-sidebar-foreground truncate">{user?.full_name || "Usuario"}</p>
-              <p className="text-xs text-sidebar-foreground/50 truncate">{user?.email || ""}</p>
-            </div>
-            <button
-              onClick={() => base44.auth.logout()}
-              className="text-sidebar-foreground/40 hover:text-destructive transition-colors flex-shrink-0"
-              title="Cerrar sesión"
+          <div className="space-y-1">
+            <Link
+              to="/Profile"
+              className={cn(
+                "flex items-center gap-3 px-3 py-2 rounded-lg text-xs transition-colors",
+                location.pathname === "/Profile"
+                  ? "bg-primary text-primary-foreground"
+                  : "text-sidebar-foreground/50 hover:text-sidebar-foreground/80 hover:bg-sidebar-accent"
+              )}
+              title="Mi perfil"
             >
-              <LogOut className="w-4 h-4" />
-            </button>
+              <User className="w-4 h-4 flex-shrink-0" />
+              <span>Mi Perfil</span>
+            </Link>
+            <div className="flex items-center gap-3 px-2 py-2">
+              <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
+                <span className="text-xs font-bold text-primary">{initials}</span>
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-xs font-semibold text-sidebar-foreground truncate">{user?.full_name || "Usuario"}</p>
+                <p className="text-xs text-sidebar-foreground/50 truncate">{user?.email || ""}</p>
+              </div>
+            </div>
           </div>
         ) : (
           <div className="flex flex-col items-center gap-2">
+            <Link
+              to="/Profile"
+              className={cn(
+                "text-sidebar-foreground/50 hover:text-sidebar-foreground transition-colors",
+                location.pathname === "/Profile" && "text-primary"
+              )}
+              title="Mi perfil"
+            >
+              <User className="w-4 h-4" />
+            </Link>
             <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center">
               <span className="text-xs font-bold text-primary">{initials}</span>
             </div>
-            <button
-              onClick={() => base44.auth.logout()}
-              className="text-sidebar-foreground/40 hover:text-destructive transition-colors"
-              title="Cerrar sesión"
-            >
-              <LogOut className="w-3.5 h-3.5" />
-            </button>
           </div>
         )}
       </div>
