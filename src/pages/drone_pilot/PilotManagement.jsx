@@ -60,11 +60,14 @@ export default function PilotManagement() {
     setEditingPilot(null);
     setForm({
       full_name: "",
+      cipu: "",
       license_number: "",
       license_category: "operador_remoto",
+      rac_100_phase: "solicitud",
       rac_100_expiry_date: "",
       email: "",
       phone: "",
+      sms_manager: "",
       role: "piloto",
       status: "activo",
     });
