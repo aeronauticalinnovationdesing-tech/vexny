@@ -86,7 +86,22 @@ export default function Sidebar({ mobileOpen, onMobileClose }) {
       </nav>
 
       {/* Change Profile */}
-      <div className="px-3 pb-2">
+      <div className="px-3 pb-2 space-y-1">
+        {user?.role === "admin" && (
+          <Link
+            to="/Admin"
+            className={cn(
+              "w-full flex items-center gap-3 px-3 py-2 rounded-lg text-xs transition-colors",
+              location.pathname === "/Admin"
+                ? "bg-primary text-primary-foreground"
+                : "text-sidebar-foreground/50 hover:text-sidebar-foreground/80 hover:bg-sidebar-accent"
+            )}
+            title="Panel de administración"
+          >
+            <Shield className="w-4 h-4 flex-shrink-0" />
+            {!collapsed && <span>Administración</span>}
+          </Link>
+        )}
         <button
           onClick={() => selectProfile(null)}
           className={cn(
