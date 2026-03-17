@@ -245,10 +245,9 @@ export default function Notes() {
                   {viewNote.created_date && format(new Date(viewNote.created_date), "d 'de' MMMM yyyy", { locale: es })}
                 </p>
               </DialogHeader>
-              <div
-                className="prose prose-sm max-w-none mt-2"
-                dangerouslySetInnerHTML={{ __html: viewNote.content || "<p class='text-muted-foreground'>Sin contenido.</p>" }}
-              />
+              <p className="text-sm mt-2 whitespace-pre-wrap text-foreground/90">
+                {viewNote.content || "Sin contenido."}
+              </p>
               <div className="flex gap-2 mt-4 pt-4 border-t">
                 <Button variant="outline" size="sm" onClick={() => { setViewNote(null); openEdit(viewNote); }}>
                   <Pencil className="w-3.5 h-3.5 mr-1" /> Editar
