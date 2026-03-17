@@ -1,6 +1,7 @@
 import React from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { FolderKanban, CheckSquare, Wallet, Sword, ArrowRight, TrendingUp, TrendingDown } from "lucide-react";
 import { Link } from "react-router-dom";
 import StatCard from "../components/dashboard/StatCard";
