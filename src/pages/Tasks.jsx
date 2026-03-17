@@ -14,15 +14,18 @@ export default function Tasks() {
   const [filterStatus, setFilterStatus] = useState("all");
   const [filterPriority, setFilterPriority] = useState("all");
   const queryClient = useQueryClient();
+  const user = useCurrentUser();
 
   const { data: tasks = [] } = useQuery({
-    queryKey: ["tasks"],
-    queryFn: () => base44.entities.Task.list("-created_date"),
+    queryKey: ["tasks", user?.email],
+    queryFn: () => base44.entities.Task.filter({ created_by: user.email }, "-created_date"),
+    enabled: !!user,
   });
 
   const { data: projects = [] } = useQuery({
-    queryKey: ["projects"],
-    queryFn: () => base44.entities.Project.list(),
+    queryKey: ["projects", user?.email],
+    queryFn: () => base44.entities.Project.filter({ created_by: user.email }),
+    enabled: !!user,
   });
 
   const createMutation = useMutation({

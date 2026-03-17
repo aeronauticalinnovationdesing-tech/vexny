@@ -16,29 +16,36 @@ import { format } from "date-fns";
 import { es } from "date-fns/locale";
 
 export default function Dashboard() {
+  const user = useCurrentUser();
+
   const { data: projects = [] } = useQuery({
-    queryKey: ["projects"],
-    queryFn: () => base44.entities.Project.list("-created_date", 50),
+    queryKey: ["projects", user?.email],
+    queryFn: () => base44.entities.Project.filter({ created_by: user.email }, "-created_date", 50),
+    enabled: !!user,
   });
 
   const { data: tasks = [] } = useQuery({
-    queryKey: ["tasks"],
-    queryFn: () => base44.entities.Task.list("-created_date", 50),
+    queryKey: ["tasks", user?.email],
+    queryFn: () => base44.entities.Task.filter({ created_by: user.email }, "-created_date", 50),
+    enabled: !!user,
   });
 
   const { data: transactions = [] } = useQuery({
-    queryKey: ["transactions"],
-    queryFn: () => base44.entities.Transaction.list("-created_date", 100),
+    queryKey: ["transactions", user?.email],
+    queryFn: () => base44.entities.Transaction.filter({ created_by: user.email }, "-created_date", 100),
+    enabled: !!user,
   });
 
   const { data: events = [] } = useQuery({
-    queryKey: ["events-today"],
-    queryFn: () => base44.entities.CalendarEvent.filter({ date: format(new Date(), "yyyy-MM-dd") }),
+    queryKey: ["events-today", user?.email],
+    queryFn: () => base44.entities.CalendarEvent.filter({ date: format(new Date(), "yyyy-MM-dd"), created_by: user.email }),
+    enabled: !!user,
   });
 
   const { data: bankAccounts = [] } = useQuery({
-    queryKey: ["bankAccounts"],
-    queryFn: () => base44.entities.BankAccount.list("-created_date", 20),
+    queryKey: ["bankAccounts", user?.email],
+    queryFn: () => base44.entities.BankAccount.filter({ created_by: user.email }, "-created_date", 20),
+    enabled: !!user,
   });
 
   const activeTasks = tasks.filter(t => t.status !== "completed" && t.status !== "cancelled");

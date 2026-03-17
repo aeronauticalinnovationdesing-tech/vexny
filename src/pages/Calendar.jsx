@@ -33,9 +33,18 @@ export default function CalendarPage() {
   const [form, setForm] = useState({ title: "", description: "", date: "", time: "", type: "reminder", meet_link: "" });
   const [generatingMeet, setGeneratingMeet] = useState(false);
   const queryClient = useQueryClient();
+  const user = useCurrentUser();
 
-  const { data: events = [] } = useQuery({ queryKey: ["events"], queryFn: () => base44.entities.CalendarEvent.list("-date") });
-  const { data: tasks = [] } = useQuery({ queryKey: ["tasks"], queryFn: () => base44.entities.Task.list() });
+  const { data: events = [] } = useQuery({
+    queryKey: ["events", user?.email],
+    queryFn: () => base44.entities.CalendarEvent.filter({ created_by: user.email }, "-date"),
+    enabled: !!user,
+  });
+  const { data: tasks = [] } = useQuery({
+    queryKey: ["tasks", user?.email],
+    queryFn: () => base44.entities.Task.filter({ created_by: user.email }),
+    enabled: !!user,
+  });
 
   const createEvent = useMutation({
     mutationFn: (d) => base44.entities.CalendarEvent.create(d),

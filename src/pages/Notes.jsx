@@ -42,10 +42,12 @@ export default function Notes() {
   const [filterCategory, setFilterCategory] = useState("all");
   const [aiLoading, setAiLoading] = useState(false);
   const queryClient = useQueryClient();
+  const user = useCurrentUser();
 
   const { data: notes = [] } = useQuery({
-    queryKey: ["notes"],
-    queryFn: () => base44.entities.Note.list("-created_date"),
+    queryKey: ["notes", user?.email],
+    queryFn: () => base44.entities.Note.filter({ created_by: user.email }, "-created_date"),
+    enabled: !!user,
   });
 
   const createMutation = useMutation({

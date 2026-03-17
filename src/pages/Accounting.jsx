@@ -36,9 +36,18 @@ export default function Accounting() {
   const [txForm, setTxForm] = useState({ description: "", amount: 0, type: "expense", category: "other", date: format(new Date(), "yyyy-MM-dd"), bank_account_id: "" });
   const [accForm, setAccForm] = useState({ name: "", bank_name: "", account_type: "checking", balance: 0, currency: "COP" });
   const queryClient = useQueryClient();
+  const user = useCurrentUser();
 
-  const { data: transactions = [] } = useQuery({ queryKey: ["transactions"], queryFn: () => base44.entities.Transaction.list("-created_date") });
-  const { data: accounts = [] } = useQuery({ queryKey: ["accounts"], queryFn: () => base44.entities.BankAccount.list() });
+  const { data: transactions = [] } = useQuery({
+    queryKey: ["transactions", user?.email],
+    queryFn: () => base44.entities.Transaction.filter({ created_by: user.email }, "-created_date"),
+    enabled: !!user,
+  });
+  const { data: accounts = [] } = useQuery({
+    queryKey: ["accounts", user?.email],
+    queryFn: () => base44.entities.BankAccount.filter({ created_by: user.email }),
+    enabled: !!user,
+  });
 
   const createTx = useMutation({ mutationFn: (d) => base44.entities.Transaction.create(d), onSuccess: () => { queryClient.invalidateQueries({ queryKey: ["transactions"] }); setShowTx(false); } });
   const deleteTx = useMutation({ mutationFn: (id) => base44.entities.Transaction.delete(id), onSuccess: () => queryClient.invalidateQueries({ queryKey: ["transactions"] }) });
