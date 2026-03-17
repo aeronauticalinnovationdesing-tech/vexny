@@ -30,17 +30,7 @@ const noteColors = [
   { label: "Blanco", value: "#ffffff", border: "#e5e7eb" },
 ];
 
-const quillModules = {
-  toolbar: [
-    [{ header: [1, 2, 3, false] }],
-    ["bold", "italic", "underline", "strike"],
-    [{ list: "ordered" }, { list: "bullet" }],
-    [{ color: [] }, { background: [] }],
-    ["blockquote", "code-block"],
-    ["link"],
-    ["clean"],
-  ],
-};
+
 
 export default function Notes() {
   const [showForm, setShowForm] = useState(false);
