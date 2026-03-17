@@ -19,6 +19,7 @@ import Secretary from './pages/Secretary';
 import Reports from './pages/Reports';
 import Courses from './pages/Courses';
 import Subscription from './pages/Subscription';
+import Admin from './pages/Admin';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -63,6 +64,7 @@ const AuthenticatedApp = () => {
         <Route path="/Reports" element={<Reports />} />
         <Route path="/Courses" element={<Courses />} />
         <Route path="/Subscription" element={<Subscription />} />
+        <Route path="/Admin" element={<Admin />} />
       </Route>
       <Route path="*" element={<PageNotFound />} />
     </Routes>
