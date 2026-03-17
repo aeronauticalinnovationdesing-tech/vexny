@@ -6,6 +6,14 @@ import { PROFILES } from "@/lib/ProfileContext";
 import { CheckCircle, Clock, AlertTriangle, CreditCard, Loader2, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import WompiWidget from "@/components/courses/WompiWidget";
 
 function useCountdown(trialStartISO) {
   const [remaining, setRemaining] = useState(null);
