@@ -18,6 +18,8 @@ export default function WompiCheckout({ open, onClose, course, userEmail, onPurc
      setLoading(true);
      const reference = `VEXNY-${course.id}-${Date.now()}`;
      const amountInCents = Math.round((course.price || 0) * 100);
+
+     console.log('📋 Checkout prep:', { reference, amountInCents, price: course.price });
      const redirectUrl = `${window.location.origin}/Courses?wompi_ref=${reference}`;
 
      try {
