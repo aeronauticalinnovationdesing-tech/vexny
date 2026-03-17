@@ -61,17 +61,12 @@ function AppSubscriptionCard({ profile, sub, onPay, paying }) {
           </div>
         </div>
 
-        {isPaid && (
+        {paidActive && (
           <Badge className="bg-emerald-500/15 text-emerald-600 border-emerald-500/20 flex-shrink-0">
             <CheckCircle className="w-3 h-3 mr-1" /> Activo
           </Badge>
         )}
-        {!isPaid && trialActive && (
-          <Badge className="bg-amber-500/15 text-amber-600 border-amber-500/20 flex-shrink-0">
-            <Clock className="w-3 h-3 mr-1" /> Prueba
-          </Badge>
-        )}
-        {!isPaid && trialExpired && (
+        {paidExpired && (
           <Badge variant="destructive" className="flex-shrink-0">
             <AlertTriangle className="w-3 h-3 mr-1" /> Vencida
           </Badge>
