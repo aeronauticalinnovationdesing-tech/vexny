@@ -21,11 +21,11 @@ Deno.serve(async (req) => {
       'currency': currency,
       'amount-in-cents': parseInt(amountInCents).toString(),
       'reference': reference,
+      'signature:integrity': signature,
       'redirect-url': redirectUrl,
     });
     
-    // Agregar signature:integrity manualmente para preservar los dos puntos
-    const checkoutUrl = `https://checkout.wompi.co/p/?${params.toString()}&signature:integrity=${encodeURIComponent(signature)}`;
+    const checkoutUrl = `https://checkout.wompi.co/p/?${params.toString()}`;
 
     return Response.json({ 
       processingUrl: checkoutUrl
