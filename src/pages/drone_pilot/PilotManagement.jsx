@@ -223,7 +223,7 @@ export default function PilotManagement() {
           <DialogHeader>
             <DialogTitle>{editingPilot ? "Editar Piloto" : "Agregar Piloto"}</DialogTitle>
           </DialogHeader>
-          <form onSubmit={handleSave} className="space-y-4">
+          <form onSubmit={handleSave} className="space-y-4 max-h-96 overflow-y-auto">
             <div>
               <label className="text-sm font-medium">Nombre Completo</label>
               <Input
@@ -232,7 +232,16 @@ export default function PilotManagement() {
                 required
               />
             </div>
+
             <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="text-sm font-medium">CIPU</label>
+                <Input
+                  value={form.cipu || ""}
+                  onChange={(e) => setForm({ ...form, cipu: e.target.value })}
+                  placeholder="Certificado de Identificación..."
+                />
+              </div>
               <div>
                 <label className="text-sm font-medium">Número de Licencia</label>
                 <Input
@@ -241,6 +250,9 @@ export default function PilotManagement() {
                   required
                 />
               </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="text-sm font-medium">Categoría</label>
                 <Select value={form.license_category} onValueChange={(v) => setForm({ ...form, license_category: v })}>
@@ -254,7 +266,24 @@ export default function PilotManagement() {
                   </SelectContent>
                 </Select>
               </div>
+              <div>
+                <label className="text-sm font-medium">Fase RAC 100</label>
+                <Select value={form.rac_100_phase || "solicitud"} onValueChange={(v) => setForm({ ...form, rac_100_phase: v })}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="solicitud">Solicitud</SelectItem>
+                    <SelectItem value="evaluacion">Evaluación</SelectItem>
+                    <SelectItem value="capacitacion">Capacitación</SelectItem>
+                    <SelectItem value="examen">Examen</SelectItem>
+                    <SelectItem value="certificacion">Certificación</SelectItem>
+                    <SelectItem value="licencia_emitida">Licencia Emitida</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
+
             <div>
               <label className="text-sm font-medium">Vencimiento RAC 100</label>
               <Input
@@ -264,15 +293,25 @@ export default function PilotManagement() {
                 required
               />
             </div>
+
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="text-sm font-medium">Email</label>
-                <Input value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
+                <Input value={form.email || ""} onChange={(e) => setForm({ ...form, email: e.target.value })} />
               </div>
               <div>
                 <label className="text-sm font-medium">Teléfono</label>
-                <Input value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
+                <Input value={form.phone || ""} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
               </div>
+            </div>
+
+            <div>
+              <label className="text-sm font-medium">Gerente de SMS</label>
+              <Input
+                value={form.sms_manager || ""}
+                onChange={(e) => setForm({ ...form, sms_manager: e.target.value })}
+                placeholder="Nombre o email del gerente responsable"
+              />
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
