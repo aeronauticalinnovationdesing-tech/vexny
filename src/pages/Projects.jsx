@@ -1,12 +1,12 @@
 import { useProfile } from "@/lib/ProfileContext";
-import Projects from "./startup/StartupProjects.jsx";
-import DroneMissions from "./drone_pilot/DroneMissions";
-import EliteHumanProjects from "./elite_human/EliteHumanProjects";
+import StartupProjects from "./startup/StartupProjects.jsx";
+import DroneMissions from "./drone_pilot/DroneMissions.jsx";
+import EliteHumanProjects from "./elite_human/EliteHumanProjects.jsx";
 
 const PAGE_MAP = {
-  trader: Projects,         // Trader no tiene proyectos en nav, pero por si accede
+  trader: StartupProjects,
   drone_pilot: DroneMissions,
-  startup: Projects,
+  startup: StartupProjects,
   elite_human: EliteHumanProjects,
 };
 

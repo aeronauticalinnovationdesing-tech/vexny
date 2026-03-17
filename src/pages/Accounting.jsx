@@ -1,6 +1,6 @@
 import { useProfile } from "@/lib/ProfileContext";
-import TraderAccounting from "./trader/TraderAccounting";
-import GenericAccounting from "./shared/GenericAccounting";
+import TraderAccounting from "./trader/TraderAccounting.jsx";
+import GenericAccounting from "./shared/GenericAccounting.jsx";
 
 const PAGE_MAP = {
   trader: TraderAccounting,

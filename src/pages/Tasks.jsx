@@ -1,8 +1,8 @@
 import { useProfile } from "@/lib/ProfileContext";
-import TraderTrades from "./trader/TraderTrades";
-import DronePilotFlightLog from "./drone_pilot/DronePilotFlightLog";
-import StartupTasks from "./startup/StartupTasks";
-import EliteHumanGoals from "./elite_human/EliteHumanGoals";
+import TraderTrades from "./trader/TraderTrades.jsx";
+import DronePilotFlightLog from "./drone_pilot/DronePilotFlightLog.jsx";
+import StartupTasks from "./startup/StartupTasks.jsx";
+import EliteHumanGoals from "./elite_human/EliteHumanGoals.jsx";
 
 const PAGE_MAP = {
   trader: TraderTrades,

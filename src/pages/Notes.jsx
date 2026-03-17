@@ -1,8 +1,7 @@
 import { useProfile } from "@/lib/ProfileContext";
-import TraderNotes from "./trader/TraderNotes";
-import GenericNotes from "./shared/GenericNotes";
+import TraderNotes from "./trader/TraderNotes.jsx";
+import GenericNotes from "./shared/GenericNotes.jsx";
 
-// Notes are mostly the same but with different labels/context per profile
 const PAGE_MAP = {
   trader: TraderNotes,
   drone_pilot: GenericNotes,
