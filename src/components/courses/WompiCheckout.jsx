@@ -3,6 +3,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Button } from "@/components/ui/button";
 import { base44 } from "@/api/base44Client";
 import { Loader2, CreditCard } from "lucide-react";
+import WompiWidget from "./WompiWidget";
 
 export default function WompiCheckout({ open, onClose, course, userEmail, onPurchaseCreated }) {
   const [loading, setLoading] = useState(false);
