@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
-import { Shield, AlertTriangle } from "lucide-react";
+import { base44 } from "@/api/base44Client";
+import { Shield, AlertTriangle, Database, Trash2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import PriceManager from "@/components/dashboard/PriceManager";
 
 export default function Admin() {
