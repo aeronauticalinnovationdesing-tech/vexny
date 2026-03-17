@@ -1,7 +1,7 @@
 import React from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
-import { FolderKanban, CheckSquare, Wallet, Clock, Sword, ArrowRight, TrendingUp, TrendingDown } from "lucide-react";
+import { FolderKanban, CheckSquare, Wallet, Sword, ArrowRight, TrendingUp, TrendingDown } from "lucide-react";
 import { Link } from "react-router-dom";
 import StatCard from "../components/dashboard/StatCard";
 import RecentActivity from "../components/dashboard/RecentActivity";
@@ -9,6 +9,8 @@ import {
   IncomeExpenseChart, TaskPriorityChart,
   ProjectProgressChart, CashFlowChart, TaskStatusChart
 } from "../components/dashboard/DashboardCharts";
+import ProjectProgressBars from "../components/dashboard/ProjectProgressBars";
+import MoneyGoalBars from "../components/dashboard/MoneyGoalBars";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 
