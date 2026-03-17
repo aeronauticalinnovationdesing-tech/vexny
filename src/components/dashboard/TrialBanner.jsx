@@ -85,18 +85,22 @@ export default function TrialBanner({ profile }) {
       });
 
       const { signature, publicKey } = res.data;
+      if (!signature || !publicKey) {
+        throw new Error('Missing signature or publicKey from wompiSignature');
+      }
+
       const redirectUrl = `${window.location.origin}/Dashboard`;
 
-      const params = new URLSearchParams({
-        "public-key": publicKey,
-        currency: "COP",
-        "amount-in-cents": String(amountInCents),
-        reference,
-        "signature:integrity": signature,
-        "redirect-url": redirectUrl,
-      });
+      // Construir URL de Wompi Checkout con parámetros correctos
+      const checkoutUrl = new URL('https://checkout.wompi.co/p/');
+      checkoutUrl.searchParams.append('public-key', publicKey);
+      checkoutUrl.searchParams.append('currency', 'COP');
+      checkoutUrl.searchParams.append('amount-in-cents', String(amountInCents));
+      checkoutUrl.searchParams.append('reference', reference);
+      checkoutUrl.searchParams.append('signature:integrity', signature);
+      checkoutUrl.searchParams.append('redirect-url', redirectUrl);
 
-      window.location.href = `https://checkout.wompi.co/p/?${params.toString()}`;
+      window.location.href = checkoutUrl.toString();
     } catch (err) {
       console.error("Error iniciando pago:", err);
       alert("Error al iniciar el pago. Intenta de nuevo.");
