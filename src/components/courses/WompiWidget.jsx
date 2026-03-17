@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 export default function WompiWidget({
   publicKey,
@@ -8,11 +8,19 @@ export default function WompiWidget({
   customerEmail,
   redirectUrl
 }) {
+  const containerRef = useRef(null);
+
   useEffect(() => {
-    // Esperar a que el script de Wompi esté cargado
-    const checkInterval = setInterval(() => {
+    if (!containerRef.current || !signature) return;
+
+    // Cargar script de Wompi
+    const script = document.createElement('script');
+    script.src = 'https://checkout.wompi.co/widget.js';
+    script.async = true;
+
+    // Cuando el script esté listo, inicializar el widget
+    script.onload = () => {
       if (window.WidgetCheckout) {
-        clearInterval(checkInterval);
         new window.WidgetCheckout({
           currency: 'COP',
           amountInCents,
@@ -23,24 +31,16 @@ export default function WompiWidget({
           signature
         });
       }
-    }, 100);
+    };
 
-    return () => clearInterval(checkInterval);
+    containerRef.current.appendChild(script);
+
+    return () => {
+      if (containerRef.current && containerRef.current.contains(script)) {
+        containerRef.current.removeChild(script);
+      }
+    };
   }, [publicKey, reference, amountInCents, signature, customerEmail, redirectUrl]);
 
-  return (
-    <div>
-      <script
-        src="https://checkout.wompi.co/widget.js"
-        data-public-key={publicKey}
-        data-currency="COP"
-        data-amount-in-cents={amountInCents}
-        data-reference={reference}
-        data-customer-email={customerEmail}
-        data-redirect-url={redirectUrl}
-        data-signature:integrity={signature}
-        async
-      ></script>
-    </div>
-  );
+  return <div ref={containerRef} />;
 }
