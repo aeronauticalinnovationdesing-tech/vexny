@@ -2,35 +2,43 @@ import React, { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
-import { Clock, Crown, AlertTriangle, CheckCircle, Edit3, Save, X } from "lucide-react";
+import { Clock, AlertTriangle, CheckCircle, Edit3, Save, X, CreditCard, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 function useCountdown(trialStartISO) {
   const [remaining, setRemaining] = useState(null);
-
   useEffect(() => {
     if (!trialStartISO) return;
     const trialEnd = new Date(trialStartISO).getTime() + 48 * 60 * 60 * 1000;
-
     const tick = () => {
       const diff = trialEnd - Date.now();
       if (diff <= 0) {
         setRemaining({ expired: true, h: 0, m: 0, s: 0 });
       } else {
-        const h = Math.floor(diff / 3600000);
-        const m = Math.floor((diff % 3600000) / 60000);
-        const s = Math.floor((diff % 60000) / 1000);
-        setRemaining({ expired: false, h, m, s });
+        setRemaining({
+          expired: false,
+          h: Math.floor(diff / 3600000),
+          m: Math.floor((diff % 3600000) / 60000),
+          s: Math.floor((diff % 60000) / 1000),
+        });
       }
     };
     tick();
     const id = setInterval(tick, 1000);
     return () => clearInterval(id);
   }, [trialStartISO]);
-
   return remaining;
 }
+
+const pad = (n) => String(n).padStart(2, "0");
+
+const PROFILE_NAMES = {
+  trader: "Trader Pro",
+  drone_pilot: "Drone Pilot Pro",
+  startup: "Startup HQ Pro",
+  elite_human: "Elite Human Pro",
+};
 
 export default function TrialBanner({ profile }) {
   const user = useCurrentUser();
@@ -38,6 +46,7 @@ export default function TrialBanner({ profile }) {
   const queryClient = useQueryClient();
   const [editingPrice, setEditingPrice] = useState(false);
   const [priceInput, setPriceInput] = useState("");
+  const [paying, setPaying] = useState(false);
 
   const { data: subs = [] } = useQuery({
     queryKey: ["subscription", profile],
@@ -58,34 +67,58 @@ export default function TrialBanner({ profile }) {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["subscription", profile] }),
   });
 
-  // Auto-create subscription record with trial start on first load (admin only)
+  // Para usuario regular: crear registro de trial si no existe
   useEffect(() => {
-    if (isAdmin && subs.length === 0 && profile) {
-      createSub.mutate({
-        profile,
-        monthly_price_cop: 0,
-        is_active: false,
-        trial_start_date: new Date().toISOString(),
-      });
-    }
-  }, [isAdmin, subs.length, profile]);
+    if (!user || subs.length > 0) return;
+    createSub.mutate({
+      profile,
+      monthly_price_cop: 0,
+      is_active: false,
+      trial_start_date: new Date().toISOString(),
+    });
+  }, [user, subs.length, profile]);
 
   const handleSavePrice = () => {
     const price = parseFloat(priceInput);
     if (isNaN(price) || price < 0) return;
-    if (sub) {
-      updateSub.mutate({ id: sub.id, data: { monthly_price_cop: price } });
-    }
+    if (sub) updateSub.mutate({ id: sub.id, data: { monthly_price_cop: price } });
     setEditingPrice(false);
   };
 
-  if (!sub && !isAdmin) return null;
+  const handlePay = async () => {
+    if (!sub || !sub.monthly_price_cop || sub.monthly_price_cop <= 0) return;
+    setPaying(true);
+    const reference = `VEXNY-SUB-${profile}-${user.email}-${Date.now()}`;
+    const amountInCents = Math.round(sub.monthly_price_cop * 100);
 
+    const res = await base44.functions.invoke("wompiSignature", {
+      reference,
+      amountInCents,
+      currency: "COP",
+    });
+
+    const { signature, publicKey } = res.data;
+    const redirectUrl = `${window.location.origin}/Dashboard?sub_ref=${reference}`;
+
+    const params = new URLSearchParams({
+      "public-key": publicKey,
+      currency: "COP",
+      "amount-in-cents": String(amountInCents),
+      reference,
+      "signature:integrity": signature,
+      "redirect-url": redirectUrl,
+    });
+
+    setPaying(false);
+    window.open(`https://checkout.wompi.co/p/?${params.toString()}`, "_blank");
+  };
+
+  if (!sub && !user) return null;
+
+  const isPaid = sub?.is_active;
   const trialActive = sub?.trial_start_date && countdown && !countdown.expired;
   const trialExpired = sub?.trial_start_date && countdown?.expired;
-  const isPaid = sub?.is_active;
-
-  const pad = (n) => String(n).padStart(2, "0");
+  const hasPrice = sub?.monthly_price_cop > 0;
 
   return (
     <div className={`rounded-2xl border p-5 ${
@@ -96,8 +129,8 @@ export default function TrialBanner({ profile }) {
         : "bg-amber-500/5 border-amber-500/20"
     }`}>
       <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-        {/* Status */}
-        <div className="flex items-center gap-3 flex-1">
+        {/* Status left */}
+        <div className="flex items-center gap-3 flex-1 min-w-0">
           <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${
             isPaid ? "bg-emerald-500/15" : trialExpired ? "bg-destructive/15" : "bg-amber-500/15"
           }`}>
@@ -110,41 +143,41 @@ export default function TrialBanner({ profile }) {
             )}
           </div>
           <div>
-            {isPaid && (
-              <p className="font-semibold text-emerald-600 dark:text-emerald-400 text-sm">Suscripción Activa</p>
-            )}
+            <p className={`font-semibold text-sm ${
+              isPaid ? "text-emerald-600 dark:text-emerald-400"
+              : trialExpired ? "text-destructive"
+              : "text-amber-600 dark:text-amber-400"
+            }`}>
+              {isPaid ? `✓ ${PROFILE_NAMES[profile]} — Activo`
+               : trialExpired ? "Prueba vencida — activa tu plan"
+               : "Prueba gratuita de 48 horas"}
+            </p>
             {!isPaid && trialActive && countdown && (
-              <>
-                <p className="font-semibold text-amber-600 dark:text-amber-400 text-sm">Prueba Gratuita</p>
-                <p className="text-xs text-muted-foreground mt-0.5">
-                  Tiempo restante:{" "}
-                  <span className="font-mono font-bold text-amber-600 dark:text-amber-400">
-                    {pad(countdown.h)}h {pad(countdown.m)}m {pad(countdown.s)}s
-                  </span>
-                </p>
-              </>
+              <p className="text-xs text-muted-foreground mt-0.5">
+                Tiempo restante:{" "}
+                <span className="font-mono font-bold text-amber-600 dark:text-amber-400">
+                  {pad(countdown.h)}h {pad(countdown.m)}m {pad(countdown.s)}s
+                </span>
+              </p>
             )}
             {!isPaid && trialExpired && (
-              <>
-                <p className="font-semibold text-destructive text-sm">Prueba Vencida</p>
-                <p className="text-xs text-muted-foreground mt-0.5">Activa tu suscripción para continuar</p>
-              </>
-            )}
-            {!sub && isAdmin && (
-              <p className="text-xs text-muted-foreground">Iniciando prueba gratuita...</p>
+              <p className="text-xs text-muted-foreground mt-0.5">
+                Suscríbete para seguir usando {PROFILE_NAMES[profile]}
+              </p>
             )}
           </div>
         </div>
 
-        {/* Price section */}
-        <div className="flex items-center gap-3">
+        {/* Right: price + action */}
+        <div className="flex items-center gap-3 flex-shrink-0">
+          {/* Price display */}
           <div className="text-right">
             <p className="text-xs text-muted-foreground mb-0.5">Suscripción mensual</p>
-            {editingPrice ? (
-              <div className="flex items-center gap-2">
+            {isAdmin && editingPrice ? (
+              <div className="flex items-center gap-1.5">
                 <span className="text-xs text-muted-foreground">COP $</span>
                 <Input
-                  className="w-32 h-7 text-sm"
+                  className="w-28 h-7 text-sm"
                   value={priceInput}
                   onChange={(e) => setPriceInput(e.target.value)}
                   placeholder="0"
@@ -159,16 +192,15 @@ export default function TrialBanner({ profile }) {
                 </Button>
               </div>
             ) : (
-              <div className="flex items-center gap-2">
-                <p className="font-bold text-lg">
-                  {sub?.monthly_price_cop > 0
-                    ? `COP $${Number(sub.monthly_price_cop).toLocaleString("es-CO")}`
-                    : "Por definir"}
+              <div className="flex items-center gap-1.5">
+                <p className="font-bold text-base">
+                  {hasPrice ? `$${Number(sub.monthly_price_cop).toLocaleString("es-CO")} COP` : "—"}
                 </p>
                 {isAdmin && (
                   <button
                     onClick={() => { setPriceInput(sub?.monthly_price_cop || ""); setEditingPrice(true); }}
                     className="text-muted-foreground hover:text-foreground transition-colors"
+                    title="Editar precio"
                   >
                     <Edit3 className="w-3.5 h-3.5" />
                   </button>
@@ -177,16 +209,30 @@ export default function TrialBanner({ profile }) {
             )}
           </div>
 
-          {isAdmin && sub && (
+          {/* Action button */}
+          {isAdmin ? (
+            // Admin: toggle activo/inactivo manualmente
             <Button
               size="sm"
               variant={isPaid ? "outline" : "default"}
-              className="gap-2 flex-shrink-0"
-              onClick={() => updateSub.mutate({ id: sub.id, data: { is_active: !isPaid } })}
+              onClick={() => sub && updateSub.mutate({ id: sub.id, data: { is_active: !isPaid } })}
+              disabled={!sub}
             >
-              <Crown className="w-3.5 h-3.5" />
-              {isPaid ? "Desactivar" : "Activar"}
+              {isPaid ? "Desactivar" : "Marcar activo"}
             </Button>
+          ) : (
+            // Usuario: botón pagar si no está activo y hay precio
+            !isPaid && hasPrice && (
+              <Button
+                size="sm"
+                className="gap-2"
+                onClick={handlePay}
+                disabled={paying}
+              >
+                {paying ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <CreditCard className="w-3.5 h-3.5" />}
+                Pagar con Wompi
+              </Button>
+            )
           )}
         </div>
       </div>
