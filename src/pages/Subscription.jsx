@@ -123,16 +123,42 @@ function AppSubscriptionCard({ profile, sub, onPay, paying, dialogOpen, setDialo
           </p>
         </div>
         {!isPaid ? (
-          <Button
-            className="gap-2"
-            onClick={() => onPay(profile.id, monthlyPrice)}
-            disabled={paying === profile.id}
-          >
-            {paying === profile.id
-              ? <Loader2 className="w-4 h-4 animate-spin" />
-              : <CreditCard className="w-4 h-4" />}
-            Suscribirme
-          </Button>
+          <>
+            <Button
+              className="gap-2"
+              onClick={() => onPay(profile.id, monthlyPrice)}
+              disabled={paying === profile.id || monthlyPrice <= 0}
+            >
+              {paying === profile.id
+                ? <Loader2 className="w-4 h-4 animate-spin" />
+                : <CreditCard className="w-4 h-4" />}
+              Suscribirme
+            </Button>
+            {checkoutData?.profileId === profile.id && (
+              <Dialog open={dialogOpen && checkoutData?.profileId === profile.id} onOpenChange={setDialogOpen}>
+                <DialogContent className="max-w-sm">
+                  <DialogHeader>
+                    <DialogTitle>Confirmar suscripción</DialogTitle>
+                    <DialogDescription>
+                      {profile.label} • ${monthlyPrice.toLocaleString("es-CO")} COP/mes
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="py-4">
+                    {checkoutData && (
+                      <WompiWidget
+                        publicKey={checkoutData.publicKey}
+                        reference={checkoutData.reference}
+                        amountInCents={checkoutData.amountInCents}
+                        signature={checkoutData.signature}
+                        customerEmail={checkoutData.email}
+                        redirectUrl={checkoutData.redirectUrl}
+                      />
+                    )}
+                  </div>
+                </DialogContent>
+              </Dialog>
+            )}
+          </>
         ) : (
           <Button variant="outline" disabled className="text-emerald-600 border-emerald-500/30">
             <CheckCircle className="w-4 h-4 mr-2" /> Suscrito
