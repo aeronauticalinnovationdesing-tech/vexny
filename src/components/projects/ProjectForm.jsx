@@ -174,7 +174,9 @@ export default function ProjectForm({ open, onOpenChange, onSave, project }) {
                 <Label className="mb-2 block">Miembros del Equipo</Label>
                 <div className="flex gap-2 mb-2">
                   <Input value={newMember} onChange={e => setNewMember(e.target.value)} onKeyDown={e => e.key === "Enter" && (e.preventDefault(), addMember())} placeholder="Nombre o email..." className="flex-1" />
-                  <Button type="button" size="sm" onClick={addMember} variant="outline"><Plus className="w-3.5 h-3.5" /></Button>
+                  <Button type="button" size="sm" onClick={addMember} variant="outline" disabled={sendingEmail}>
+                    {sendingEmail ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Plus className="w-3.5 h-3.5" />}
+                  </Button>
                 </div>
                 <div className="flex flex-wrap gap-2">
                   {(form.team_members || []).map((m, i) => (
