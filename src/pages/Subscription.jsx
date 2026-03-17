@@ -212,6 +212,21 @@ export default function Subscription() {
     }
   };
 
+  const handleCancel = async (subscriptionId) => {
+    if (!confirm("¿Estás seguro? Se cancelará la renovación automática.")) return;
+    setCanceling(subscriptionId);
+    try {
+      await base44.functions.invoke("cancelSubscription", {
+        subscriptionId,
+      });
+      queryClient.invalidateQueries({ queryKey: ["all-subscriptions"] });
+    } catch (err) {
+      console.error(err);
+      alert("Error al cancelar la suscripción. Intenta de nuevo.");
+    }
+    setCanceling(null);
+  };
+
   const getSubForProfile = (profileId) =>
     allSubs.find((s) => s.profile === profileId) || null;
 
