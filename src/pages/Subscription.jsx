@@ -252,6 +252,7 @@ export default function Subscription() {
             sub={getSubForProfile(profile.id)}
             onPay={handlePay}
             paying={paying}
+            onCancel={handleCancel}
           />
         ))}
       </div>
