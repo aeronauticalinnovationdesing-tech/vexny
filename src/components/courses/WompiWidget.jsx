@@ -77,14 +77,28 @@ export default function WompiWidget({
 
       checkout.onSuccess = async (transaction) => {
         console.log('Payment successful:', transaction);
-        // Invalidar queries para refrescar datos
+        
         if (isSub) {
+          try {
+            // Llamar callback para sincronizar backend
+            const callbackRes = await base44.functions.invoke('wompiCallback', {
+              reference: transaction.reference || reference,
+              transactionId: transaction.id
+            });
+            console.log('Callback response:', callbackRes.data);
+          } catch (err) {
+            console.error('Callback error:', err);
+          }
+
+          // Esperar más tiempo para que el webhook se procese
+          await new Promise(r => setTimeout(r, 2000));
+
+          // Invalidar todas las queries de suscripción y usuario
           queryClient.invalidateQueries({ queryKey: ['subscription'] });
-          queryClient.invalidateQueries({ queryKey: ['user'] });
-          // Dar tiempo a que las queries se actualicen antes de redirigir
-          setTimeout(() => {
-            window.location.href = redirectUrl;
-          }, 1000);
+          queryClient.invalidateQueries({ queryKey: ['me'] });
+          
+          console.log('Redirecting to:', redirectUrl);
+          window.location.href = redirectUrl;
         } else if (onSuccess) {
           onSuccess(true);
         }
