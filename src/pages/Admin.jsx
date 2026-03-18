@@ -143,6 +143,10 @@ export default function Admin() {
 
       <div className="border-t" />
 
+      <CompanySubscriptionsManager />
+
+      <div className="border-t" />
+
       <div className="space-y-4">
         <h2 className="text-lg font-semibold flex items-center gap-2">
           <MessageSquare className="w-5 h-5" />
