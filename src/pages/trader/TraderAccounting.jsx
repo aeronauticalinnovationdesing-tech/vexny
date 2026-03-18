@@ -13,6 +13,7 @@ import { Plus, TrendingUp, TrendingDown, Building2, Trash2, PiggyBank, BarChart2
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
+import { useProfile } from "@/lib/ProfileContext";
 
 const formatCOP = (n) =>
   new Intl.NumberFormat("es-CO", { style: "currency", currency: "COP", minimumFractionDigits: 0 }).format(n || 0);
