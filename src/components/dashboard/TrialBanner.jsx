@@ -204,6 +204,16 @@ export default function TrialBanner({ profile }) {
                   Suscríbete para seguir usando {PROFILE_NAMES[profile]}
                 </p>
               )}
+              {isPaid && userSub?.paid_until && (
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  Renovación: <span className="font-semibold text-emerald-600 dark:text-emerald-400">{formatDate(userSub.paid_until)}</span>
+                </p>
+              )}
+              {isPaid && userSub?.auto_renew && (
+                <p className="text-xs text-emerald-600 dark:text-emerald-400">
+                  ✓ Renovación automática habilitada
+                </p>
+              )}
             </div>
           </div>
 
