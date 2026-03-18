@@ -45,7 +45,7 @@ export default function Profile() {
   const [editing, setEditing] = useState(false);
   const [editName, setEditName] = useState(user?.full_name || "");
 
-  const { data: userSubs = [] } = useQuery({
+  const { data: userSubs = [], refetch: refetchUserSubs } = useQuery({
     queryKey: ["user-subscriptions", user?.email, activeProfile?.id],
     queryFn: async () => {
       if (!user?.email || !activeProfile?.id) return [];
@@ -57,7 +57,7 @@ export default function Profile() {
       return subs;
     },
     enabled: !!user?.email && !!activeProfile?.id,
-    refetchInterval: 3000, // Refetch cada 3 segundos para captar cambios rápidamente
+    refetchInterval: 2000, // Refetch cada 2 segundos para captar cambios rápidamente
   });
 
   const { data: globalSubs = [] } = useQuery({
@@ -93,10 +93,16 @@ export default function Profile() {
     if (!confirm("¿Deseas renovar tu suscripción?")) return;
     setRenewing(sub.id);
     try {
-      await base44.functions.invoke("activateSubscription", {
+      const response = await base44.functions.invoke("activateSubscription", {
         profileId: activeProfile.id,
       });
-      queryClient.invalidateQueries({ queryKey: ["user-subscriptions", user?.email, activeProfile?.id] });
+      console.log("Activate response:", response.data);
+      
+      // Refetch inmediatamente
+      setTimeout(() => {
+        refetchUserSubs();
+        queryClient.invalidateQueries({ queryKey: ["user-subscriptions", user?.email, activeProfile?.id] });
+      }, 500);
     } catch (err) {
       console.error(err);
       alert("Error al renovar. Intenta de nuevo.");
