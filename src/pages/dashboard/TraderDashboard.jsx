@@ -16,26 +16,26 @@ export default function TraderDashboard() {
   const user = useCurrentUser();
 
   const { data: transactions = [] } = useQuery({
-    queryKey: ["transactions", user?.email],
-    queryFn: () => base44.entities.Transaction.filter({ created_by: user.email }, "-created_date", 100),
+    queryKey: ["transactions", user?.email, "trader"],
+    queryFn: () => base44.entities.Transaction.filter({ created_by: user.email, profile_id: "trader" }, "-created_date", 100),
     enabled: !!user,
   });
 
   const { data: tasks = [] } = useQuery({
-    queryKey: ["tasks", user?.email],
-    queryFn: () => base44.entities.Task.filter({ created_by: user.email }, "-created_date", 50),
+    queryKey: ["tasks", user?.email, "trader"],
+    queryFn: () => base44.entities.Task.filter({ created_by: user.email, profile_id: "trader" }, "-created_date", 50),
     enabled: !!user,
   });
 
   const { data: bankAccounts = [] } = useQuery({
-    queryKey: ["bankAccounts", user?.email],
-    queryFn: () => base44.entities.BankAccount.filter({ created_by: user.email }),
+    queryKey: ["bankAccounts", user?.email, "trader"],
+    queryFn: () => base44.entities.BankAccount.filter({ created_by: user.email, profile_id: "trader" }),
     enabled: !!user,
   });
 
   const { data: notes = [] } = useQuery({
-    queryKey: ["notes", user?.email],
-    queryFn: () => base44.entities.Note.filter({ created_by: user.email }, "-created_date", 5),
+    queryKey: ["notes", user?.email, "trader"],
+    queryFn: () => base44.entities.Note.filter({ created_by: user.email, profile_id: "trader" }, "-created_date", 5),
     enabled: !!user,
   });
 
