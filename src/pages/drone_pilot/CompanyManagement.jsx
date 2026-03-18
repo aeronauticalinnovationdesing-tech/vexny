@@ -159,7 +159,6 @@ export default function CompanyManagement() {
            { label: "Empresas", val: companies.length, icon: Building2, color: "text-sky-500", bg: "bg-sky-50" },
            { label: "Pilotos Activos", val: `${activePilots}/${totalPilots}`, icon: Users, color: "text-emerald-600", bg: "bg-emerald-50" },
            { label: "Drones Operativos", val: `${operativeDrones}/${totalDrones}`, icon: Shield, color: "text-blue-600", bg: "bg-blue-50" },
-           { label: "Jefes de Pilotos", val: pilots.filter(p => p.role === "jefe_pilotos").length, icon: CheckCircle, color: "text-primary", bg: "bg-primary/10" },
          ].map(s => (
            <div key={s.label} className={`rounded-xl p-4 ${s.bg}`}>
              <div className="flex items-center gap-3">
