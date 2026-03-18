@@ -62,7 +62,7 @@ export default function DronePilotFlightLog() {
   });
 
   const createMutation = useMutation({
-    mutationFn: (d) => base44.entities.Task.create(d),
+    mutationFn: (d) => base44.entities.Task.create({ ...d, profile_id: activeProfileId }),
     onSuccess: () => { queryClient.invalidateQueries({ queryKey: ["tasks"] }); closeForm(); },
   });
   const updateMutation = useMutation({
