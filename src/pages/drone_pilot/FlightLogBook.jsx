@@ -88,6 +88,7 @@ const statusColors = {
 };
 
 export default function FlightLogBook() {
+  const user = useCurrentUser();
   const [showForm, setShowForm] = useState(false);
   const [editingLog, setEditingLog] = useState(null);
   const [form, setForm] = useState({ ...emptyForm });
@@ -97,18 +98,21 @@ export default function FlightLogBook() {
   const queryClient = useQueryClient();
 
   const { data: logs = [] } = useQuery({
-    queryKey: ["flight_logs"],
-    queryFn: () => base44.entities.FlightLog.list("-date", 100),
+    queryKey: ["flight_logs", user?.email],
+    queryFn: () => base44.entities.FlightLog.filter({ created_by: user?.email }, "-date", 100),
+    enabled: !!user?.email,
   });
 
   const { data: pilots = [] } = useQuery({
-    queryKey: ["pilots"],
-    queryFn: () => base44.entities.Pilot.list("-created_date"),
+    queryKey: ["pilots", user?.email],
+    queryFn: () => base44.entities.Pilot.filter({ created_by: user?.email }, "-created_date"),
+    enabled: !!user?.email,
   });
 
   const { data: drones = [] } = useQuery({
-    queryKey: ["drones"],
-    queryFn: () => base44.entities.Drone.list("-created_date"),
+    queryKey: ["drones", user?.email],
+    queryFn: () => base44.entities.Drone.filter({ created_by: user?.email }, "-created_date"),
+    enabled: !!user?.email,
   });
 
   const createMutation = useMutation({
