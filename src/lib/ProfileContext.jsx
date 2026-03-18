@@ -55,6 +55,30 @@ export const PROFILES = [
     ]
   },
   {
+    id: 'drone_company',
+    label: 'Empresa de Dron',
+    description: 'Gestiona operaciones, equipo y reportes de tu empresa de drones',
+    icon: Building2,
+    color: 'from-indigo-500 to-purple-700',
+    accent: '#6366f1',
+    nav: [
+      { icon: LayoutDashboard, label: 'Dashboard', path: '/Dashboard' },
+      { icon: Building2, label: 'Empresa', path: '/CompanyManagement' },
+      { icon: BookMarked, label: 'Bitácora RAC 100', path: '/FlightLogBook' },
+      { icon: Map, label: 'Misiones', path: '/Projects' },
+      { icon: UsersIcon, label: 'Pilotos', path: '/PilotManagement' },
+      { icon: FileCode, label: 'Flota de Drones', path: '/DroneRegistry' },
+      { icon: AlertCircle, label: 'Reportes SMS', path: '/SMSReporting' },
+      { icon: Wrench, label: 'Pólizas', path: '/MaintenanceManagement' },
+      { icon: Map, label: 'Espacio Aéreo', path: '/AirspaceMap' },
+      { icon: Calendar, label: 'Calendario', path: '/Calendar' },
+      { icon: FileText, label: 'Informes', path: '/Reports' },
+      { icon: Bot, label: 'Secretaria IA', path: '/Secretary' },
+      { icon: BookOpen, label: 'Cursos', path: '/Courses' },
+      { icon: CreditCard, label: 'Suscripciones', path: '/Subscription' },
+    ]
+  },
+  {
     id: 'startup',
     label: 'Startup',
     description: 'Gestiona proyectos, equipo, finanzas y el crecimiento de tu empresa',
