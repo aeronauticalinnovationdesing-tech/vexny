@@ -30,6 +30,9 @@ export function IncomeExpenseChart({ transactions }) {
     return { name: format(day, "EEE", { locale: es }), Ingresos: income, Gastos: expense };
   });
 
+  const hasData = transactions.length > 0;
+  if (!hasData) return null;
+
   return (
     <div className="bg-card rounded-2xl border border-border p-5">
       <h3 className="font-semibold text-sm mb-4">Ingresos vs Gastos (7 días)</h3>
