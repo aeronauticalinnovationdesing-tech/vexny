@@ -199,13 +199,26 @@ export default function Profile() {
             </div>
 
             {/* Status */}
-            <div className="text-sm border-t border-border/50 pt-4">
+            <div className="text-sm border-t border-border/50 pt-4 space-y-2">
               {paidActive && paidCountdown && (
                 <p className="text-muted-foreground">
                   Vence en:{" "}
                   <span className="font-mono font-bold text-emerald-600 dark:text-emerald-400">
                     {pad(paidCountdown.d)}d {pad(paidCountdown.h)}h {pad(paidCountdown.m)}m
                   </span>
+                </p>
+              )}
+              {paidActive && sub?.paid_until && (
+                <p className="text-muted-foreground">
+                  Renovación:{" "}
+                  <span className="font-semibold text-emerald-600 dark:text-emerald-400">
+                    {new Date(sub.paid_until).toLocaleDateString("es-CO")}
+                  </span>
+                </p>
+              )}
+              {paidActive && sub?.auto_renew !== false && (
+                <p className="text-xs text-emerald-600 dark:text-emerald-400">
+                  ✓ Renovación automática habilitada
                 </p>
               )}
               {paidExpired && (
