@@ -42,6 +42,16 @@ export default function CourseCard({ course, purchased, onBuy, onView, showProfi
             {course.duration_hours}h de contenido
           </div>
         )}
+        {showProfiles && (
+          <div className="flex flex-wrap gap-1">
+            {course.target_profiles?.length > 0
+              ? course.target_profiles.map(p => (
+                  <Badge key={p} variant="outline" className="text-xs px-1.5 py-0">{profileLabels[p] || p}</Badge>
+                ))
+              : <Badge variant="outline" className="text-xs px-1.5 py-0 text-muted-foreground">Todos los perfiles</Badge>
+            }
+          </div>
+        )}
         <div className="mt-auto pt-3 flex items-center justify-between">
           <span className="text-lg font-bold text-primary">
             ${(course.price || 0).toLocaleString()} COP
