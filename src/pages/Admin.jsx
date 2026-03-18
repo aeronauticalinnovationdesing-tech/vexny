@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { base44 } from "@/api/base44Client";
-import { useQuery } from "@tanstack/react-query";
-import { Shield, AlertTriangle, Database, Trash2, MessageSquare, CheckCircle, Clock } from "lucide-react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { Shield, AlertTriangle, Database, Trash2, MessageSquare, CheckCircle, Clock, ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import PriceManager from "@/components/dashboard/PriceManager";
 import SubscriptionsTable from "@/components/dashboard/SubscriptionsTable";
 import SubscriptionDebugger from "@/components/dashboard/SubscriptionDebugger";
