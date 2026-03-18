@@ -83,12 +83,26 @@ export default function CompanySubscriptionsManager() {
   const openEdit = (sub) => {
     setEditingId(sub.id);
     setForm({
+      company_id: sub.company_id,
       company_name: sub.company_name,
       monthly_price_cop: sub.monthly_price_cop,
       max_pilots: sub.max_pilots,
       max_drones: sub.max_drones,
     });
+    setSelectedCompanyId(sub.company_id);
     setShowForm(true);
+  };
+
+  const handleCompanySelect = (companyId) => {
+    const selected = companies.find(c => c.id === companyId);
+    if (selected) {
+      setSelectedCompanyId(companyId);
+      setForm(prev => ({
+        ...prev,
+        company_id: selected.id,
+        company_name: selected.name,
+      }));
+    }
   };
 
   const handleSave = (e) => {
