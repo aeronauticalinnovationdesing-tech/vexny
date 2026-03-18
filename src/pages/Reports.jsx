@@ -586,54 +586,7 @@ FINANZAS:
         ))}
       </div>
 
-      {/* Fila 1: Estado Tareas + Prioridad Tareas */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div ref={refPieTask} className="bg-card rounded-2xl border border-border p-5">
-          <h3 className="font-semibold mb-4 flex items-center gap-2"><PieChartIcon className="w-4 h-4 text-primary" />Estado de Tareas</h3>
-          {taskStatusData.length > 0 ? (
-            <ResponsiveContainer width="100%" height={230}>
-              <PieChart>
-                <Pie data={taskStatusData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80} label={({name,value})=>`${name}: ${value}`} labelLine>
-                  {taskStatusData.map((_,i)=><Cell key={i} fill={COLORS[i%COLORS.length]}/>)}
-                </Pie>
-                <Tooltip/>
-              </PieChart>
-            </ResponsiveContainer>
-          ) : <div className="h-[230px] flex items-center justify-center text-muted-foreground text-sm">Sin datos de tareas</div>}
-        </div>
 
-        <div ref={refPiePriority} className="bg-card rounded-2xl border border-border p-5">
-          <h3 className="font-semibold mb-4 flex items-center gap-2"><Target className="w-4 h-4 text-primary" />Prioridad de Tareas</h3>
-          {taskPriorityData.length > 0 ? (
-            <ResponsiveContainer width="100%" height={230}>
-              <PieChart>
-                <Pie data={taskPriorityData} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={50} outerRadius={85} label={({name,value})=>`${name}: ${value}`}>
-                  {taskPriorityData.map((_,i)=><Cell key={i} fill={["#ef4444","#f97316","#3b82f6","#10b981"][i]}/>)}
-                </Pie>
-                <Tooltip/><Legend/>
-              </PieChart>
-            </ResponsiveContainer>
-          ) : <div className="h-[230px] flex items-center justify-center text-muted-foreground text-sm">Sin datos</div>}
-        </div>
-      </div>
-
-      {/* Fila 2: Proyectos por estado */}
-      <div ref={refBarProject} className="bg-card rounded-2xl border border-border p-5">
-        <h3 className="font-semibold mb-4 flex items-center gap-2"><FolderKanban className="w-4 h-4 text-primary" />Estado de Proyectos</h3>
-        {projectStatusData.length > 0 ? (
-          <ResponsiveContainer width="100%" height={200}>
-            <BarChart data={projectStatusData} barSize={40}>
-              <CartesianGrid strokeDasharray="3 3" stroke="hsl(220,14%,90%)"/>
-              <XAxis dataKey="name" tick={{fontSize:12}}/>
-              <YAxis tick={{fontSize:12}} allowDecimals={false}/>
-              <Tooltip/>
-              <Bar dataKey="value" name="Proyectos" radius={[6,6,0,0]}>
-                {projectStatusData.map((_,i)=><Cell key={i} fill={COLORS[i%COLORS.length]}/>)}
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
-        ) : <div className="h-[200px] flex items-center justify-center text-muted-foreground text-sm">Sin datos de proyectos</div>}
-      </div>
 
 
     </div>
