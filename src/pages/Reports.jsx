@@ -696,3 +696,9 @@ FINANZAS:
     </div>
   );
 }
+
+export default function Reports() {
+  const { activeProfileId } = useProfile();
+  if (activeProfileId === "drone_pilot") return <DronePilotReport />;
+  return <GenericReport />;
+}
