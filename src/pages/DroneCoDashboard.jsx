@@ -121,30 +121,6 @@ export default function DroneCoDashboard() {
           )}
         </div>
 
-        {/* Team Overview */}
-        <div className="bg-card rounded-2xl border border-border p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="font-semibold text-lg">Equipo</h2>
-            <Link to="/UserManagementEnterprise" className="text-primary text-sm font-medium flex items-center gap-1 hover:underline">
-              Gestionar <ArrowRight className="w-3 h-3" />
-            </Link>
-          </div>
-          <div className="space-y-2">
-            {companyUsers.length === 0 ? (
-              <p className="text-muted-foreground text-sm">No hay usuarios registrados en el sistema</p>
-            ) : (
-              companyUsers.slice(0, 5).map(cu => (
-                <div key={cu.id} className="flex items-center gap-3 p-3 rounded-xl bg-muted/40">
-                  <div className="w-2 h-2 rounded-full bg-indigo-500 flex-shrink-0" />
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium truncate">{cu.full_name}</p>
-                    <p className="text-xs text-muted-foreground capitalize">{cu.role.replace(/_/g, ' ')}</p>
-                  </div>
-                </div>
-              ))
-            )}
-          </div>
-        </div>
       </div>
 
       {/* Recent flights + quick access */}
