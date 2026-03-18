@@ -4,10 +4,19 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { BookOpen, Download, Eye, Loader2 } from "lucide-react";
 
-export default function MyCoursesPanel({ purchases = [], onView }) {
+export default function MyCoursesPanel({ purchases = [], courses = [], onView }) {
   const [expandedPdf, setExpandedPdf] = useState(null);
 
-  if (purchases.length === 0) {
+  // Enriquecer purchases con datos del curso
+  const enrichedPurchases = purchases.map(purchase => {
+    const course = courses.find(c => c.id === purchase.course_id);
+    return {
+      ...purchase,
+      pdf_url: course?.pdf_url || purchase.pdf_url,
+    };
+  });
+
+  if (enrichedPurchases.length === 0) {
     return (
       <div className="text-center py-16 text-muted-foreground">
         <BookOpen className="w-12 h-12 mx-auto mb-3 opacity-30" />
