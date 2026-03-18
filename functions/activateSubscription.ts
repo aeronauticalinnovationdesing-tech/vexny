@@ -19,20 +19,27 @@ Deno.serve(async (req) => {
     const status = data?.data?.status;
 
     if (status === 'APPROVED') {
-      // Buscar la suscripción de este perfil y activarla
-      const subs = await base44.asServiceRole.entities.Subscription.filter({ profile });
+      // Buscar la suscripción del usuario actual para este perfil
+      const subs = await base44.entities.Subscription.filter({ profile });
+      
+      console.log(`[activateSubscription] User: ${user.email}, Profile: ${profile}, Found subs: ${subs.length}`);
+      
       if (subs.length > 0) {
         const now = new Date();
         const paidUntil = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000); // +30 días
         const paymentData = data?.data?.payment_source || {};
         
-        await base44.asServiceRole.entities.Subscription.update(subs[0].id, {
+        await base44.entities.Subscription.update(subs[0].id, {
           is_active: true,
           paid_until: paidUntil.toISOString(),
           payment_token: paymentData.id || null,
           auto_renew: true,
           last_renewal_date: now.toISOString(),
         });
+        
+        console.log(`✓ Subscription activated: ${subs[0].id}, paid_until: ${paidUntil.toISOString()}`);
+      } else {
+        console.error(`No subscription found for user ${user.email} with profile ${profile}`);
       }
       return Response.json({ success: true, status: 'APPROVED' });
     }
