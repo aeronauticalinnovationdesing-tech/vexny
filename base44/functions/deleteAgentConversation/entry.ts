@@ -15,12 +15,11 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Missing conversation_id or agent_name' }, { status: 400 });
     }
 
-    // Marcar como eliminado usando updateConversation
-    await base44.agents.updateConversation(conversation_id, {
-      metadata: {
-        is_deleted: true,
-        deleted_at: new Date().toISOString()
-      }
+    // Registrar la eliminación en la base de datos
+    await base44.asServiceRole.entities.DeletedConversation.create({
+      conversation_id,
+      agent_name,
+      user_email: user.email
     });
 
     return Response.json({ success: true, message: 'Conversation deleted' });
