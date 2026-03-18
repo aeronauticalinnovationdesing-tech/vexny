@@ -71,26 +71,26 @@ function AssetChart({ symbol, name, icon, color, type = 'line', basePrices = {} 
   const isPositive = change >= 0;
 
   return (
-    <div className="bg-card rounded-2xl border border-border p-5 space-y-4">
+    <div className="bg-card rounded-2xl border border-border p-4 sm:p-5 space-y-3">
       {/* Header */}
-      <div className="flex items-start justify-between">
+      <div className="flex items-start justify-between gap-2">
         <div>
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg flex items-center justify-center text-lg" style={{ backgroundColor: color + '15' }}>
+            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center text-base sm:text-lg" style={{ backgroundColor: color + '15' }}>
               {icon}
             </div>
-            <div>
-              <p className="font-semibold text-sm">{name}</p>
+            <div className="min-w-0">
+              <p className="font-semibold text-xs sm:text-sm truncate">{name}</p>
               <p className="text-xs text-muted-foreground">{symbol}</p>
             </div>
           </div>
         </div>
-        {isLoading && <Loader2 className="w-4 h-4 animate-spin text-muted-foreground" />}
+        {isLoading && <Loader2 className="w-4 h-4 animate-spin text-muted-foreground flex-shrink-0" />}
       </div>
 
       {/* Price */}
       <div className="flex items-end gap-2">
-        <p className="text-2xl font-bold">${currentPrice.toFixed(2)}</p>
+        <p className="text-lg sm:text-2xl font-bold">${currentPrice.toFixed(2)}</p>
         <div className={cn("text-xs font-semibold flex items-center gap-1", isPositive ? "text-emerald-600" : "text-red-600")}>
           {isPositive ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
           {isPositive ? '+' : ''}{changePercent}%
@@ -103,17 +103,18 @@ function AssetChart({ symbol, name, icon, color, type = 'line', basePrices = {} 
           Error cargando datos
         </div>
       ) : (
-        <ResponsiveContainer width="100%" height={150}>
+        <ResponsiveContainer width="100%" height={window.innerWidth < 640 ? 120 : 150}>
           {type === 'bar' ? (
             <ComposedChart data={chartData}>
               <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
-              <XAxis dataKey="date" fontSize={12} stroke="var(--muted-foreground)" />
-              <YAxis fontSize={12} stroke="var(--muted-foreground)" />
+              <XAxis dataKey="date" fontSize={window.innerWidth < 640 ? 10 : 12} stroke="var(--muted-foreground)" />
+              <YAxis fontSize={window.innerWidth < 640 ? 10 : 12} stroke="var(--muted-foreground)" />
               <Tooltip 
                 contentStyle={{ 
                   backgroundColor: 'var(--card)',
                   border: '1px solid var(--border)',
-                  borderRadius: '8px'
+                  borderRadius: '8px',
+                  fontSize: window.innerWidth < 640 ? '11px' : '12px'
                 }}
                 formatter={(value) => `$${value.toFixed(2)}`}
               />
@@ -122,13 +123,14 @@ function AssetChart({ symbol, name, icon, color, type = 'line', basePrices = {} 
           ) : (
             <LineChart data={chartData}>
               <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
-              <XAxis dataKey="date" fontSize={12} stroke="var(--muted-foreground)" />
-              <YAxis fontSize={12} stroke="var(--muted-foreground)" width={40} />
+              <XAxis dataKey="date" fontSize={window.innerWidth < 640 ? 10 : 12} stroke="var(--muted-foreground)" />
+              <YAxis fontSize={window.innerWidth < 640 ? 10 : 12} stroke="var(--muted-foreground)" width={window.innerWidth < 640 ? 35 : 40} />
               <Tooltip 
                 contentStyle={{ 
                   backgroundColor: 'var(--card)',
                   border: '1px solid var(--border)',
-                  borderRadius: '8px'
+                  borderRadius: '8px',
+                  fontSize: window.innerWidth < 640 ? '11px' : '12px'
                 }}
                 formatter={(value) => `$${value.toFixed(2)}`}
                 labelFormatter={(label) => label}
@@ -174,7 +176,7 @@ export default function MarketCharts() {
         <h2 className="text-lg font-semibold mb-1">Precios en Vivo</h2>
         <p className="text-xs text-muted-foreground">S&P 500, Forex, Petróleo y Oro</p>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
         {assets.map(asset => (
           <AssetChart
             key={asset.symbol}
