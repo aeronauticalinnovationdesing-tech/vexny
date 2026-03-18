@@ -168,6 +168,27 @@ export default function Secretary() {
     setSending(false);
   };
 
+  const deleteConversation = async (convId) => {
+    if (!confirm("¿Eliminar esta sesión?")) return;
+    
+    setDeleting(true);
+    try {
+      await base44.functions.invoke('deleteAgentConversation', { 
+        conversation_id: convId,
+        agent_name: agentName 
+      });
+      setConversations(prev => prev.filter(c => c.id !== convId));
+      if (activeConvId === convId) {
+        const remaining = conversations.filter(c => c.id !== convId);
+        setActiveConvId(remaining[0]?.id || null);
+      }
+    } catch (error) {
+      console.error("Error deleting conversation:", error);
+    } finally {
+      setDeleting(false);
+    }
+  };
+
   const activeConv = conversations.find(c => c.id === activeConvId);
 
   return (
