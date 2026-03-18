@@ -65,17 +65,17 @@ export default function PilotManagement() {
 
   const createMutation = useMutation({
     mutationFn: (data) => base44.entities.Pilot.create(data),
-    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ["pilots"] }); closeForm(); },
+    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ["pilots", user?.email] }); closeForm(); },
   });
 
   const updateMutation = useMutation({
     mutationFn: ({ id, data }) => base44.entities.Pilot.update(id, data),
-    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ["pilots"] }); closeForm(); },
+    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ["pilots", user?.email] }); closeForm(); },
   });
 
   const deleteMutation = useMutation({
     mutationFn: (id) => base44.entities.Pilot.delete(id),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["pilots"] }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["pilots", user?.email] }),
   });
 
   const closeForm = () => { setShowForm(false); setEditingPilot(null); setForm({ ...emptyForm }); };
