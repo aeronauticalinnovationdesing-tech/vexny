@@ -102,7 +102,7 @@ export default function StartupProjects() {
           {filtered.map(project => {
             const pt = tasks.filter(t => t.project_id === project.id);
             const ct = pt.filter(t => t.status === "completed");
-            return <ProjectCard key={project.id} project={project} taskCount={pt.length} completedCount={ct.length} onClick={() => setSelectedProjectId(project.id)} />;
+            return <ProjectCard key={project.id} project={project} taskCount={pt.length} completedCount={ct.length} onClick={() => setSelectedProjectId(project.id)} onDelete={(p) => deleteMutation.mutate(p.id)} />;
           })}
         </div>
       ) : (
