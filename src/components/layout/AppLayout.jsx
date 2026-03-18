@@ -18,9 +18,9 @@ export default function AppLayout() {
         {/* Mobile top bar */}
         <header className="lg:hidden flex items-center gap-3 px-4 h-14 border-b border-border bg-card sticky top-0 z-40 pt-safe">
           <button
-            onClick={() => setMobileOpen(true)}
-            className="text-muted-foreground hover:text-foreground text-xl"
-          >
+            onClick={() => setMobileOpen(true)} className="bg-yellow-500 text-slate-500 text-xl opacity-90 rounded-md hover:text-foreground">
+
+            
             ⚔️
           </button>
           <span className="text-base font-bold tracking-tight">VEXNY</span>
@@ -37,6 +37,6 @@ export default function AppLayout() {
 
       {/* Mobile bottom navigation */}
       <BottomNavigation />
-    </div>
-  );
+    </div>);
+
 }
