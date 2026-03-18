@@ -9,10 +9,26 @@ import { base44 } from "@/api/base44Client";
 import { Upload, Loader2 } from "lucide-react";
 
 export default function CourseUploadForm({ open, onClose, onSaved }) {
+  const PROFILES = [
+    { value: "trader", label: "Trader" },
+    { value: "drone_pilot", label: "Piloto de Drones" },
+    { value: "startup", label: "Startup" },
+    { value: "elite_human", label: "Elite Human" },
+  ];
+
   const [form, setForm] = useState({
     title: "", description: "", price: "", category: "otro",
-    duration_hours: "", is_published: true
+    duration_hours: "", is_published: true, target_profiles: []
   });
+
+  const toggleProfile = (value) => {
+    setForm(f => ({
+      ...f,
+      target_profiles: f.target_profiles.includes(value)
+        ? f.target_profiles.filter(p => p !== value)
+        : [...f.target_profiles, value]
+    }));
+  };
   const [pdfFile, setPdfFile] = useState(null);
   const [thumbFile, setThumbFile] = useState(null);
   const [loading, setLoading] = useState(false);
