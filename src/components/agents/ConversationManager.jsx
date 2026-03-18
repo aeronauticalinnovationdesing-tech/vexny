@@ -18,7 +18,9 @@ export default function ConversationManager({ agentName }) {
     try {
       setLoading(true);
       const convs = await base44.agents.listConversations({ agent_name: agentName });
-      setConversations(convs || []);
+      const deleted = await base44.entities.DeletedConversation.list();
+      const deletedIds = new Set(deleted.map(d => d.conversation_id));
+      setConversations((convs || []).filter(c => !deletedIds.has(c.id)));
     } catch (error) {
       console.error("Error loading conversations:", error);
       setConversations([]);
