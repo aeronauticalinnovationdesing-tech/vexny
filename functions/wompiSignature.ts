@@ -7,6 +7,38 @@ Deno.serve(async (req) => {
     if (!user) return Response.json({ error: 'Unauthorized' }, { status: 401 });
 
     const { reference, amountInCents, currency } = await req.json();
+    
+    // Extraer el profile de la referencia: VEXNY-SUB-{profile}-{timestamp}
+    const parts = reference.split('-');
+    const profile = parts[2];
+    
+    if (!profile) {
+      return Response.json({ error: 'Invalid reference format' }, { status: 400 });
+    }
+    
+    // Crear o buscar la suscripción del usuario para este profile
+    const existingSubs = await base44.entities.Subscription.filter({ 
+      profile,
+      created_by: user.email
+    });
+    
+    if (existingSubs.length === 0) {
+      // Obtener el precio global del profile
+      const globalPrices = await base44.asServiceRole.entities.Subscription.filter({ profile });
+      const monthlyPrice = globalPrices[0]?.monthly_price_cop || amountInCents / 100;
+      
+      // Crear la suscripción del usuario
+      await base44.entities.Subscription.create({
+        profile,
+        monthly_price_cop: monthlyPrice,
+        is_active: false,
+        trial_hours: 48,
+        trial_start_date: new Date().toISOString(),
+        auto_renew: false
+      });
+      
+      console.log(`✓ Created subscription for user ${user.email} with profile ${profile}`);
+    }
 
     const integritySecret = Deno.env.get('WOMPI_INTEGRITY_SECRET');
     if (!integritySecret) {
