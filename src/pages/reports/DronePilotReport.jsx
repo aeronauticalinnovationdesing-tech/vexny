@@ -111,10 +111,20 @@ export default function DronePilotReport() {
     enabled: !!user,
   });
   const { data: flights = [] } = useQuery({
-    queryKey: ["flights_drone", user?.email],
-    queryFn: () => base44.entities.Task.filter({ created_by: user.email, profile_id: "drone_pilot" }),
-    enabled: !!user,
-  });
+     queryKey: ["flights_drone", user?.email],
+     queryFn: () => base44.entities.FlightLog.filter({ created_by: user.email }),
+     enabled: !!user,
+   });
+   const { data: maintenance = [] } = useQuery({
+     queryKey: ["maintenance_drone", user?.email],
+     queryFn: () => base44.entities.DroneMaintenanceLog.filter({ created_by: user.email }),
+     enabled: !!user,
+   });
+   const { data: filings = [] } = useQuery({
+     queryKey: ["filings_drone", user?.email],
+     queryFn: () => base44.entities.AerocivialFiling.filter({ created_by: user.email }),
+     enabled: !!user,
+   });
 
   // ── Métricas clave ──
   const totalFlightHours = pilots.reduce((s, p) => s + (p.hours_flown || 0), 0);
