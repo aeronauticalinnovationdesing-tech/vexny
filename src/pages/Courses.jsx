@@ -6,9 +6,12 @@ import { useProfile } from "@/lib/ProfileContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Plus, BookOpen, Search, Loader2, CheckCircle2 } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Plus, BookOpen, Search, Loader2, CheckCircle2, Edit2 } from "lucide-react";
 import CourseCard from "@/components/courses/CourseCard";
 import CourseUploadForm from "@/components/courses/CourseUploadForm";
+import CourseEditForm from "@/components/courses/CourseEditForm";
+import MyCoursesPanel from "@/components/courses/MyCoursesPanel";
 import WompiCheckout from "@/components/courses/WompiCheckout";
 
 export default function Courses() {
