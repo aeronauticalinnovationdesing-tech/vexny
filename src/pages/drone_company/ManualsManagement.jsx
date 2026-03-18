@@ -200,8 +200,25 @@ export default function ManualsManagement() {
             </div>
 
             <div>
-              <label className="text-sm font-medium">URL del PDF</label>
-              <Input value={form.pdf_url} onChange={e => setForm({ ...form, pdf_url: e.target.value })} placeholder="https://" />
+              <label className="text-sm font-medium">PDF</label>
+              <div className="flex gap-2">
+                <div className="flex-1">
+                  <Input value={form.pdf_url} onChange={e => setForm({ ...form, pdf_url: e.target.value })} placeholder="https://" disabled className="bg-muted" />
+                </div>
+                <label>
+                  <Button type="button" variant="outline" disabled={uploadingPdf} className="gap-2">
+                    <Upload className="w-4 h-4" />
+                    {uploadingPdf ? "Subiendo..." : "Subir PDF"}
+                  </Button>
+                  <input type="file" accept=".pdf" onChange={handlePdfUpload} className="hidden" />
+                </label>
+                {form.pdf_url && (
+                  <Button type="button" variant="outline" onClick={() => setShowPdfPreview(true)} className="gap-2">
+                    <Eye className="w-4 h-4" />
+                    Ver
+                  </Button>
+                )}
+              </div>
             </div>
 
             <div>
