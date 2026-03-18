@@ -52,12 +52,15 @@ Deno.serve(async (req) => {
       return Response.json({ ok: true });
     }
 
-    // Buscar usuario por email y actualizar su suscripción
+    // Buscar suscripción del usuario específico por email y profile
     const base44 = createClientFromRequest(req);
-    const subs = await base44.asServiceRole.entities.Subscription.filter({ profile });
+    const subs = await base44.asServiceRole.entities.Subscription.filter({ 
+      profile,
+      created_by: customerEmail 
+    });
     
     if (subs.length === 0) {
-      console.error(`No subscription found for profile: ${profile}`);
+      console.error(`No subscription found for profile ${profile} and email ${customerEmail}`);
       return Response.json({ ok: true });
     }
 
