@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
+import { useProfile } from "@/lib/ProfileContext";
 import { PROFILES } from "@/lib/ProfileContext";
 import { CheckCircle, AlertTriangle, CreditCard, Loader2, User, LogOut, Edit2, Check, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -37,24 +38,30 @@ const pad = (n) => String(n).padStart(2, "0");
 export default function Profile() {
   const user = useCurrentUser();
   const queryClient = useQueryClient();
+  const profileContext = useProfile();
+  const { activeProfile = null } = profileContext || {};
   const [canceling, setCanceling] = useState(null);
   const [editing, setEditing] = useState(false);
   const [editName, setEditName] = useState(user?.full_name || "");
 
   const { data: userSubs = [] } = useQuery({
-    queryKey: ["user-subscriptions", user?.email],
+    queryKey: ["user-subscriptions", user?.email, activeProfile?.id],
     queryFn: async () => {
-      if (!user?.email) return [];
-      const subs = await base44.entities.Subscription.filter({ created_by: user.email });
+      if (!user?.email || !activeProfile?.id) return [];
+      const subs = await base44.entities.Subscription.filter({ 
+        profile: activeProfile.id,
+        created_by: user.email 
+      });
       console.log("User subs fetched:", subs);
       return subs;
     },
-    enabled: !!user?.email,
+    enabled: !!user?.email && !!activeProfile?.id,
   });
 
   const { data: globalSubs = [] } = useQuery({
-    queryKey: ["global-subscriptions"],
-    queryFn: () => base44.asServiceRole.entities.Subscription.list(),
+    queryKey: ["global-subscriptions", activeProfile?.id],
+    queryFn: () => activeProfile?.id ? base44.asServiceRole.entities.Subscription.filter({ profile: activeProfile.id }) : Promise.resolve([]),
+    enabled: !!activeProfile?.id,
   });
 
   const sub = userSubs.length > 0 ? userSubs[0] : globalSubs.length > 0 ? globalSubs[0] : null;
@@ -71,7 +78,7 @@ export default function Profile() {
       await base44.functions.invoke("cancelSubscription", {
         subscriptionId: sub.id,
       });
-      queryClient.invalidateQueries({ queryKey: ["user-subscriptions", user?.email] });
+      queryClient.invalidateQueries({ queryKey: ["user-subscriptions", user?.email, activeProfile?.id] });
     } catch (err) {
       console.error(err);
       alert("Error al cancelar la suscripción. Intenta de nuevo.");
