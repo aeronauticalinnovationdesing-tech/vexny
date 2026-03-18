@@ -70,7 +70,7 @@ export default function Sidebar({ mobileOpen, onMobileClose }) {
       <div className="flex items-center justify-between px-4 h-16 border-b border-sidebar-border flex-shrink-0">
         <div className="flex items-center gap-2">
           <div className="bg-slate-950 text-lg rounded-lg w-8 h-8 flex items-center justify-center flex-shrink-0">
-            🗡️
+            🤺
           </div>
           {!collapsed &&
         <div className="flex items-center gap-1">
