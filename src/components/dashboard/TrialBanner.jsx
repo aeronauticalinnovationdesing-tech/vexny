@@ -54,6 +54,7 @@ export default function TrialBanner({ profile }) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [checkoutData, setCheckoutData] = useState(null);
 
+  // Sub global del perfil (solo 1, creado por admin)
   const { data: subs = [] } = useQuery({
     queryKey: ["subscription", profile],
     queryFn: () => base44.entities.Subscription.filter({ profile }),
@@ -62,23 +63,17 @@ export default function TrialBanner({ profile }) {
 
   const sub = subs[0] || null;
   const trialHours = sub?.trial_hours ?? 48;
-  const countdown = useCountdown(sub?.trial_start_date || null, trialHours);
 
-  const createSub = useMutation({
-    mutationFn: (data) => base44.entities.Subscription.create(data),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["subscription", profile] }),
-  });
+  // trial_start_date se guarda en el usuario, no en Subscription
+  const trialKey = `trial_start_${profile}`;
+  const trialStartDate = user?.[trialKey] || null;
+  const countdown = useCountdown(trialStartDate, trialHours);
 
-  // Para usuario regular: crear registro de trial si no existe
+  // Si el usuario no tiene trial_start aún, iniciarlo en su propio registro
   useEffect(() => {
-    if (!user || subs.length > 0) return;
-    createSub.mutate({
-      profile,
-      monthly_price_cop: 0,
-      is_active: false,
-      trial_start_date: new Date().toISOString(),
-    });
-  }, [user, subs.length, profile]);
+    if (!user || user[trialKey]) return;
+    base44.auth.updateMe({ [trialKey]: new Date().toISOString() });
+  }, [user?.email, profile]);
 
   const handlePay = async () => {
     if (!sub || !sub.monthly_price_cop || sub.monthly_price_cop <= 0) return;
