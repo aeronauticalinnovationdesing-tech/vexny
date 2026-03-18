@@ -196,14 +196,7 @@ export default function DronePilotReport() {
   const generatePDF = async () => {
     setGenerating(true);
 
-    const [imgPilot, imgDrone, imgArea, imgSms, imgPolicies, imgHours] = await Promise.all([
-      captureEl(refPilotStatus),
-      captureEl(refDroneStatus),
-      captureEl(refFlightArea),
-      captureEl(refSmsMonth),
-      captureEl(refMaintenancePie),
-      captureEl(refHoursBar),
-    ]);
+    const [imgPilot, imgDrone, imgArea, imgSms, imgPolicies, imgHours] = [null, null, null, null, null, null];
 
     // Análisis IA especializado para dron
     const pilotRac = pilots.map(p => `${p.full_name} [${p.license_category}] – Vence RAC: ${p.rac_100_expiry_date || "N/A"} – ${p.hours_flown || 0}h`).join("\n");
