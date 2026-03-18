@@ -421,18 +421,24 @@ export default function CompanyManagement() {
             {/* Vuelos Especiales */}
             <div>
               <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-3">Vuelos Especiales Autorizados</h3>
-              <Select value={form.special_flights || ""} onValueChange={v => setForm({ ...form, special_flights: v })}>
-                <SelectTrigger><SelectValue placeholder="Seleccionar vuelos especiales..." /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="vuelo_nocturno">Vuelo nocturno</SelectItem>
-                  <SelectItem value="vuelo_zona_urbana">Vuelo en zona urbana</SelectItem>
-                  <SelectItem value="vuelo_autonomo">Vuelo autónomo</SelectItem>
-                  <SelectItem value="demostraciones_comerciales">Vuelo para demostraciones comerciales de capacidad tecnológica de UAS</SelectItem>
-                  <SelectItem value="competencias_deportivas">Vuelos en competencias y actividades deportivas y recreativas al aire libre</SelectItem>
-                  <SelectItem value="ua_cautiva">Vuelos de UA cautiva</SelectItem>
-                  <SelectItem value="espacios_cerrados">Vuelos en espacios cerrados o confinados</SelectItem>
-                </SelectContent>
-              </Select>
+              <div className="space-y-2 bg-muted/30 p-3 rounded-lg">
+                {specialFlightsOptions.map(option => (
+                  <label key={option.value} className="flex items-start gap-3 cursor-pointer">
+                    <Checkbox 
+                      checked={(Array.isArray(form.special_flights) ? form.special_flights : []).includes(option.value)}
+                      onCheckedChange={(checked) => {
+                        const current = Array.isArray(form.special_flights) ? form.special_flights : [];
+                        const updated = checked 
+                          ? [...current, option.value]
+                          : current.filter(v => v !== option.value);
+                        setForm({ ...form, special_flights: updated });
+                      }}
+                      className="mt-1"
+                    />
+                    <span className="text-sm leading-relaxed">{option.label}</span>
+                  </label>
+                ))}
+              </div>
             </div>
 
             <DialogFooter>
