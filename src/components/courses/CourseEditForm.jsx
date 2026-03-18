@@ -26,6 +26,22 @@ export default function CourseEditForm({ course, open, onClose, onSaved }) {
   const [uploadingThumbnail, setUploadingThumbnail] = useState(false);
   const [uploadingPdf, setUploadingPdf] = useState(false);
 
+  useEffect(() => {
+    if (course) {
+      setForm({
+        title: course.title || "",
+        description: course.description || "",
+        price: course.price || "",
+        thumbnail_url: course.thumbnail_url || "",
+        pdf_url: course.pdf_url || "",
+        category: course.category || "otro",
+        is_published: course.is_published || false,
+        duration_hours: course.duration_hours || "",
+        target_profiles: course.target_profiles || [],
+      });
+    }
+  }, [course, open]);
+
   const mutation = useMutation({
     mutationFn: (data) =>
       course
