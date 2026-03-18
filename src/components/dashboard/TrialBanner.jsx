@@ -61,7 +61,8 @@ export default function TrialBanner({ profile }) {
   });
 
   const sub = subs[0] || null;
-  const countdown = useCountdown(sub?.trial_start_date || null);
+  const trialHours = sub?.trial_hours ?? 48;
+  const countdown = useCountdown(sub?.trial_start_date || null, trialHours);
 
   const createSub = useMutation({
     mutationFn: (data) => base44.entities.Subscription.create(data),
