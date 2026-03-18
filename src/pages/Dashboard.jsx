@@ -2,7 +2,7 @@ import { useProfile } from "@/lib/ProfileContext";
 import WompiCallback from "@/components/dashboard/WompiCallback";
 import TraderDashboard from "./dashboard/TraderDashboard";
 import DronePilotDashboard from "./dashboard/DronePilotDashboard";
-import DroneCoDashboard from "./dashboard/DroneCoDashboard";
+import DroneCoDashboard from "./DroneCoDashboard";
 import StartupDashboard from "./dashboard/StartupDashboard";
 import EliteHumanDashboard from "./dashboard/EliteHumanDashboard";
 
