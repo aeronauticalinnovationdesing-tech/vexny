@@ -25,26 +25,26 @@ export default function EliteHumanDashboard() {
   const quote = QUOTES[new Date().getDay() % QUOTES.length];
 
   const { data: tasks = [] } = useQuery({
-    queryKey: ["tasks", user?.email],
-    queryFn: () => base44.entities.Task.filter({ created_by: user.email }, "-created_date", 50),
+    queryKey: ["tasks", user?.email, "elite_human"],
+    queryFn: () => base44.entities.Task.filter({ created_by: user.email, profile_id: "elite_human" }, "-created_date", 50),
     enabled: !!user,
   });
 
   const { data: projects = [] } = useQuery({
-    queryKey: ["projects", user?.email],
-    queryFn: () => base44.entities.Project.filter({ created_by: user.email }, "-created_date", 20),
+    queryKey: ["projects", user?.email, "elite_human"],
+    queryFn: () => base44.entities.Project.filter({ created_by: user.email, profile_id: "elite_human" }, "-created_date", 20),
     enabled: !!user,
   });
 
   const { data: transactions = [] } = useQuery({
-    queryKey: ["transactions", user?.email],
-    queryFn: () => base44.entities.Transaction.filter({ created_by: user.email }, "-created_date", 100),
+    queryKey: ["transactions", user?.email, "elite_human"],
+    queryFn: () => base44.entities.Transaction.filter({ created_by: user.email, profile_id: "elite_human" }, "-created_date", 100),
     enabled: !!user,
   });
 
   const { data: bankAccounts = [] } = useQuery({
-    queryKey: ["bankAccounts", user?.email],
-    queryFn: () => base44.entities.BankAccount.filter({ created_by: user.email }),
+    queryKey: ["bankAccounts", user?.email, "elite_human"],
+    queryFn: () => base44.entities.BankAccount.filter({ created_by: user.email, profile_id: "elite_human" }),
     enabled: !!user,
   });
 
