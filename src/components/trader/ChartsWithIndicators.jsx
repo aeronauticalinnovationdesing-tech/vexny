@@ -42,7 +42,7 @@ export default function ChartsWithIndicators() {
       {/* Chart Section */}
       <Card>
         <CardHeader>
-          <div className="flex items-center justify-between flex-wrap gap-4">
+          <div className="space-y-3">
             <CardTitle>Gráficos en Tiempo Real</CardTitle>
             <div className="flex gap-1 flex-wrap">
               {PAIRS.map(pair => (
@@ -52,6 +52,7 @@ export default function ChartsWithIndicators() {
                   size="sm"
                   onClick={() => setSelectedPair(pair)}
                   disabled={isLoading}
+                  className="text-xs sm:text-sm px-2 sm:px-3"
                 >
                   {pair}
                 </Button>
@@ -61,39 +62,42 @@ export default function ChartsWithIndicators() {
         </CardHeader>
         <CardContent className="space-y-4">
           {/* Indicators Toggle */}
-          <div className="flex gap-2 flex-wrap">
+          <div className="flex gap-1.5 flex-wrap">
             <Button
               variant={indicators.rsi ? 'default' : 'outline'}
               size="sm"
               onClick={() => toggleIndicator('rsi')}
-              className="gap-2"
+              className="gap-2 text-xs sm:text-sm px-2 sm:px-3"
             >
               {indicators.rsi ? <Eye className="w-3 h-3" /> : <EyeOff className="w-3 h-3" />}
-              RSI
+              <span className="hidden sm:inline">RSI</span>
+              <span className="sm:hidden">R</span>
             </Button>
             <Button
               variant={indicators.ma20 ? 'default' : 'outline'}
               size="sm"
               onClick={() => toggleIndicator('ma20')}
-              className="gap-2"
+              className="gap-2 text-xs sm:text-sm px-2 sm:px-3"
             >
               {indicators.ma20 ? <Eye className="w-3 h-3" /> : <EyeOff className="w-3 h-3" />}
-              MA 20
+              <span className="hidden sm:inline">MA 20</span>
+              <span className="sm:hidden">20</span>
             </Button>
             <Button
               variant={indicators.ma50 ? 'default' : 'outline'}
               size="sm"
               onClick={() => toggleIndicator('ma50')}
-              className="gap-2"
+              className="gap-2 text-xs sm:text-sm px-2 sm:px-3"
             >
               {indicators.ma50 ? <Eye className="w-3 h-3" /> : <EyeOff className="w-3 h-3" />}
-              MA 50
+              <span className="hidden sm:inline">MA 50</span>
+              <span className="sm:hidden">50</span>
             </Button>
           </div>
 
           {/* Chart */}
           {isLoading ? (
-            <div className="flex justify-center items-center h-96">
+            <div className="flex justify-center items-center h-40 sm:h-64">
               <Loader2 className="w-6 h-6 animate-spin" />
             </div>
           ) : forexData ? (
