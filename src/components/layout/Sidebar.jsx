@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { ChevronLeft, ChevronRight, Sword, LogOut, X, RefreshCw, Shield, User } from "lucide-react";
+import { ChevronLeft, ChevronRight, Sword, LogOut, X, RefreshCw, Shield, User, Lock } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import { useProfile } from "@/lib/ProfileContext";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 export default function Sidebar({ mobileOpen, onMobileClose }) {
   const [collapsed, setCollapsed] = useState(false);
@@ -16,6 +17,25 @@ export default function Sidebar({ mobileOpen, onMobileClose }) {
     queryKey: ["me"],
     queryFn: () => base44.auth.me(),
   });
+
+  // Verificar si la prueba ha expirado
+  const { data: subs = [] } = useQuery({
+    queryKey: ["subscription", activeProfile?.id],
+    queryFn: () => activeProfile?.id ? base44.entities.Subscription.filter({ profile: activeProfile.id }) : Promise.resolve([]),
+    enabled: !!activeProfile?.id,
+  });
+
+  const sub = subs[0] || null;
+  const trialHours = sub?.trial_hours ?? 48;
+  const trialKey = `trial_start_${activeProfile?.id}`;
+  const trialStartDate = user?.[trialKey];
+
+  const isTrialExpired = trialStartDate && sub && !sub.is_active && (() => {
+    const trialEnd = new Date(trialStartDate).getTime() + trialHours * 60 * 60 * 1000;
+    return Date.now() > trialEnd;
+  })();
+
+  const isRestricted = isTrialExpired && user?.role !== "admin";
 
   useEffect(() => {
     if (onMobileClose) onMobileClose();
@@ -67,6 +87,33 @@ export default function Sidebar({ mobileOpen, onMobileClose }) {
       <nav className="flex-1 py-3 px-3 space-y-1 overflow-y-auto">
         {navItems.map((item, idx) => {
           const isActive = location.pathname === item.path;
+          const isSubscriptionPage = item.path === "/Subscription";
+          const isBlocked = isRestricted && !isSubscriptionPage;
+
+          if (isBlocked) {
+            return (
+              <TooltipProvider key={`${item.path}-${idx}`}>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <div
+                      className={cn(
+                        "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 cursor-not-allowed opacity-50",
+                        "text-sidebar-foreground/50 bg-sidebar-accent/30"
+                      )}
+                    >
+                      <item.icon className="w-5 h-5 flex-shrink-0" />
+                      {!collapsed && <span>{item.label}</span>}
+                      {!collapsed && <Lock className="w-3 h-3 ml-auto flex-shrink-0" />}
+                    </div>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">
+                    Activa tu suscripción para acceder
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            );
+          }
+
           return (
             <Link
               key={`${item.path}-${idx}`}
