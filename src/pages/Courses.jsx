@@ -126,54 +126,126 @@ export default function Courses() {
         </div>
       )}
 
-      {/* Search */}
-      <div className="relative max-w-md">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-        <Input
-          placeholder="Buscar cursos..."
-          value={search}
-          onChange={e => setSearch(e.target.value)}
-          className="pl-9"
-        />
-      </div>
+      {/* Tabs */}
+      <Tabs value={activeTab} onValueChange={setActiveTab} defaultValue={defaultTab}>
+        <TabsList className="grid w-full grid-cols-2 sm:w-auto">
+          <TabsTrigger value="explore">📚 Explorar</TabsTrigger>
+          {!isAdmin && (
+            <TabsTrigger value="comprados" className="flex gap-2">
+              ✓ Mis cursos {purchases.length > 0 && <Badge variant="secondary">{purchases.length}</Badge>}
+            </TabsTrigger>
+          )}
+          {isAdmin && (
+            <TabsTrigger value="administrar">⚙️ Administrar</TabsTrigger>
+          )}
+        </TabsList>
 
-      {/* Stats */}
-      <div className="flex gap-3 flex-wrap">
-        <Badge variant="outline" className="px-3 py-1.5 text-sm">
-          {filteredCourses.length} cursos disponibles
-        </Badge>
-        {!isAdmin && (
-          <Badge className="px-3 py-1.5 text-sm bg-green-100 text-green-800 border-green-200">
-            {purchases.length} comprados
-          </Badge>
-        )}
-      </div>
-
-      {/* Courses Grid */}
-      {loadingCourses ? (
-        <div className="flex items-center justify-center py-16">
-          <Loader2 className="w-6 h-6 animate-spin text-primary" />
-        </div>
-      ) : filteredCourses.length === 0 ? (
-        <div className="text-center py-16 text-muted-foreground">
-          <BookOpen className="w-12 h-12 mx-auto mb-3 opacity-30" />
-          <p className="font-medium">No hay cursos disponibles</p>
-          {isAdmin && <p className="text-sm mt-1">Sube tu primer curso usando el botón de arriba</p>}
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-          {filteredCourses.map(course => (
-            <CourseCard
-              key={course.id}
-              course={course}
-              purchased={purchasedIds.has(course.id) || isAdmin}
-              onBuy={c => setSelectedCourse(c)}
-              onView={handleView}
-              showProfiles={isAdmin}
+        {/* EXPLORAR TAB */}
+        <TabsContent value="explore" className="space-y-4 mt-4">
+          <div className="relative max-w-md">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <Input
+              placeholder="Buscar cursos..."
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              className="pl-9"
             />
-          ))}
-        </div>
-      )}
+          </div>
+
+          <div className="flex gap-3 flex-wrap">
+            <Badge variant="outline" className="px-3 py-1.5 text-sm">
+              {filteredCourses.length} cursos disponibles
+            </Badge>
+            {!isAdmin && (
+              <Badge className="px-3 py-1.5 text-sm bg-green-100 text-green-800 border-green-200">
+                {purchases.length} comprados
+              </Badge>
+            )}
+          </div>
+
+          {loadingCourses ? (
+            <div className="flex items-center justify-center py-16">
+              <Loader2 className="w-6 h-6 animate-spin text-primary" />
+            </div>
+          ) : filteredCourses.length === 0 ? (
+            <div className="text-center py-16 text-muted-foreground">
+              <BookOpen className="w-12 h-12 mx-auto mb-3 opacity-30" />
+              <p className="font-medium">No hay cursos disponibles</p>
+              {isAdmin && <p className="text-sm mt-1">Usa el botón de arriba para crear tu primer curso</p>}
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+              {filteredCourses.map(course => (
+                <CourseCard
+                  key={course.id}
+                  course={course}
+                  purchased={purchasedIds.has(course.id) || isAdmin}
+                  onBuy={c => setSelectedCourse(c)}
+                  onView={handleView}
+                  showProfiles={isAdmin}
+                  onEdit={isAdmin ? (c) => setEditingCourse(c) : undefined}
+                />
+              ))}
+            </div>
+          )}
+        </TabsContent>
+
+        {/* MIS CURSOS TAB (Solo usuarios) */}
+        {!isAdmin && (
+          <TabsContent value="comprados" className="mt-4">
+            <MyCoursesPanel purchases={purchases} onView={handleView} />
+          </TabsContent>
+        )}
+
+        {/* ADMINISTRAR TAB (Solo admin) */}
+        {isAdmin && (
+          <TabsContent value="administrar" className="space-y-4 mt-4">
+            <div className="relative max-w-md">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Buscar tus cursos..."
+                value={search}
+                onChange={e => setSearch(e.target.value)}
+                className="pl-9"
+              />
+            </div>
+
+            {loadingCourses ? (
+              <div className="flex items-center justify-center py-16">
+                <Loader2 className="w-6 h-6 animate-spin text-primary" />
+              </div>
+            ) : filteredCourses.length === 0 ? (
+              <div className="text-center py-16 text-muted-foreground">
+                <BookOpen className="w-12 h-12 mx-auto mb-3 opacity-30" />
+                <p className="font-medium">Sin cursos creados</p>
+              </div>
+            ) : (
+              <div className="space-y-2">
+                {filteredCourses.map(course => (
+                  <div key={course.id} className="flex items-center gap-3 p-4 bg-card rounded-lg border border-border hover:border-primary/50 transition-colors">
+                    {course.thumbnail_url && (
+                      <img src={course.thumbnail_url} alt={course.title} className="w-16 h-16 rounded object-cover flex-shrink-0" />
+                    )}
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-semibold line-clamp-1">{course.title}</h3>
+                      <p className="text-sm text-muted-foreground line-clamp-1">{course.description}</p>
+                      <div className="flex gap-2 mt-2 flex-wrap">
+                        <Badge variant={course.is_published ? "default" : "outline"}>
+                          {course.is_published ? "Publicado" : "Borrador"}
+                        </Badge>
+                        <Badge variant="outline" className="text-xs">${course.price.toLocaleString("es-CO")} COP</Badge>
+                      </div>
+                    </div>
+                    <Button size="sm" variant="outline" onClick={() => setEditingCourse(course)} className="gap-2 flex-shrink-0">
+                      <Edit2 className="w-4 h-4" /> Editar
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </TabsContent>
+        )}
+      </Tabs>
 
       {/* PDF Viewer Modal */}
       {viewingPdf && (
