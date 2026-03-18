@@ -19,6 +19,7 @@ import ForexFactoryWidget from "@/components/trader/ForexFactoryWidget";
 import StrategyAnalyzer from "@/components/trader/StrategyAnalyzer";
 import AccountTypeBadge, { ACCOUNT_CONFIG } from "@/components/trader/AccountTypeBadge";
 import TradingViewLite from "@/components/trader/TradingViewLite";
+import FeatureGate from "@/components/subscription/FeatureGate";
 
 const PAIRS_FOREX = ["EUR/USD", "GBP/USD", "USD/JPY", "USD/CHF", "AUD/USD", "USD/CAD", "NZD/USD", "GBP/JPY", "EUR/JPY"];
 const PAIRS_CRIPTO = ["BTC/USDT", "ETH/USDT", "SOL/USDT", "BNB/USDT", "XRP/USDT", "ADA/USDT"];
@@ -259,7 +260,9 @@ export default function TraderJournal() {
 
         {/* CHARTS TAB */}
         <TabsContent value="charts" className="mt-4">
-          <TradingViewLite />
+          <FeatureGate featureName="TradingView Charts">
+            <TradingViewLite />
+          </FeatureGate>
         </TabsContent>
 
         {/* JOURNAL TAB */}
@@ -314,7 +317,9 @@ export default function TraderJournal() {
 
         {/* STRATEGY AI TAB */}
         <TabsContent value="strategy" className="mt-4">
-          <StrategyAnalyzer trades={trades} accountType={dominantAccountType} />
+          <FeatureGate featureName="AI Strategy Analyzer">
+            <StrategyAnalyzer trades={trades} accountType={dominantAccountType} />
+          </FeatureGate>
         </TabsContent>
 
         {/* NEWS TAB */}
