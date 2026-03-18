@@ -41,6 +41,7 @@ export default function Profile() {
   const profileContext = useProfile();
   const { activeProfile = null } = profileContext || {};
   const [canceling, setCanceling] = useState(null);
+  const [renewing, setRenewing] = useState(null);
   const [editing, setEditing] = useState(false);
   const [editName, setEditName] = useState(user?.full_name || "");
 
@@ -85,6 +86,21 @@ export default function Profile() {
       alert("Error al cancelar la suscripción. Intenta de nuevo.");
     }
     setCanceling(null);
+  };
+
+  const handleRenew = async () => {
+    if (!confirm("¿Deseas renovar tu suscripción?")) return;
+    setRenewing(sub.id);
+    try {
+      await base44.functions.invoke("activateSubscription", {
+        profileId: activeProfile.id,
+      });
+      queryClient.invalidateQueries({ queryKey: ["user-subscriptions", user?.email, activeProfile?.id] });
+    } catch (err) {
+      console.error(err);
+      alert("Error al renovar. Intenta de nuevo.");
+    }
+    setRenewing(null);
   };
 
   const handleLogout = async () => {
@@ -253,17 +269,29 @@ export default function Profile() {
                 </p>
               </div>
               {paidActive && sub?.auto_renew !== false && (
-               <Button
-                 variant="ghost"
-                 onClick={handleCancel}
-                 disabled={canceling}
-                 className="text-destructive hover:text-destructive hover:bg-destructive/10"
-               >
-                 {canceling ? (
-                   <Loader2 className="w-4 h-4 animate-spin mr-2" />
-                 ) : null}
-                 Cancelar Renovación
-               </Button>
+                <Button
+                  variant="ghost"
+                  onClick={handleCancel}
+                  disabled={canceling}
+                  className="text-destructive hover:text-destructive hover:bg-destructive/10"
+                >
+                  {canceling ? (
+                    <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                  ) : null}
+                  Cancelar Renovación
+                </Button>
+              )}
+              {paidActive && sub?.auto_renew === false && (
+                <Button
+                  onClick={handleRenew}
+                  disabled={renewing}
+                  className="bg-emerald-600 hover:bg-emerald-700 text-white"
+                >
+                  {renewing ? (
+                    <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                  ) : null}
+                  Renovar Suscripción
+                </Button>
               )}
             </div>
           </Card>
