@@ -52,26 +52,32 @@ export default function MyCoursesPanel({ purchases = [], courses = [], onView })
             </div>
 
             {/* Actions */}
-            <div className="flex gap-2 mt-4 pt-4 border-t border-border">
-              <Button
-                variant="outline"
-                size="sm"
-                className="flex-1 gap-2"
-                onClick={() => setExpandedPdf(purchase.id)}
-              >
-                <Eye className="w-4 h-4" /> Ver
-              </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="w-10"
-                asChild
-              >
-                <a href={purchase.pdf_url} download title="Descargar PDF">
-                  <Download className="w-4 h-4" />
-                </a>
-              </Button>
-            </div>
+             <div className="flex gap-2 mt-4 pt-4 border-t border-border">
+               <Button
+                 variant="outline"
+                 size="sm"
+                 className="flex-1 gap-2"
+                 onClick={() => setExpandedPdf(purchase.id)}
+               >
+                 <Eye className="w-4 h-4" /> Ver
+               </Button>
+               <Button
+                 variant="ghost"
+                 size="sm"
+                 className="w-10"
+                 onClick={() => {
+                   const link = document.createElement('a');
+                   link.href = purchase.pdf_url;
+                   link.download = `${purchase.course_title}.pdf`;
+                   document.body.appendChild(link);
+                   link.click();
+                   document.body.removeChild(link);
+                 }}
+                 title="Descargar PDF"
+               >
+                 <Download className="w-4 h-4" />
+               </Button>
+             </div>
           </Card>
         ))}
       </div>
