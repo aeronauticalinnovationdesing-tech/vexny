@@ -85,6 +85,18 @@ export default function Courses() {
 
   const handleView = (course) => setViewingPdf(course);
 
+  const handleDelete = async (course) => {
+    if (confirm(`¿Estás seguro de que deseas eliminar "${course.title}"?`)) {
+      try {
+        await base44.entities.Course.delete(course.id);
+        queryClient.invalidateQueries(['courses', 'courses-admin']);
+        setDeletingCourse(null);
+      } catch (error) {
+        console.error('Error deleting course:', error);
+      }
+    }
+  };
+
   // Determinar qué tab mostrar por defecto
   const defaultTab = isAdmin && purchases.length > 0 ? "explore" : !isAdmin && purchases.length > 0 ? "comprados" : "explore";
 
