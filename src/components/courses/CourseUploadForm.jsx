@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { base44 } from "@/api/base44Client";
-import { Upload, Loader2 } from "lucide-react";
+import { Upload, Loader2, Check } from "lucide-react";
 
 export default function CourseUploadForm({ open, onClose, onSaved }) {
   const PROFILES = [
@@ -60,7 +60,7 @@ export default function CourseUploadForm({ open, onClose, onSaved }) {
     setLoading(false);
     onSaved();
     onClose();
-    setForm({ title: "", description: "", price: "", category: "otro", duration_hours: "", is_published: true });
+    setForm({ title: "", description: "", price: "", category: "otro", duration_hours: "", is_published: true, target_profiles: [] });
     setPdfFile(null);
     setThumbFile(null);
   };
