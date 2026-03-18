@@ -158,7 +158,7 @@ export default function ProfessionalCharts() {
   const [drawMode, setDrawMode] = useState(false);
   const chartContainerRef = useRef(null);
 
-  const candles = useMemo(() => generateMockData(pair, 100), [pair]);
+  const candles = useMemo(() => generateMockData(pair, timeframe), [pair, timeframe]);
 
   const ema20 = useMemo(() => (candles.length ? calculateEMA(candles, 20) : []), [candles]);
   const ema50 = useMemo(() => (candles.length ? calculateEMA(candles, 50) : []), [candles]);
