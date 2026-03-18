@@ -53,8 +53,8 @@ export default function WompiWidget({
     // Si es suscripción, redirige a Dashboard; si es curso, a Courses
     const isSub = reference?.startsWith('VEXNY-SUB-');
     const redirectUrl = isSub 
-      ? `${window.location.origin}/Dashboard?wompi_ref=${reference}`
-      : `${window.location.origin}/Courses?wompi_ref=${reference}`;
+      ? `${window.location.origin}/Dashboard`
+      : `${window.location.origin}/Courses`;
 
     try {
       console.log('Initializing Wompi widget with:', { reference, amountInCents, publicKey });
@@ -75,15 +75,11 @@ export default function WompiWidget({
 
       checkout.onSuccess = async (transaction) => {
         console.log('Payment successful:', transaction);
-        // Si es suscripción, activarla
-        if (isSub && profile) {
-          try {
-            await base44.functions.invoke('wompiCallback', { reference, transactionId: transaction.id });
-            onSuccess && onSuccess(true);
-          } catch (e) {
-            console.error('Error activating subscription:', e);
-            onSuccess && onSuccess(false);
-          }
+        // Redirigir después de pago exitoso
+        if (isSub) {
+          window.location.href = redirectUrl;
+        } else if (onSuccess) {
+          onSuccess(true);
         }
       };
 
