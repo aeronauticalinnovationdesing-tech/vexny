@@ -52,6 +52,7 @@ import Admin from './pages/Admin';
 import Calendar from './pages/Calendar';
 import Courses from './pages/Courses';
 import Dashboard from './pages/Dashboard';
+import DroneCoDashboard from './pages/DroneCoDashboard';
 import Notes from './pages/Notes';
 import Profile from './pages/Profile';
 import ProfileSelect from './pages/ProfileSelect';
@@ -66,16 +67,23 @@ import EliteHumanDashboard from './pages/EliteHumanDashboard';
 import StartupDashboard from './pages/StartupDashboard';
 import TraderDashboard from './pages/TraderDashboard';
 import AirspaceMap from './pages/AirspaceMap';
-import CompanyManagement from './pages/CompanyManagement';
-import DroneMissions from './pages/DroneMissions';
-import DronePilotFlightLog from './pages/DronePilotFlightLog';
+import CompanySubscription from './pages/CompanySubscription';
 import DroneRegistry from './pages/DroneRegistry';
 import FlightLogBook from './pages/FlightLogBook';
 import MaintenanceManagement from './pages/MaintenanceManagement';
 import PilotManagement from './pages/PilotManagement';
 import SMSReporting from './pages/SMSReporting';
+import AirspaceMap from './pages/AirspaceMap';
+import CompanyManagement from './pages/CompanyManagement';
 import CompanySubscription from './pages/CompanySubscription';
+import DroneMissions from './pages/DroneMissions';
+import DronePilotFlightLog from './pages/DronePilotFlightLog';
 import DronePilotSubscription from './pages/DronePilotSubscription';
+import DroneRegistry from './pages/DroneRegistry';
+import FlightLogBook from './pages/FlightLogBook';
+import MaintenanceManagement from './pages/MaintenanceManagement';
+import PilotManagement from './pages/PilotManagement';
+import SMSReporting from './pages/SMSReporting';
 import EliteHumanGoals from './pages/EliteHumanGoals';
 import EliteHumanProjects from './pages/EliteHumanProjects';
 import DronePilotReport from './pages/DronePilotReport';
@@ -88,15 +96,7 @@ import TraderAccounting from './pages/TraderAccounting';
 import TraderJournal from './pages/TraderJournal';
 import TraderNotes from './pages/TraderNotes';
 import TraderTrades from './pages/TraderTrades';
-import CompanySubscription from './pages/CompanySubscription';
-import PilotManagement from './pages/PilotManagement';
-import DroneRegistry from './pages/DroneRegistry';
-import FlightLogBook from './pages/FlightLogBook';
-import SMSReporting from './pages/SMSReporting';
-import MaintenanceManagement from './pages/MaintenanceManagement';
-import AirspaceMap from './pages/AirspaceMap';
-import UserManagement from './pages/UserManagement';
-import DroneCoDashboard from './pages/DroneCoDashboard';
+import CompanyManagementEnterprise from './pages/CompanyManagementEnterprise';
 
 
 export const PAGES = {
@@ -105,6 +105,7 @@ export const PAGES = {
     "Calendar": Calendar,
     "Courses": Courses,
     "Dashboard": Dashboard,
+    "DroneCoDashboard": DroneCoDashboard,
     "Notes": Notes,
     "Profile": Profile,
     "ProfileSelect": ProfileSelect,
@@ -119,16 +120,23 @@ export const PAGES = {
     "StartupDashboard": StartupDashboard,
     "TraderDashboard": TraderDashboard,
     "AirspaceMap": AirspaceMap,
-    "CompanyManagement": CompanyManagement,
-    "DroneMissions": DroneMissions,
-    "DronePilotFlightLog": DronePilotFlightLog,
+    "CompanySubscription": CompanySubscription,
     "DroneRegistry": DroneRegistry,
     "FlightLogBook": FlightLogBook,
     "MaintenanceManagement": MaintenanceManagement,
     "PilotManagement": PilotManagement,
     "SMSReporting": SMSReporting,
+    "AirspaceMap": AirspaceMap,
+    "CompanyManagement": CompanyManagement,
     "CompanySubscription": CompanySubscription,
+    "DroneMissions": DroneMissions,
+    "DronePilotFlightLog": DronePilotFlightLog,
     "DronePilotSubscription": DronePilotSubscription,
+    "DroneRegistry": DroneRegistry,
+    "FlightLogBook": FlightLogBook,
+    "MaintenanceManagement": MaintenanceManagement,
+    "PilotManagement": PilotManagement,
+    "SMSReporting": SMSReporting,
     "EliteHumanGoals": EliteHumanGoals,
     "EliteHumanProjects": EliteHumanProjects,
     "DronePilotReport": DronePilotReport,
@@ -141,15 +149,7 @@ export const PAGES = {
     "TraderJournal": TraderJournal,
     "TraderNotes": TraderNotes,
     "TraderTrades": TraderTrades,
-    "CompanySubscription": CompanySubscription,
-    "PilotManagement": PilotManagement,
-    "DroneRegistry": DroneRegistry,
-    "FlightLogBook": FlightLogBook,
-    "SMSReporting": SMSReporting,
-    "MaintenanceManagement": MaintenanceManagement,
-    "AirspaceMap": AirspaceMap,
-    "UserManagement": UserManagement,
-    "DroneCoDashboard": DroneCoDashboard,
+    "CompanyManagementEnterprise": CompanyManagementEnterprise,
 }
 
 export const pagesConfig = {
