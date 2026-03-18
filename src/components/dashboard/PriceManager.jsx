@@ -131,20 +131,16 @@ export default function PriceManager() {
         </div>
       </div>
 
-      {allSubs.length === 0 ? (
-        <p className="text-sm text-muted-foreground py-6 text-center">Cargando precios...</p>
-      ) : (
-        <div>
-          {PROFILES.map((profile) => (
-            <ProfilePriceRow
-              key={profile.id}
-              profile={profile}
-              sub={getSubForProfile(profile.id)}
-              onSave={handleSave}
-            />
-          ))}
-        </div>
-      )}
+      <div>
+        {PROFILES.map((profile) => (
+          <ProfilePriceRow
+            key={profile.id}
+            profile={profile}
+            sub={getSubForProfile(profile.id)}
+            onSave={handleSave}
+          />
+        ))}
+      </div>
     </div>
   );
 }
