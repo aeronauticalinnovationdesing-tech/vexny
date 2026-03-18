@@ -312,8 +312,18 @@ export default function CompanyManagement() {
               <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-3">Certificación AAC / RAC 100</h3>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="text-sm font-medium">Número Certificado AAC</label>
-                  <Input value={form.aac_cert_number} onChange={e => setForm({ ...form, aac_cert_number: e.target.value })} placeholder="COL-OPS-0001" />
+                  <label className="text-sm font-medium">Fase de Registro RAC 100</label>
+                  <Select value={form.aac_cert_phase || ""} onValueChange={v => setForm({ ...form, aac_cert_phase: v })}>
+                    <SelectTrigger><SelectValue placeholder="Seleccionar fase..." /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="solicitud">Solicitud</SelectItem>
+                      <SelectItem value="evaluacion">Evaluación</SelectItem>
+                      <SelectItem value="capacitacion">Capacitación</SelectItem>
+                      <SelectItem value="examen">Examen</SelectItem>
+                      <SelectItem value="certificacion">Certificación</SelectItem>
+                      <SelectItem value="licencia_emitida">Licencia Emitida</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
                 <div>
                   <label className="text-sm font-medium">Vencimiento Certificado AAC</label>
