@@ -406,19 +406,29 @@ export default function CompanyManagement() {
               )}
             </div>
 
-            {/* Póliza */}
+            {/* Vuelos Especiales */}
             <div>
-              <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-3">Póliza de Responsabilidad Civil</h3>
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="text-sm font-medium">Número de Póliza</label>
-                  <Input value={form.insurance_policy_number} onChange={e => setForm({ ...form, insurance_policy_number: e.target.value })} />
-                </div>
-                <div>
-                  <label className="text-sm font-medium">Vencimiento Póliza</label>
-                  <Input type="date" value={form.insurance_expiry} onChange={e => setForm({ ...form, insurance_expiry: e.target.value })} />
-                </div>
-              </div>
+              <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-3">Vuelos Especiales Autorizados</h3>
+              <Select value={form.special_flights || ""} onValueChange={v => setForm({ ...form, special_flights: v })}>
+                <SelectTrigger><SelectValue placeholder="Seleccionar vuelos especiales..." /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="nocturno">Nocturno</SelectItem>
+                  <SelectItem value="zona_urbana">Zona Urbana</SelectItem>
+                  <SelectItem value="autonomo">Autónomo</SelectItem>
+                  <SelectItem value="demostracion_comercial">Demostración Comercial</SelectItem>
+                  <SelectItem value="competencias_deportivas">Competencias Deportivas</SelectItem>
+                  <SelectItem value="ua_cautiva">UA Cautiva</SelectItem>
+                  <SelectItem value="espacios_cerrados">Espacios Cerrados</SelectItem>
+                  <SelectItem value="captura_imagenes">Captura de Imágenes</SelectItem>
+                  <SelectItem value="vigilancia_seguridad">Vigilancia y Seguridad</SelectItem>
+                  <SelectItem value="medios_comunicacion">Medios de Comunicación</SelectItem>
+                  <SelectItem value="aspersion">Aspersión</SelectItem>
+                  <SelectItem value="dispersion">Dispersión</SelectItem>
+                  <SelectItem value="enjambre">Enjambre</SelectItem>
+                  <SelectItem value="transporte_carga">Transporte de Carga</SelectItem>
+                  <SelectItem value="entidades_publicas">Entidades Públicas</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
 
             <DialogFooter>
