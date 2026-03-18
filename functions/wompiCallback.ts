@@ -54,12 +54,20 @@ Deno.serve(async (req) => {
         const now = new Date();
         const paidUntil = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
         
-        await base44.asServiceRole.entities.Subscription.update(subs[0].id, {
+        const updatedSub = await base44.asServiceRole.entities.Subscription.update(subs[0].id, {
           is_active: true,
           paid_until: paidUntil.toISOString(),
           auto_renew: true,
           last_renewal_date: now.toISOString(),
         });
+
+        console.log(`✓ Subscription activated via callback for profile ${profile}:`, {
+          subId: subs[0].id,
+          paidUntil: paidUntil.toISOString(),
+          isActive: updatedSub.is_active
+        });
+      } else {
+        console.error(`No subscription found for profile ${profile}`);
       }
     }
 
