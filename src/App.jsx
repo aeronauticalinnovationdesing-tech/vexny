@@ -30,6 +30,7 @@ import CompanyManagement from './pages/drone_pilot/CompanyManagement';
 import FlightLogBook from './pages/drone_pilot/FlightLogBook';
 import CompanySubscription from './pages/drone_pilot/CompanySubscription';
 import DronePilotSubscription from './pages/drone_pilot/DronePilotSubscription';
+import CompanySubscription as CompanySubscriptionEnterprise from './pages/drone_company/CompanySubscription';
 import TraderJournal from './pages/trader/TraderJournal';
 import AdvancedTools from './pages/trader/AdvancedTools';
 
