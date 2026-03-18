@@ -64,7 +64,6 @@ export const PROFILES = [
     nav: [
       { icon: LayoutDashboard, label: 'Dashboard', path: '/Dashboard' },
       { icon: Building2, label: 'Empresa', path: '/CompanyManagement' },
-      { icon: UsersIcon, label: 'Usuarios', path: '/UserManagementEnterprise' },
       { icon: BookMarked, label: 'Bitácora RAC 100', path: '/FlightLogBookEnterprise' },
       { icon: Map, label: 'Misiones', path: '/Projects' },
       { icon: UsersIcon, label: 'Pilotos', path: '/PilotManagementEnterprise' },
