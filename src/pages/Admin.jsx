@@ -4,6 +4,7 @@ import { base44 } from "@/api/base44Client";
 import { Shield, AlertTriangle, Database, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import PriceManager from "@/components/dashboard/PriceManager";
+import SubscriptionsTable from "@/components/dashboard/SubscriptionsTable";
 
 export default function Admin() {
   const user = useCurrentUser();
