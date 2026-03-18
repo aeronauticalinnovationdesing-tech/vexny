@@ -420,11 +420,6 @@ export default function ProfessionalCharts() {
 
       {/* Gráfica */}
       <Card className="overflow-hidden">
-        {isLoading && (
-          <div className="h-96 flex items-center justify-center bg-muted">
-            <Loader2 className="w-8 h-8 animate-spin text-primary" />
-          </div>
-        )}
         <div ref={containerRef} style={{ height: "500px", width: "100%" }} />
       </Card>
 
