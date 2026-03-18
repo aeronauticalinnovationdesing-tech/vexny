@@ -334,6 +334,15 @@ Proyectos activos: ${projects.filter(p => p.status === "active").map(p => p.name
       doc.text("Finanzas", margin + 6, y + 5.5);
       y += 12;
 
+      // bar chart image
+      if (barImg) {
+        checkY(70);
+        const imgW = contentW;
+        const imgH = imgW * 0.45;
+        doc.addImage(barImg, "PNG", margin, y, imgW, imgH);
+        y += imgH + 6;
+      }
+
       if (expenseData.length > 0) {
         doc.setFontSize(9);
         doc.setFont("helvetica", "bold");
