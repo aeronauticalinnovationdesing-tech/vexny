@@ -21,7 +21,7 @@ const statusColors = {
   completed: "bg-muted text-muted-foreground",
 };
 
-export default function ProjectCard({ project, taskCount = 0, completedCount = 0, onClick }) {
+export default function ProjectCard({ project, taskCount = 0, completedCount = 0, onClick, onDelete }) {
   const progress = taskCount > 0 ? Math.round((completedCount / taskCount) * 100) : 0;
   const budgetUsed = project.budget > 0 ? Math.round(((project.spent || 0) / project.budget) * 100) : 0;
 
