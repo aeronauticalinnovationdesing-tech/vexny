@@ -6,7 +6,7 @@ import {
   LayoutDashboard, FolderKanban, CheckSquare, StickyNote,
   Wallet, Calendar, Bot, FileText, BookOpen,
   BarChart2, BookMarked, Wind, Map, Target, Users, DollarSign, Lightbulb, Activity, CreditCard,
-  Users as UsersIcon, AlertCircle, FileCode, Wrench
+  Users as UsersIcon, AlertCircle, FileCode, Wrench, Building2
 } from 'lucide-react';
 
 export const PROFILES = [
