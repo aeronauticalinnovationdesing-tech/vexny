@@ -45,19 +45,22 @@ const emptyForm = {
 };
 
 export default function PilotManagement() {
+  const user = useCurrentUser();
   const [showForm, setShowForm] = useState(false);
   const [editingPilot, setEditingPilot] = useState(null);
   const [form, setForm] = useState({ ...emptyForm });
   const queryClient = useQueryClient();
 
   const { data: pilots = [] } = useQuery({
-    queryKey: ["pilots"],
-    queryFn: () => base44.entities.Pilot.list("-created_date"),
+    queryKey: ["pilots", user?.email],
+    queryFn: () => base44.entities.Pilot.filter({ created_by: user?.email }, "-created_date"),
+    enabled: !!user?.email,
   });
 
   const { data: companies = [] } = useQuery({
-    queryKey: ["companies"],
-    queryFn: () => base44.entities.Company.list("-created_date"),
+    queryKey: ["companies", user?.email],
+    queryFn: () => base44.entities.Company.filter({ created_by: user?.email }, "-created_date"),
+    enabled: !!user?.email,
   });
 
   const createMutation = useMutation({
