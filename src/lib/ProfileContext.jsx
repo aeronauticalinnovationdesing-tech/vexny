@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
+import { queryClientInstance } from '@/lib/query-client';
 import {
   TrendingUp, Plane, Rocket, Zap,
   LayoutDashboard, FolderKanban, CheckSquare, StickyNote,
