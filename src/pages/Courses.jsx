@@ -196,6 +196,7 @@ export default function Courses() {
                   onBuy={c => setSelectedCourse(c)}
                   onView={handleView}
                   onEdit={isAdmin ? (c) => setEditingCourse(c) : undefined}
+                  onDelete={isAdmin ? handleDelete : undefined}
                   showProfiles={isAdmin}
                 />
               ))}
