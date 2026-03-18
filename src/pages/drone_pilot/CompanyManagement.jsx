@@ -316,12 +316,11 @@ export default function CompanyManagement() {
                   <Select value={form.aac_cert_phase || ""} onValueChange={v => setForm({ ...form, aac_cert_phase: v })}>
                     <SelectTrigger><SelectValue placeholder="Seleccionar fase..." /></SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="solicitud">Solicitud</SelectItem>
-                      <SelectItem value="evaluacion">Evaluación</SelectItem>
-                      <SelectItem value="capacitacion">Capacitación</SelectItem>
-                      <SelectItem value="examen">Examen</SelectItem>
-                      <SelectItem value="certificacion">Certificación</SelectItem>
-                      <SelectItem value="licencia_emitida">Licencia Emitida</SelectItem>
+                      <SelectItem value="fase_0">Fase 0</SelectItem>
+                      <SelectItem value="fase_1">Fase 1</SelectItem>
+                      <SelectItem value="fase_2">Fase 2</SelectItem>
+                      <SelectItem value="fase_3">Fase 3</SelectItem>
+                      <SelectItem value="fase_4">Fase 4</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
