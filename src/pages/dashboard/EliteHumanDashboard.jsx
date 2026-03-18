@@ -80,13 +80,24 @@ export default function EliteHumanDashboard() {
       <TrialBanner profile="elite_human" />
       <PriceManager />
 
-      {/* Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard icon={Target} label="Metas Activas" value={pendingTasks} subtitle="por completar" />
-        <StatCard icon={CheckCircle} label="Logros" value={completedTasks} subtitle={`${completionRate}% tasa de éxito`} />
-        <StatCard icon={Activity} label="Proyectos Vitales" value={activeProjects} subtitle="en progreso" />
-        <StatCard icon={Flame} label="Balance" value={`$${(totalIncome - totalExpense).toLocaleString()}`} subtitle="patrimonio neto" />
-      </div>
+      {/* Stats - solo si hay datos */}
+      {(tasks.length > 0 || projects.length > 0 || transactions.length > 0) && (
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <StatCard icon={Target} label="Metas Activas" value={pendingTasks} subtitle="por completar" />
+          <StatCard icon={CheckCircle} label="Logros" value={completedTasks} subtitle={`${completionRate}% tasa de éxito`} />
+          <StatCard icon={Activity} label="Proyectos Vitales" value={activeProjects} subtitle="en progreso" />
+          <StatCard icon={Flame} label="Balance" value={`$${(totalIncome - totalExpense).toLocaleString()}`} subtitle="patrimonio neto" />
+        </div>
+      )}
+
+      {/* Empty state */}
+      {tasks.length === 0 && projects.length === 0 && transactions.length === 0 && (
+        <div className="text-center py-16 bg-card rounded-2xl border border-border">
+          <Zap className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+          <p className="text-lg font-semibold mb-1">¡Comienza tu transformación!</p>
+          <p className="text-muted-foreground text-sm">Crea tu primera meta o proyecto para ver tus métricas aquí.</p>
+        </div>
+      )}
 
       {/* Today's focus */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
