@@ -66,7 +66,7 @@ export default function Profile() {
       await base44.functions.invoke("cancelSubscription", {
         subscriptionId: sub.id,
       });
-      queryClient.invalidateQueries({ queryKey: ["all-subscriptions", user?.email] });
+      queryClient.invalidateQueries({ queryKey: ["user-subscriptions", user?.email] });
     } catch (err) {
       console.error(err);
       alert("Error al cancelar la suscripción. Intenta de nuevo.");
