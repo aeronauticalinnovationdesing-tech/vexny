@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { base44 } from '@/api/base44Client';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function WompiWidget({ 
   reference, 
@@ -11,6 +12,7 @@ export default function WompiWidget({
   onSuccess
 }) {
   const [scriptLoaded, setScriptLoaded] = useState(false);
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     // Cargar el script de Wompi solo una vez
@@ -75,9 +77,14 @@ export default function WompiWidget({
 
       checkout.onSuccess = async (transaction) => {
         console.log('Payment successful:', transaction);
-        // Redirigir después de pago exitoso
+        // Invalidar queries para refrescar datos
         if (isSub) {
-          window.location.href = redirectUrl;
+          queryClient.invalidateQueries({ queryKey: ['subscription'] });
+          queryClient.invalidateQueries({ queryKey: ['user'] });
+          // Dar tiempo a que las queries se actualicen antes de redirigir
+          setTimeout(() => {
+            window.location.href = redirectUrl;
+          }, 1000);
         } else if (onSuccess) {
           onSuccess(true);
         }
