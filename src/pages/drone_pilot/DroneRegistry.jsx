@@ -13,6 +13,7 @@ import { es } from "date-fns/locale";
 import { cn } from "@/lib/utils";
 
 export default function DroneRegistry() {
+  const user = useCurrentUser();
   const [showForm, setShowForm] = useState(false);
   const [editingDrone, setEditingDrone] = useState(null);
   const [form, setForm] = useState({
@@ -28,8 +29,9 @@ export default function DroneRegistry() {
   const queryClient = useQueryClient();
 
   const { data: drones = [] } = useQuery({
-    queryKey: ["drones"],
-    queryFn: () => base44.entities.Drone.list("-created_date"),
+    queryKey: ["drones", user?.email],
+    queryFn: () => base44.entities.Drone.filter({ created_by: user?.email }, "-created_date"),
+    enabled: !!user?.email,
   });
 
   const createMutation = useMutation({
