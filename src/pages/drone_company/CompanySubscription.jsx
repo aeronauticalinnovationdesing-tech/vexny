@@ -12,8 +12,8 @@ import { es } from "date-fns/locale";
 import { cn } from "@/lib/utils";
 
 function useCountdown(endDateISO) {
-  const [remaining, setRemaining] = React.useState(null);
-  React.useEffect(() => {
+  const [remaining, setRemaining] = useState(null);
+  useEffect(() => {
     if (!endDateISO) return;
     const endTime = new Date(endDateISO).getTime();
     const tick = () => {
