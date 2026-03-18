@@ -132,13 +132,11 @@ export default function ProfessionalCharts() {
   const [showEMA20, setShowEMA20] = useState(true);
   const [showEMA50, setShowEMA50] = useState(true);
   const [showRSI, setShowRSI] = useState(false);
+  const [lines, setLines] = useState([]);
+  const [drawMode, setDrawMode] = useState(false);
+  const chartContainerRef = useRef(null);
 
-  const { data: candles = [], isLoading } = useQuery({
-    queryKey: ["chart-data", pair],
-    queryFn: () => generateMockData(pair, 100),
-    staleTime: 30000,
-    refetchInterval: 5000,
-  });
+  const candles = useMemo(() => generateMockData(pair, 100), [pair]);
 
   const ema20 = useMemo(() => (candles.length ? calculateEMA(candles, 20) : []), [candles]);
   const ema50 = useMemo(() => (candles.length ? calculateEMA(candles, 50) : []), [candles]);
