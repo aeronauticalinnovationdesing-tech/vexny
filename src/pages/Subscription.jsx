@@ -95,7 +95,7 @@ function AppSubscriptionCard({ profile, sub, onPay, paying, onCancel }) {
       </div>
 
       {/* Price + button */}
-      <div className="flex items-center justify-between pt-1 border-t border-border/50 gap-4">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between pt-4 border-t border-border/50 gap-4">
         <div>
           <p className="text-2xl font-extrabold">
             ${monthlyPrice.toLocaleString("es-CO")}
