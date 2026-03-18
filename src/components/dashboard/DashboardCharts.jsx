@@ -123,6 +123,8 @@ export function CashFlowChart({ transactions }) {
     return { name: format(day, "d MMM", { locale: es }), Balance: cumulative };
   });
 
+  if (transactions.length === 0) return null;
+
   return (
     <div className="bg-card rounded-2xl border border-border p-5">
       <h3 className="font-semibold text-sm mb-4">Flujo de Caja (14 días)</h3>
