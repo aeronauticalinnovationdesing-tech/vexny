@@ -68,8 +68,8 @@ export default function Profile() {
   const profile = sub ? PROFILES.find((p) => p.id === sub.profile) : null;
   const paidCountdown = useCountdown(sub?.paid_until || null);
   const isPaid = sub?.is_active === true;
-  const paidExpired = isPaid && paidCountdown?.expired;
-  const paidActive = isPaid && paidCountdown && !paidCountdown.expired;
+  const paidExpired = isPaid && paidCountdown?.expired === true;
+  const paidActive = isPaid && paidCountdown !== null && !paidCountdown.expired;
 
   const handleCancel = async () => {
     if (!confirm("¿Estás seguro? Se cancelará la renovación automática.")) return;
@@ -212,7 +212,7 @@ export default function Profile() {
 
             {/* Status */}
             <div className="text-sm border-t border-border/50 pt-4 space-y-2">
-              {paidActive && paidCountdown && (
+              {isPaid && paidCountdown && !paidCountdown.expired && (
                 <p className="text-muted-foreground">
                   Vence en:{" "}
                   <span className="font-mono font-bold text-emerald-600 dark:text-emerald-400">
@@ -220,7 +220,7 @@ export default function Profile() {
                   </span>
                 </p>
               )}
-              {paidActive && sub?.paid_until && (
+              {isPaid && sub?.paid_until && (
                 <p className="text-muted-foreground">
                   Renovación:{" "}
                   <span className="font-semibold text-emerald-600 dark:text-emerald-400">
@@ -228,7 +228,7 @@ export default function Profile() {
                   </span>
                 </p>
               )}
-              {paidActive && sub?.auto_renew !== false && (
+              {isPaid && sub?.auto_renew !== false && (
                 <p className="text-xs text-emerald-600 dark:text-emerald-400">
                   ✓ Renovación automática habilitada
                 </p>
