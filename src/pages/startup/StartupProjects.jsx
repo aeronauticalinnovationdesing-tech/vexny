@@ -44,6 +44,11 @@ export default function StartupProjects() {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["projects"] }),
   });
 
+  const deleteMutation = useMutation({
+    mutationFn: (id) => base44.entities.Project.delete(id),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["projects"] }),
+  });
+
   if (selectedProjectId) {
     return <ProjectDetail projectId={selectedProjectId} onBack={() => setSelectedProjectId(null)} />;
   }
