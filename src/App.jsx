@@ -21,6 +21,7 @@ import Courses from './pages/Courses';
 import Subscription from './pages/Subscription';
 import Admin from './pages/Admin';
 import Profile from './pages/Profile';
+import DronePilotProfile from './pages/DronePilotProfile';
 import PilotManagement from './pages/drone_pilot/PilotManagement';
 import DroneRegistry from './pages/drone_pilot/DroneRegistry';
 import SMSReporting from './pages/drone_pilot/SMSReporting';
@@ -87,6 +88,7 @@ const AuthenticatedApp = () => {
         <Route path="/Subscription" element={<Subscription />} />
         <Route path="/Admin" element={<Admin />} />
         <Route path="/Profile" element={<Profile />} />
+        <Route path="/DronePilotProfile" element={<DronePilotProfile />} />
         <Route path="/PilotManagement" element={<PilotManagement />} />
         <Route path="/DroneRegistry" element={<DroneRegistry />} />
         <Route path="/SMSReporting" element={<SMSReporting />} />
