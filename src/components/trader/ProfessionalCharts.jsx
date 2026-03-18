@@ -40,11 +40,9 @@ const seededRandom = (seed) => {
   return x - Math.floor(x);
 };
 
-// Genera datos estables y consistentes
-const generateMockData = (pair, days = 100) => {
+// Genera datos estables y consistentes según el timeframe
+const generateMockData = (pair, timeframe = "D") => {
   const candles = [];
-  let time = Math.floor(Date.now() / 1000) - days * 24 * 60 * 60;
-  
   let close;
   if (pair === "BTCUSD") close = 45000;
   else if (pair === "ETHUSD") close = 2800;
@@ -57,17 +55,41 @@ const generateMockData = (pair, days = 100) => {
   else if (pair === "GC") close = 2100;
   else close = 150;
 
-  for (let i = 0; i < days; i++) {
-    const seed = Math.floor(time / 86400) + pair.charCodeAt(0);
+  // Determinar cantidad de candles según timeframe
+  const candleCount = 
+    timeframe === "1" ? 240 :      // 1 min: 4 horas
+    timeframe === "5" ? 288 :      // 5 min: 24 horas
+    timeframe === "15" ? 96 :      // 15 min: 24 horas
+    timeframe === "30" ? 48 :      // 30 min: 24 horas
+    timeframe === "60" ? 24 :      // 1H: 24 horas
+    timeframe === "240" ? 168 :    // 4H: 1 semana
+    timeframe === "D" ? 100 :      // 1D: 100 días
+    timeframe === "W" ? 52 : 100;  // 1W: 52 semanas
+
+  // Minutos por candle
+  const minutesPerCandle = 
+    timeframe === "1" ? 1 :
+    timeframe === "5" ? 5 :
+    timeframe === "15" ? 15 :
+    timeframe === "30" ? 30 :
+    timeframe === "60" ? 60 :
+    timeframe === "240" ? 240 :
+    timeframe === "D" ? 1440 :
+    timeframe === "W" ? 10080 : 1440;
+
+  let time = Math.floor(Date.now() / 1000) - candleCount * minutesPerCandle * 60;
+
+  for (let i = 0; i < candleCount; i++) {
+    const seed = Math.floor(time / 60) + pair.charCodeAt(0);
     const open = close;
-    const variation = (seededRandom(seed) - 0.5) * 1.5;
+    const variation = (seededRandom(seed) - 0.5) * 1.2;
     close = open * (1 + variation / 100);
     const high = Math.max(open, close) * (1 + seededRandom(seed * 2) * 0.003);
     const low = Math.min(open, close) * (1 - seededRandom(seed * 3) * 0.003);
     const volume = Math.floor(seededRandom(seed * 4) * 1000000 + 500000);
 
-    candles.push({ time: Math.floor(time / 86400), open, high, low, close, volume });
-    time += 86400;
+    candles.push({ time: Math.floor(time / 60), open, high, low, close, volume });
+    time += minutesPerCandle * 60;
   }
 
   return candles;
