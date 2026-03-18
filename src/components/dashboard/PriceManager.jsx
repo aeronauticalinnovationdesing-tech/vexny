@@ -110,27 +110,21 @@ export default function PriceManager() {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["all-subscriptions-admin"] }),
   });
 
-  const handleSave = (profileId, sub, price) => {
-    return new Promise((resolve) => {
+  const upsert = (profileId, sub, data) =>
+    new Promise((resolve) => {
       if (sub) {
-        updateSub.mutate(
-          { id: sub.id, data: { monthly_price_cop: price } },
-          { onSuccess: () => resolve() }
-        );
+        updateSub.mutate({ id: sub.id, data }, { onSuccess: () => resolve() });
       } else {
-        createSub.mutate(
-          { profile: profileId, monthly_price_cop: price, is_active: false },
-          { onSuccess: () => resolve() }
-        );
+        createSub.mutate({ profile: profileId, monthly_price_cop: 0, is_active: false, ...data }, { onSuccess: () => resolve() });
       }
     });
-  };
+
+  const handleSavePrice = (profileId, sub, price) => upsert(profileId, sub, { monthly_price_cop: price });
+  const handleSaveHours = (profileId, sub, hours) => upsert(profileId, sub, { trial_hours: hours });
 
   const getSubForProfile = (profileId) => allSubs.find((s) => s.profile === profileId) || null;
 
-  if (user?.role !== "admin") {
-    return null;
-  }
+  if (user?.role !== "admin") return null;
 
   return (
     <div className="bg-card rounded-2xl border border-border p-6">
@@ -139,8 +133,8 @@ export default function PriceManager() {
           <DollarSign className="w-4 h-4 text-primary" />
         </div>
         <div>
-          <h2 className="font-semibold text-base">Precios de suscripción</h2>
-          <p className="text-xs text-muted-foreground">Configura el costo mensual por perfil</p>
+          <h2 className="font-semibold text-base">Precios y prueba gratuita</h2>
+          <p className="text-xs text-muted-foreground">Configura el costo mensual y duración de prueba por perfil</p>
         </div>
       </div>
 
@@ -150,7 +144,8 @@ export default function PriceManager() {
             key={profile.id}
             profile={profile}
             sub={getSubForProfile(profile.id)}
-            onSave={handleSave}
+            onSavePrice={handleSavePrice}
+            onSaveHours={handleSaveHours}
           />
         ))}
       </div>
