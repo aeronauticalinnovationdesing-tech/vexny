@@ -260,9 +260,7 @@ export default function TraderJournal() {
 
         {/* CHARTS TAB */}
         <TabsContent value="charts" className="mt-4">
-          <FeatureGate featureName="TradingView Charts">
-            <TradingViewLite />
-          </FeatureGate>
+          <ProfessionalCharts />
         </TabsContent>
 
         {/* JOURNAL TAB */}
