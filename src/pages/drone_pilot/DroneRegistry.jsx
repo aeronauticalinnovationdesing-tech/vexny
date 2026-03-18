@@ -72,6 +72,10 @@ export default function DroneRegistry() {
 
   const handleSave = (e) => {
     e.preventDefault();
+    if (!editingDrone && drones.length >= 3) {
+      alert("⚠️ Límite de drones alcanzado (máximo 3)");
+      return;
+    }
     if (editingDrone) {
       updateMutation.mutate({ id: editingDrone.id, data: form });
     } else {
@@ -97,8 +101,12 @@ export default function DroneRegistry() {
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">Registro de Drones</h1>
-        <Button onClick={() => setShowForm(true)} className="gap-2">
-          <Plus className="w-4 h-4" /> Agregar Dron
+        <Button 
+          onClick={() => setShowForm(true)} 
+          disabled={drones.length >= 3}
+          className="gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          <Plus className="w-4 h-4" /> Agregar Dron {drones.length >= 3 && "(Límite alcanzado)"}
         </Button>
       </div>
 
