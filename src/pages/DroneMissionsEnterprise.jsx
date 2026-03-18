@@ -42,15 +42,15 @@ export default function DroneMissionsEnterprise() {
     enabled: !!user?.email,
   });
 
-  // Get projects/missions for this company - NOT filtered by created_by
+  // Get projects/missions for this company - filtered by company_id
   const { data: projects = [] } = useQuery({
     queryKey: ["missions-enterprise", company?.id],
-    queryFn: () => base44.entities.Project.list("-created_date"),
+    queryFn: () => base44.entities.Project.filter({ company_id: company.id }, "-created_date"),
     enabled: !!company?.id,
   });
 
   const createMutation = useMutation({
-    mutationFn: (data) => base44.entities.Project.create(data),
+    mutationFn: (data) => base44.entities.Project.create({ ...data, company_id: company.id }),
     onSuccess: () => { queryClient.invalidateQueries({ queryKey: ["missions-enterprise"] }); closeForm(); },
   });
 

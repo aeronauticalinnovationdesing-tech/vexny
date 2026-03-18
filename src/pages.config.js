@@ -62,6 +62,10 @@ import Reports from './pages/Reports';
 import Secretary from './pages/Secretary';
 import Subscription from './pages/Subscription';
 import Tasks from './pages/Tasks';
+import CompanyManagementEnterprise from './pages/CompanyManagementEnterprise';
+import PilotManagementEnterprise from './pages/PilotManagementEnterprise';
+import DroneMissionsEnterprise from './pages/DroneMissionsEnterprise';
+import DronePilotProfile from './pages/DronePilotProfile';
 import DronePilotDashboard from './pages/DronePilotDashboard';
 import EliteHumanDashboard from './pages/EliteHumanDashboard';
 import StartupDashboard from './pages/StartupDashboard';
@@ -96,7 +100,6 @@ import TraderAccounting from './pages/TraderAccounting';
 import TraderJournal from './pages/TraderJournal';
 import TraderNotes from './pages/TraderNotes';
 import TraderTrades from './pages/TraderTrades';
-import CompanyManagementEnterprise from './pages/CompanyManagementEnterprise';
 
 
 export const PAGES = {
@@ -115,6 +118,10 @@ export const PAGES = {
     "Secretary": Secretary,
     "Subscription": Subscription,
     "Tasks": Tasks,
+    "CompanyManagementEnterprise": CompanyManagementEnterprise,
+    "PilotManagementEnterprise": PilotManagementEnterprise,
+    "DroneMissionsEnterprise": DroneMissionsEnterprise,
+    "DronePilotProfile": DronePilotProfile,
     "DronePilotDashboard": DronePilotDashboard,
     "EliteHumanDashboard": EliteHumanDashboard,
     "StartupDashboard": StartupDashboard,
@@ -149,7 +156,6 @@ export const PAGES = {
     "TraderJournal": TraderJournal,
     "TraderNotes": TraderNotes,
     "TraderTrades": TraderTrades,
-    "CompanyManagementEnterprise": CompanyManagementEnterprise,
 }
 
 export const pagesConfig = {
