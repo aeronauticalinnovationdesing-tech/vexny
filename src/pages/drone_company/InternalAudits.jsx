@@ -87,7 +87,7 @@ export default function InternalAudits() {
 
   const addFinding = () => {
     if (newFinding.finding.trim()) {
-      setForm({ ...form, findings: [...form.findings, newFinding] });
+      setForm(prev => ({ ...prev, findings: [...prev.findings, { ...newFinding }] }));
       setNewFinding({ finding: "", severity: "menor", status: "abierto" });
     }
   };
