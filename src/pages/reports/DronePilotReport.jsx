@@ -82,13 +82,7 @@ export default function DronePilotReport() {
   const [generating, setGenerating] = useState(false);
   const user = useCurrentUser();
 
-  // Refs gráficas
-  const refPilotStatus = useRef(null);
-  const refDroneStatus = useRef(null);
-  const refFlightArea = useRef(null);
-  const refSmsMonth = useRef(null);
-  const refMaintenancePie = useRef(null);
-  const refHoursBar = useRef(null);
+
 
   // ── Data queries ──
   const { data: pilots = [] } = useQuery({
