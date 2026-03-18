@@ -62,6 +62,11 @@ export default function CourseCard({ course, purchased, onBuy, onView, onEdit, o
                 <Edit2 className="w-3 h-3" />
               </Button>
             )}
+            {showProfiles && onDelete && (
+              <Button size="sm" variant="outline" onClick={() => onDelete(course)} className="gap-1 text-destructive hover:text-destructive">
+                <Trash2 className="w-3 h-3" />
+              </Button>
+            )}
             {purchased ? (
               <Button size="sm" variant="outline" onClick={() => onView(course)} className="gap-1">
                 <Eye className="w-3 h-3" /> Ver
