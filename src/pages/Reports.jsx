@@ -388,8 +388,11 @@ function GenericReport() {
   );
 }
 
+import DroneCompanyReport from "./reports/DroneCompanyReport";
+
 export default function Reports() {
   const { activeProfileId } = useProfile();
   if (activeProfileId === "drone_pilot") return <DronePilotReport />;
+  if (activeProfileId === "drone_company") return <DroneCompanyReport />;
   return <GenericReport />;
 }
