@@ -1,6 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { BookOpen, Clock, ShoppingCart, Eye, Edit2 } from "lucide-react";
+import { BookOpen, Clock, ShoppingCart, Eye, Edit2, Trash2 } from "lucide-react";
 
 const profileLabels = {
   trader: "Trader",
