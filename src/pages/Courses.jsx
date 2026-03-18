@@ -205,11 +205,11 @@ export default function Courses() {
         </TabsContent>
 
         {/* MIS CURSOS TAB (Solo usuarios) */}
-        {!isAdmin && (
-          <TabsContent value="comprados" className="mt-4">
-            <MyCoursesPanel purchases={purchases} onView={handleView} />
-          </TabsContent>
-        )}
+         {!isAdmin && (
+           <TabsContent value="comprados" className="mt-4">
+             <MyCoursesPanel purchases={purchases} courses={courses} onView={handleView} />
+           </TabsContent>
+         )}
 
         {/* ADMINISTRAR TAB (Solo admin) */}
         {isAdmin && (
