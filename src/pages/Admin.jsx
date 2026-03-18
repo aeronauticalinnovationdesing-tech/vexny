@@ -5,6 +5,7 @@ import { Shield, AlertTriangle, Database, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import PriceManager from "@/components/dashboard/PriceManager";
 import SubscriptionsTable from "@/components/dashboard/SubscriptionsTable";
+import SubscriptionDebugger from "@/components/dashboard/SubscriptionDebugger";
 
 export default function Admin() {
   const user = useCurrentUser();
@@ -105,6 +106,14 @@ export default function Admin() {
       <div className="border-t" />
 
       <SubscriptionsTable />
+
+      <div className="border-t" />
+
+      <div className="space-y-4">
+        <h2 className="text-lg font-semibold">Reactivar suscripciones no procesadas</h2>
+        <p className="text-sm text-muted-foreground">Si un usuario pagó pero su suscripción no se activó automáticamente, actívala aquí.</p>
+        <SubscriptionDebugger />
+      </div>
     </div>
   );
 }
