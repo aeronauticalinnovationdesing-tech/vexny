@@ -70,7 +70,9 @@ export default function CompanySubscriptionsManager() {
   const closeForm = () => {
     setShowForm(false);
     setEditingId(null);
+    setSelectedCompanyId("");
     setForm({
+      company_id: "",
       company_name: "",
       monthly_price_cop: 99900,
       max_pilots: 10,
