@@ -19,9 +19,9 @@ export default function AppLayout() {
         <header className="lg:hidden flex items-center gap-3 px-4 h-14 border-b border-border bg-card sticky top-0 z-40 pt-safe">
           <button
             onClick={() => setMobileOpen(true)}
-            className="text-muted-foreground hover:text-foreground"
+            className="text-muted-foreground hover:text-foreground text-xl"
           >
-            <Menu className="w-5 h-5" />
+            ⚔️
           </button>
           <span className="text-base font-bold tracking-tight">VEXNY</span>
         </header>
