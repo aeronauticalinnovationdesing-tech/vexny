@@ -182,8 +182,8 @@ export default function Courses() {
                   purchased={purchasedIds.has(course.id) || isAdmin}
                   onBuy={c => setSelectedCourse(c)}
                   onView={handleView}
-                  showProfiles={isAdmin}
                   onEdit={isAdmin ? (c) => setEditingCourse(c) : undefined}
+                  showProfiles={isAdmin}
                 />
               ))}
             </div>
