@@ -15,6 +15,11 @@ export default function Admin() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
+  const { data: consultations = [] } = useQuery({
+    queryKey: ["certificationConsults"],
+    queryFn: () => base44.entities.CertificationConsult.list("-created_date"),
+  });
+
   if (user?.role !== "admin") {
     return (
       <div className="p-6 max-w-7xl mx-auto">
