@@ -13,12 +13,15 @@ export default function CompanySubscriptionsManager() {
   const queryClient = useQueryClient();
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState(null);
+  const [selectedCompanyId, setSelectedCompanyId] = useState("");
   const [form, setForm] = useState({
+    company_id: "",
     company_name: "",
     monthly_price_cop: 99900,
     max_pilots: 10,
     max_drones: 20,
   });
+  const [activatingId, setActivatingId] = useState(null);
 
   const { data: companies = [] } = useQuery({
     queryKey: ["companies"],
