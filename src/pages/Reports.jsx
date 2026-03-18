@@ -151,34 +151,41 @@ function GenericReport() {
     ]);
 
     // IA análisis especializado
-    const ctx = `
-Perfil VEXNY: ${activeProfile?.label || "General"}
-Fecha: ${format(new Date(), "d 'de' MMMM yyyy", { locale: es })}
+     const ctx = `
+    Usuario: ${user?.full_name || "Usuario"}
+    Email: ${user?.email || "N/A"}
+    Perfil VEXNY: ${activeProfile?.label || "General"}
+    Período: ${format(new Date(), "d 'de' MMMM yyyy", { locale: es })}
 
-PROYECTOS (${projects.length} total):
-- Activos: ${projects.filter(p => p.status === "active").length}
-- Planificación: ${projects.filter(p => p.status === "planning").length}
-- Completados: ${projects.filter(p => p.status === "completed").length}
-- Pausados: ${projects.filter(p => p.status === "paused").length}
+    PROYECTOS (${projects.length} total):
+    - Activos: ${projects.filter(p => p.status === "active").length}
+    - Planificación: ${projects.filter(p => p.status === "planning").length}
+    - Completados: ${projects.filter(p => p.status === "completed").length}
+    - Pausados: ${projects.filter(p => p.status === "paused").length}
 
-TAREAS (${tasks.length} total):
-- Completadas: ${tasks.filter(t => t.status === "completed").length} (${completionRate}%)
-- En progreso: ${tasks.filter(t => t.status === "in_progress").length}
-- Pendientes: ${tasks.filter(t => t.status === "pending").length}
-- Críticas: ${tasks.filter(t => t.priority === "critical").length}
-- Alta prioridad: ${tasks.filter(t => t.priority === "high").length}
+    TAREAS (${tasks.length} total):
+    - Completadas: ${tasks.filter(t => t.status === "completed").length} (${completionRate}%)
+    - En progreso: ${tasks.filter(t => t.status === "in_progress").length}
+    - Pendientes: ${tasks.filter(t => t.status === "pending").length}
+    - Críticas: ${tasks.filter(t => t.priority === "critical").length}
+    - Alta prioridad: ${tasks.filter(t => t.priority === "high").length}
 
-FINANZAS:
-- Ingresos totales: ${formatCOP(totalIncome)}
-- Gastos totales: ${formatCOP(totalExpense)}
-- Balance neto: ${formatCOP(balance)}
-- Margen: ${totalIncome > 0 ? Math.round((balance / totalIncome) * 100) : 0}%
-- Top gastos: ${expenseData.slice(0, 3).map(d => `${d.name}: ${formatCOP(d.value)}`).join(", ")}
-`;
+    FINANZAS:
+    - Ingresos totales: ${formatCOP(totalIncome)}
+    - Gastos totales: ${formatCOP(totalExpense)}
+    - Balance neto: ${formatCOP(balance)}
+    - Margen: ${totalIncome > 0 ? Math.round((balance / totalIncome) * 100) : 0}%
+    - Top 3 categorías de gasto: ${expenseData.slice(0, 3).map(d => `${d.name}: ${formatCOP(d.value)}`).join(", ")}
 
-    const aiAnalysis = await base44.integrations.Core.InvokeLLM({
-      prompt: `Eres el asesor estratégico de VEXNY. Con estos datos reales genera un análisis ejecutivo profundo en 5 párrafos: 1) Resumen ejecutivo general, 2) Análisis de proyectos y ejecución, 3) Productividad y gestión de tareas, 4) Salud financiera y recomendaciones, 5) Acciones prioritarias para los próximos 30 días. Sé directo, estratégico y específico. Sin markdown, solo texto plano:\n\n${ctx}`,
-    });
+    RESUMEN DE ACTIVIDAD:
+    - Proyectos con presupuesto: ${projects.filter(p => p.budget).length}
+    - Tareas vencidas/pendientes: ${tasks.filter(t => new Date(t.due_date) < new Date() && t.status !== "completed").length}
+    - Transacciones registradas: ${transactions.length}
+    `;
+
+     const aiAnalysis = await base44.integrations.Core.InvokeLLM({
+       prompt: `Eres el asesor estratégico de VEXNY para ${user?.full_name || "el usuario"}. Con estos datos reales PERSONALIZADOS genera un análisis ejecutivo profundo en 5 párrafos: 1) Resumen de desempeño actual, 2) Análisis de ejecución de proyectos, 3) Productividad y gestión de tareas, 4) Salud financiera y recomendaciones, 5) 3 acciones prioritarias para los próximos 30 días. Sé directo, estratégico, específico y PERSONALIZADO. Sin markdown, solo texto plano:\n\n${ctx}`,
+     });
 
     // ── Construir PDF ──
     const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
