@@ -87,78 +87,106 @@ export default function TraderDashboard() {
       <TrialBanner profile="trader" />
       <PriceManager />
 
-      {/* Stats - solo si hay transacciones */}
-      {transactions.length > 0 && (
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          <StatCard icon={DollarSign} label="Balance Total" value={`$${balance.toLocaleString()}`} subtitle="capital neto" className="border-emerald-500/20" />
-          <StatCard icon={TrendingUp} label="Ingresos" value={`$${totalIncome.toLocaleString()}`} subtitle="acumulado" />
-          <StatCard icon={TrendingDown} label="Gastos" value={`$${totalExpense.toLocaleString()}`} subtitle="acumulado" />
-          {tasks.length > 0 && <StatCard icon={BarChart2} label="Win Rate" value={`${winRate}%`} subtitle={`${winTrades}W / ${lossTrades}L`} />}
+      {/* Stats Pro */}
+      {(useNewTrades || transactions.length > 0) && (
+        <div className="grid grid-cols-2 lg:grid-cols-5 gap-3">
+          <div className="bg-card rounded-xl border border-emerald-500/20 p-4 col-span-2 lg:col-span-1">
+            <p className="text-xs text-muted-foreground mb-1">P&L Total</p>
+            <p className={`text-2xl font-bold ${(useNewTrades ? tradePnl : balance) >= 0 ? "text-emerald-600" : "text-red-600"}`}>
+              {(useNewTrades ? tradePnl : balance) >= 0 ? "+" : ""}${(useNewTrades ? tradePnl : balance).toFixed(2)}
+            </p>
+          </div>
+          <div className="bg-card rounded-xl border border-border p-4">
+            <p className="text-xs text-muted-foreground mb-1">Win Rate</p>
+            <p className="text-2xl font-bold text-blue-600">{useNewTrades ? tradeWinRate : winRate}%</p>
+            <p className="text-xs text-muted-foreground">{useNewTrades ? tradeWins.length : winTrades}W · {useNewTrades ? tradeLosses.length : lossTrades}L</p>
+          </div>
+          <div className="bg-card rounded-xl border border-border p-4">
+            <p className="text-xs text-muted-foreground mb-1">Trades</p>
+            <p className="text-2xl font-bold">{useNewTrades ? tradesNew.length : totalTrades}</p>
+          </div>
+          {avgRR && <div className="bg-card rounded-xl border border-border p-4">
+            <p className="text-xs text-muted-foreground mb-1">Avg RR</p>
+            <p className="text-2xl font-bold text-violet-600">{avgRR}</p>
+          </div>}
+          {profitFactor && <div className="bg-card rounded-xl border border-border p-4">
+            <p className="text-xs text-muted-foreground mb-1">Profit Factor</p>
+            <p className="text-2xl font-bold text-amber-600">{profitFactor}</p>
+          </div>}
         </div>
       )}
 
-      {/* Empty state */}
-      {transactions.length === 0 && tasks.length === 0 && (
-        <div className="text-center py-16 bg-card rounded-2xl border border-border">
+      {!useNewTrades && transactions.length === 0 && tasks.length === 0 && (
+        <div className="text-center py-12 bg-card rounded-2xl border border-border">
           <TrendingUp className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
           <p className="text-lg font-semibold mb-1">¡Bienvenido a tu Trading Dashboard!</p>
-          <p className="text-muted-foreground text-sm">Registra tu primer trade o transacción para ver métricas aquí.</p>
+          <p className="text-muted-foreground text-sm mb-4">Registra tu primer trade para ver métricas y análisis aquí.</p>
+          <Link to="/Tasks" className="inline-flex items-center gap-2 bg-emerald-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-emerald-700 transition-colors">
+            <BarChart2 className="w-4 h-4" /> Ir al Journal Pro
+          </Link>
         </div>
       )}
 
-      {/* Charts */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-        <CashFlowChart transactions={transactions} />
-        <IncomeExpenseChart transactions={transactions} />
+      {/* Chart + Noticias */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+        <div className="lg:col-span-2">
+          {useNewTrades ? (
+            <ProfitLossChart transactions={tradesNew.map(t => ({ ...t, type: t.result === "win" ? "income" : "expense", amount: Math.abs(t.pnl || 0) }))} />
+          ) : (
+            <CashFlowChart transactions={transactions} />
+          )}
+        </div>
+        <ForexFactoryWidget compact={true} />
       </div>
 
-      {/* Money goals + recent trades */}
+      {/* Quick Access + Notes */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-        <MoneyGoalBars transactions={transactions} bankAccounts={bankAccounts} />
-
-        <div className="bg-card rounded-2xl border border-border p-6 space-y-4">
-          <h2 className="font-semibold text-lg">Acceso Rápido</h2>
+        <div className="bg-card rounded-2xl border border-border p-5 space-y-3">
+          <h2 className="font-semibold">Acceso Rápido</h2>
           <div className="space-y-2">
             {[
-              { label: "Registrar Trade", path: "/Tasks", icon: BarChart2 },
-              { label: "Contabilidad", path: "/Accounting", icon: DollarSign },
-              { label: "Informes", path: "/Reports", icon: TrendingUp },
-              { label: "Notas de Trading", path: "/Notes", icon: StickyNote },
-              { label: "Secretaria IA", path: "/Secretary", icon: Bot },
-              { label: "Cursos", path: "/Courses", icon: BookOpen },
+              { label: "Journal Pro", path: "/Tasks", icon: BarChart2, desc: "Registra y analiza trades" },
+              { label: "Análisis IA", path: "/Tasks", icon: Brain, desc: "Estrategia con IA" },
+              { label: "Contabilidad", path: "/Accounting", icon: DollarSign, desc: "Capital y P&L" },
+              { label: "Informes", path: "/Reports", icon: TrendingUp, desc: "Exportar reportes" },
+              { label: "Secretaria IA", path: "/Secretary", icon: Bot, desc: "Asistente trader" },
             ].map((action) => (
-              <Link key={action.path + action.label} to={action.path}
+              <Link key={action.label} to={action.path}
                 className="flex items-center gap-3 p-3 rounded-xl bg-muted/50 hover:bg-muted transition-colors">
-                <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center">
+                <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center flex-shrink-0">
                   <action.icon className="w-4 h-4 text-emerald-500" />
                 </div>
-                <span className="text-sm font-medium">{action.label}</span>
-                <ArrowRight className="w-3 h-3 ml-auto text-muted-foreground" />
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium">{action.label}</p>
+                  <p className="text-xs text-muted-foreground">{action.desc}</p>
+                </div>
+                <ArrowRight className="w-3 h-3 text-muted-foreground" />
               </Link>
             ))}
           </div>
         </div>
-      </div>
 
-      {/* Notes */}
-      {notes.length > 0 && (
-        <div className="bg-card rounded-2xl border border-border p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="font-semibold text-lg">Notas Recientes</h2>
-            <Link to="/Notes" className="text-primary text-sm font-medium flex items-center gap-1 hover:underline">
-              Ver todas <ArrowRight className="w-3 h-3" />
-            </Link>
+        {notes.length > 0 ? (
+          <div className="bg-card rounded-2xl border border-border p-5">
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="font-semibold">Notas Recientes</h2>
+              <Link to="/Notes" className="text-primary text-xs font-medium flex items-center gap-1 hover:underline">
+                Ver todas <ArrowRight className="w-3 h-3" />
+              </Link>
+            </div>
+            <div className="space-y-2">
+              {notes.slice(0, 4).map(note => (
+                <div key={note.id} className="p-3 rounded-xl bg-muted/40 border border-border">
+                  <p className="text-sm font-medium truncate">{note.title}</p>
+                  <p className="text-xs text-muted-foreground mt-0.5 line-clamp-1">{note.content}</p>
+                </div>
+              ))}
+            </div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-            {notes.slice(0, 3).map(note => (
-              <div key={note.id} className="p-4 rounded-xl bg-muted/40 border border-border">
-                <p className="text-sm font-medium truncate">{note.title}</p>
-                <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{note.content}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
+        ) : (
+          <MoneyGoalBars transactions={transactions} bankAccounts={bankAccounts} />
+        )}
+      </div>
     </div>
   );
 }
