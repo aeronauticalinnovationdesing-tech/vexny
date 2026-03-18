@@ -18,7 +18,7 @@ import { ProfitLossChart, WinRateAnalysis, PerformanceMetrics } from "@/componen
 import ForexFactoryWidget from "@/components/trader/ForexFactoryWidget";
 import StrategyAnalyzer from "@/components/trader/StrategyAnalyzer";
 import AccountTypeBadge, { ACCOUNT_CONFIG } from "@/components/trader/AccountTypeBadge";
-import TradingViewLite from "@/components/trader/TradingViewLite";
+import ProfessionalCharts from "@/components/trader/ProfessionalCharts";
 import FeatureGate from "@/components/subscription/FeatureGate";
 
 const PAIRS_FOREX = ["EUR/USD", "GBP/USD", "USD/JPY", "USD/CHF", "AUD/USD", "USD/CAD", "NZD/USD", "GBP/JPY", "EUR/JPY"];
