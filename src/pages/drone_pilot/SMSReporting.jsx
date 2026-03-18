@@ -32,7 +32,10 @@ export default function SMSReporting() {
 
   const { data: reports = [] } = useQuery({
     queryKey: ["sms_reports"],
-    queryFn: () => base44.entities.SMSReport.list("-created_date"),
+    queryFn: async () => {
+      const user = await base44.auth.me();
+      return base44.entities.SMSReport.filter({ created_by: user.email }, "-created_date");
+    },
   });
 
   const createMutation = useMutation({
