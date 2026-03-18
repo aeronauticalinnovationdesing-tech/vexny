@@ -54,6 +54,19 @@ export default function CompanySubscriptionsManager() {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["company-subscriptions"] }),
   });
 
+  const activateMutation = useMutation({
+    mutationFn: (id) => base44.entities.CompanySubscription.update(id, { 
+      is_active: true,
+      trial_start_date: new Date().toISOString(),
+      trial_hours: 0,
+      paid_until: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+    }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["company-subscriptions"] });
+      setActivatingId(null);
+    },
+  });
+
   const closeForm = () => {
     setShowForm(false);
     setEditingId(null);
