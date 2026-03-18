@@ -101,6 +101,10 @@ export default function Admin() {
       <div className="border-t" />
 
       <PriceManager />
+
+      <div className="border-t" />
+
+      <SubscriptionsTable />
     </div>
   );
 }
