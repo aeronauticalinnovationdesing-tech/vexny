@@ -88,6 +88,10 @@ export default function PilotManagement() {
 
   const handleSave = (e) => {
     e.preventDefault();
+    if (!editingPilot && pilots.length >= 2) {
+      alert("⚠️ Límite de pilotos alcanzado (máximo 2)");
+      return;
+    }
     const data = { ...form, hours_flown: Number(form.hours_flown) || 0, hours_bvlos: Number(form.hours_bvlos) || 0, hours_nocturno: Number(form.hours_nocturno) || 0 };
     if (editingPilot) updateMutation.mutate({ id: editingPilot.id, data });
     else createMutation.mutate(data);
@@ -125,8 +129,12 @@ export default function PilotManagement() {
             <p className="text-sm text-muted-foreground">Personal certificado · Habilitaciones · Documentación aeronáutica</p>
           </div>
         </div>
-        <Button onClick={() => setShowForm(true)} className="gap-2 bg-sky-600 hover:bg-sky-700">
-          <Plus className="w-4 h-4" /> Agregar Piloto
+        <Button 
+          onClick={() => setShowForm(true)} 
+          disabled={pilots.length >= 2}
+          className="gap-2 bg-sky-600 hover:bg-sky-700 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          <Plus className="w-4 h-4" /> Agregar Piloto {pilots.length >= 2 && "(Límite alcanzado)"}
         </Button>
       </div>
 
