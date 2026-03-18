@@ -40,11 +40,12 @@ export default function TraderNotes() {
   const [aiLoading, setAiLoading] = useState(false);
   const queryClient = useQueryClient();
   const user = useCurrentUser();
+  const { activeProfileId } = useProfile();
 
   const { data: notes = [] } = useQuery({
-    queryKey: ["notes", user?.email],
-    queryFn: () => base44.entities.Note.filter({ created_by: user.email }, "-created_date"),
-    enabled: !!user,
+    queryKey: ["notes", user?.email, activeProfileId],
+    queryFn: () => base44.entities.Note.filter({ created_by: user.email, profile_id: activeProfileId }, "-created_date"),
+    enabled: !!user && !!activeProfileId,
   });
 
   const createMutation = useMutation({

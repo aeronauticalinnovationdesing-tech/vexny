@@ -15,6 +15,7 @@ import { es } from "date-fns/locale";
 import AlertsPanel from "@/components/trader/AlertsPanel";
 import ReportExporter from "@/components/trader/ReportExporter";
 import { PerformanceMetrics, ProfitLossChart, WinRateAnalysis } from "@/components/trader/AdvancedMetrics";
+import { useProfile } from "@/lib/ProfileContext";
 
 const PAIRS = ["BTC/USDT", "ETH/USDT", "EUR/USD", "GBP/USD", "S&P500", "NASDAQ", "ORO", "PETRÓLEO", "OTRO"];
 const DIRECTIONS = [{ value: "income", label: "LONG 📈", color: "text-emerald-600" }, { value: "expense", label: "SHORT 📉", color: "text-red-600" }];
