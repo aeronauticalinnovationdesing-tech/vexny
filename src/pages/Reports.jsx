@@ -50,9 +50,10 @@ const pdfSection = (doc, title, color, margin, y, pageH) => {
 };
 
 function GenericReport() {
-  const [generating, setGenerating] = useState(false);
-  const user = useCurrentUser();
-  const { activeProfileId, activeProfile } = useProfile();
+   const [generating, setGenerating] = useState(false);
+   const user = useCurrentUser();
+   const { activeProfileId, activeProfile } = useProfile();
+   const isDronePilot = activeProfileId === "drone_pilot";
 
   // Refs para todas las gráficas
   const refPieTask = useRef(null);
@@ -569,16 +570,13 @@ FINANZAS:
         </Button>
       </div>
 
-      {/* KPIs */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-        {[
-          { label:"Proyectos", val: projects.length, sub:`${projects.filter(p=>p.status==="active").length} activos`, icon: FolderKanban, color:"text-blue-500" },
-          { label:"Tareas", val: tasks.length, sub:`${completionRate}% completadas`, icon: CheckSquare, color:"text-green-500" },
-          { label:"Ingresos", val: formatCOP(totalIncome), sub:"total", icon: TrendingUp, color:"text-green-500" },
-          { label:"Gastos", val: formatCOP(totalExpense), sub:"total", icon: TrendingDown, color:"text-red-500" },
-          { label:"Balance", val: formatCOP(balance), sub: balance>=0?"superávit":"déficit", icon: Wallet, color: balance>=0?"text-primary":"text-red-500" },
-          { label:"Productividad", val:`${completionRate}%`, sub:"tareas hechas", icon: Activity, color:"text-purple-500" },
-        ].map(k => (
+      {/* KPIs - Perfil específico */}
+       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-3">
+         {[
+           { label:"Proyectos", val: projects.length, sub:`${projects.filter(p=>p.status==="active").length} activos`, icon: FolderKanban, color:"text-blue-500" },
+           { label:"Tareas", val: tasks.length, sub:`${completionRate}% completadas`, icon: CheckSquare, color:"text-green-500" },
+           { label:"Productividad", val:`${completionRate}%`, sub:"tareas hechas", icon: Activity, color:"text-purple-500" },
+         ].map(k => (
           <div key={k.label} className="bg-card border border-border rounded-2xl p-4 flex flex-col gap-1">
             <k.icon className={`w-5 h-5 ${k.color}`} />
             <div className="text-lg font-bold leading-tight">{k.val}</div>
@@ -637,64 +635,7 @@ FINANZAS:
         ) : <div className="h-[200px] flex items-center justify-center text-muted-foreground text-sm">Sin datos de proyectos</div>}
       </div>
 
-      {/* Fila 3: Ingresos vs Gastos (Line) */}
-      <div ref={refLineFinance} className="bg-card rounded-2xl border border-border p-5">
-        <h3 className="font-semibold mb-4 flex items-center gap-2"><BarChart2 className="w-4 h-4 text-primary" />Ingresos vs Gastos Mensuales</h3>
-        {monthlyData.length > 0 ? (
-          <ResponsiveContainer width="100%" height={230}>
-            <LineChart data={monthlyData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="hsl(220,14%,90%)"/>
-              <XAxis dataKey="month" tick={{fontSize:11}}/>
-              <YAxis tick={{fontSize:11}} tickFormatter={v=>formatCOP(v).replace("COP","").trim()}/>
-              <Tooltip formatter={v=>formatCOP(v)}/>
-              <Legend/>
-              <Line type="monotone" dataKey="ingresos" stroke="#10b981" strokeWidth={2.5} dot={{r:4}} name="Ingresos"/>
-              <Line type="monotone" dataKey="gastos" stroke="#ef4444" strokeWidth={2.5} dot={{r:4}} name="Gastos"/>
-            </LineChart>
-          </ResponsiveContainer>
-        ) : <div className="h-[230px] flex items-center justify-center text-muted-foreground text-sm">Sin datos financieros mensuales</div>}
-      </div>
 
-      {/* Fila 4: Balance Acumulado (Area) + Gastos por Categoría (Bar) */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div ref={refAreaBalance} className="bg-card rounded-2xl border border-border p-5">
-          <h3 className="font-semibold mb-4 flex items-center gap-2"><TrendingUp className="w-4 h-4 text-primary" />Balance Acumulado</h3>
-          {balanceData.length > 0 ? (
-            <ResponsiveContainer width="100%" height={220}>
-              <AreaChart data={balanceData}>
-                <defs>
-                  <linearGradient id="balGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#f59e0b" stopOpacity={0.4}/>
-                    <stop offset="95%" stopColor="#f59e0b" stopOpacity={0}/>
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="hsl(220,14%,90%)"/>
-                <XAxis dataKey="month" tick={{fontSize:11}}/>
-                <YAxis tick={{fontSize:11}} tickFormatter={v=>formatCOP(v).replace("COP","").trim()}/>
-                <Tooltip formatter={v=>formatCOP(v)}/>
-                <Area type="monotone" dataKey="balance" stroke="#f59e0b" strokeWidth={2.5} fill="url(#balGrad)" name="Balance"/>
-              </AreaChart>
-            </ResponsiveContainer>
-          ) : <div className="h-[220px] flex items-center justify-center text-muted-foreground text-sm">Sin datos</div>}
-        </div>
-
-        <div ref={refBarExpense} className="bg-card rounded-2xl border border-border p-5">
-          <h3 className="font-semibold mb-4 flex items-center gap-2"><Wallet className="w-4 h-4 text-primary" />Gastos por Categoría</h3>
-          {expenseData.length > 0 ? (
-            <ResponsiveContainer width="100%" height={220}>
-              <BarChart data={expenseData} layout="vertical" barSize={14}>
-                <CartesianGrid strokeDasharray="3 3" stroke="hsl(220,14%,90%)"/>
-                <XAxis type="number" tick={{fontSize:10}} tickFormatter={v=>formatCOP(v).replace("COP","").trim()}/>
-                <YAxis type="category" dataKey="name" tick={{fontSize:10}} width={70}/>
-                <Tooltip formatter={v=>formatCOP(v)}/>
-                <Bar dataKey="value" name="Gasto" radius={[0,4,4,0]}>
-                  {expenseData.map((_,i)=><Cell key={i} fill={COLORS[i%COLORS.length]}/>)}
-                </Bar>
-              </BarChart>
-            </ResponsiveContainer>
-          ) : <div className="h-[220px] flex items-center justify-center text-muted-foreground text-sm">Sin datos de gastos</div>}
-        </div>
-      </div>
     </div>
   );
 }
