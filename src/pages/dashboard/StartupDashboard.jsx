@@ -68,8 +68,8 @@ export default function StartupDashboard() {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard icon={FolderKanban} label="Proyectos Activos" value={activeProjects} subtitle={`${projects.length} total`} />
         <StatCard icon={CheckSquare} label="Tareas Pendientes" value={activeTasks.length} subtitle={`${completedTasks.length} completadas`} />
-        <StatCard icon={DollarSign} label="Ingresos" value={`$${totalIncome.toLocaleString()}`} subtitle="acumulado" />
-        <StatCard icon={TrendingUp} label="Burn Rate" value={`$${totalExpense.toLocaleString()}`} subtitle={`~${runway} meses runway`} />
+        <StatCard icon={DollarSign} label="Ingresos" value={`$${totalIncome.toLocaleString()}`} subtitle={`Balance: $${netBalance.toLocaleString()}`} />
+        <StatCard icon={TrendingUp} label="Burn Rate" value={`$${Math.round(monthlyBurn).toLocaleString()}/mes`} subtitle={runway > 0 ? `~${runway} meses runway` : "Sin runway positivo"} />
       </div>
 
       {/* Charts row 1 */}
