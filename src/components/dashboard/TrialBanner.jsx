@@ -13,11 +13,11 @@ import {
 } from "@/components/ui/dialog";
 import WompiWidget from "../courses/WompiWidget";
 
-function useCountdown(trialStartISO) {
+function useCountdown(trialStartISO, trialHours = 48) {
   const [remaining, setRemaining] = useState(null);
   useEffect(() => {
     if (!trialStartISO) return;
-    const trialEnd = new Date(trialStartISO).getTime() + 48 * 60 * 60 * 1000;
+    const trialEnd = new Date(trialStartISO).getTime() + trialHours * 60 * 60 * 1000;
     const tick = () => {
       const diff = trialEnd - Date.now();
       if (diff <= 0) {
@@ -34,7 +34,7 @@ function useCountdown(trialStartISO) {
     tick();
     const id = setInterval(tick, 1000);
     return () => clearInterval(id);
-  }, [trialStartISO]);
+  }, [trialStartISO, trialHours]);
   return remaining;
 }
 
