@@ -35,9 +35,21 @@ export default function ProjectCard({ project, taskCount = 0, completedCount = 0
           <div className="w-3 h-3 rounded-full" style={{ backgroundColor: project.color || "#F59E0B" }} />
           <h3 className="font-semibold text-base group-hover:text-primary transition-colors">{project.name}</h3>
         </div>
-        <Badge className={cn("text-xs", statusColors[project.status])}>
-          {statusLabels[project.status]}
-        </Badge>
+        <div className="flex items-center gap-2">
+          <Badge className={cn("text-xs", statusColors[project.status])}>
+            {statusLabels[project.status]}
+          </Badge>
+          {onDelete && (
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-7 w-7 text-muted-foreground hover:text-destructive opacity-0 group-hover:opacity-100 transition-opacity"
+              onClick={(e) => { e.stopPropagation(); onDelete(project); }}
+            >
+              <Trash2 className="w-3.5 h-3.5" />
+            </Button>
+          )}
+        </div>
       </div>
 
       {project.description && (
