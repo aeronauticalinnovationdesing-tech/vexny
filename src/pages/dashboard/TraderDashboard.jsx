@@ -62,13 +62,24 @@ export default function TraderDashboard() {
       <TrialBanner profile="trader" />
       <PriceManager />
 
-      {/* Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard icon={DollarSign} label="Balance Total" value={`$${balance.toLocaleString()}`} subtitle="capital neto" className="border-emerald-500/20" />
-        <StatCard icon={TrendingUp} label="Ingresos" value={`$${totalIncome.toLocaleString()}`} subtitle="acumulado" />
-        <StatCard icon={TrendingDown} label="Gastos" value={`$${totalExpense.toLocaleString()}`} subtitle="acumulado" />
-        <StatCard icon={BarChart2} label="Win Rate" value={`${winRate}%`} subtitle={`${winTrades}W / ${lossTrades}L`} />
-      </div>
+      {/* Stats - solo si hay datos */}
+      {(transactions.length > 0 || tasks.length > 0) && (
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <StatCard icon={DollarSign} label="Balance Total" value={`$${balance.toLocaleString()}`} subtitle="capital neto" className="border-emerald-500/20" />
+          <StatCard icon={TrendingUp} label="Ingresos" value={`$${totalIncome.toLocaleString()}`} subtitle="acumulado" />
+          <StatCard icon={TrendingDown} label="Gastos" value={`$${totalExpense.toLocaleString()}`} subtitle="acumulado" />
+          <StatCard icon={BarChart2} label="Win Rate" value={`${winRate}%`} subtitle={`${winTrades}W / ${lossTrades}L`} />
+        </div>
+      )}
+
+      {/* Empty state */}
+      {transactions.length === 0 && tasks.length === 0 && (
+        <div className="text-center py-16 bg-card rounded-2xl border border-border">
+          <TrendingUp className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+          <p className="text-lg font-semibold mb-1">¡Bienvenido a tu Trading Dashboard!</p>
+          <p className="text-muted-foreground text-sm">Registra tu primer trade o transacción para ver métricas aquí.</p>
+        </div>
+      )}
 
       {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
