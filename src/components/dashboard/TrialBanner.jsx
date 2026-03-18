@@ -227,7 +227,7 @@ export default function TrialBanner({ profile }) {
               </p>
             </div>
 
-            {/* Action button */}
+            {/* Action buttons */}
             {!isPaid && (
               <Button
                 size="sm"
@@ -238,6 +238,18 @@ export default function TrialBanner({ profile }) {
               >
                 {paying ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <CreditCard className="w-3.5 h-3.5" />}
                 Suscribirme
+              </Button>
+            )}
+            {isPaid && userSub?.id && (
+              <Button
+                size="sm"
+                variant="ghost"
+                className="gap-2 text-destructive hover:text-destructive hover:bg-destructive/10"
+                onClick={handleCancel}
+                disabled={canceling}
+              >
+                {canceling ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <X className="w-3.5 h-3.5" />}
+                Cancelar
               </Button>
             )}
           </div>
