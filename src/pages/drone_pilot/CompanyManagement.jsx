@@ -412,21 +412,13 @@ export default function CompanyManagement() {
               <Select value={form.special_flights || ""} onValueChange={v => setForm({ ...form, special_flights: v })}>
                 <SelectTrigger><SelectValue placeholder="Seleccionar vuelos especiales..." /></SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="nocturno">Nocturno</SelectItem>
-                  <SelectItem value="zona_urbana">Zona Urbana</SelectItem>
-                  <SelectItem value="autonomo">Autónomo</SelectItem>
-                  <SelectItem value="demostracion_comercial">Demostración Comercial</SelectItem>
-                  <SelectItem value="competencias_deportivas">Competencias Deportivas</SelectItem>
-                  <SelectItem value="ua_cautiva">UA Cautiva</SelectItem>
-                  <SelectItem value="espacios_cerrados">Espacios Cerrados</SelectItem>
-                  <SelectItem value="captura_imagenes">Captura de Imágenes</SelectItem>
-                  <SelectItem value="vigilancia_seguridad">Vigilancia y Seguridad</SelectItem>
-                  <SelectItem value="medios_comunicacion">Medios de Comunicación</SelectItem>
-                  <SelectItem value="aspersion">Aspersión</SelectItem>
-                  <SelectItem value="dispersion">Dispersión</SelectItem>
-                  <SelectItem value="enjambre">Enjambre</SelectItem>
-                  <SelectItem value="transporte_carga">Transporte de Carga</SelectItem>
-                  <SelectItem value="entidades_publicas">Entidades Públicas</SelectItem>
+                  <SelectItem value="vuelo_nocturno">Vuelo nocturno</SelectItem>
+                  <SelectItem value="vuelo_zona_urbana">Vuelo en zona urbana</SelectItem>
+                  <SelectItem value="vuelo_autonomo">Vuelo autónomo</SelectItem>
+                  <SelectItem value="demostraciones_comerciales">Vuelo para demostraciones comerciales de capacidad tecnológica de UAS</SelectItem>
+                  <SelectItem value="competencias_deportivas">Vuelos en competencias y actividades deportivas y recreativas al aire libre</SelectItem>
+                  <SelectItem value="ua_cautiva">Vuelos de UA cautiva</SelectItem>
+                  <SelectItem value="espacios_cerrados">Vuelos en espacios cerrados o confinados</SelectItem>
                 </SelectContent>
               </Select>
             </div>
