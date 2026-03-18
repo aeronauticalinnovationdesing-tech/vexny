@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { FileText, Plus, Download, Archive, Edit2, Trash2 } from "lucide-react";
+import { FileText, Plus, Download, Archive, Edit2, Trash2, Upload, Eye, X } from "lucide-react";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { useProfile } from "@/lib/ProfileContext";
