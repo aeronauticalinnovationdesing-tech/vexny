@@ -38,11 +38,11 @@ function MessageBubble({ message }) {
   return (
     <div className={cn("flex gap-3", isUser ? "justify-end" : "justify-start")}>
       {!isUser && (
-        <div className="w-8 h-8 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 mt-1">
+        <div className="w-8 h-8 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 mt-1 flex-shrink-0">
           <Sparkles className="w-4 h-4 text-primary" />
         </div>
       )}
-      <div className={cn("max-w-[80%] space-y-2", isUser && "flex flex-col items-end")}>
+      <div className={cn("max-w-[85%] sm:max-w-[80%] space-y-2", isUser && "flex flex-col items-end")}>
         {message.content && (
           <div className={cn(
             "rounded-2xl px-4 py-3 text-sm",
@@ -88,6 +88,7 @@ export default function Secretary() {
   const [input, setInput] = useState("");
   const [sending, setSending] = useState(false);
   const [loadingConvs, setLoadingConvs] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const messagesEndRef = useRef(null);
 
   // Load conversations on mount
@@ -170,8 +171,19 @@ export default function Secretary() {
 
   return (
     <div className="flex h-[calc(100vh-4rem)] overflow-hidden">
-      {/* Sidebar: conversations */}
-      <div className="w-60 flex-shrink-0 border-r border-border bg-muted/30 flex flex-col">
+      {/* Sidebar: conversations - Hidden on mobile, visible on md+ */}
+      <div className={cn(
+        "flex-shrink-0 border-r border-border bg-muted/30 flex flex-col transition-all",
+        "absolute inset-y-0 left-0 w-60 z-40 md:relative md:w-60 md:translate-x-0",
+        sidebarOpen ? "translate-x-0" : "-translate-x-full"
+      )}>
+        {/* Mobile close button */}
+        <div className="md:hidden p-3 border-b border-border flex items-center justify-between">
+          <span className="text-xs font-semibold text-muted-foreground">Sesiones</span>
+          <button onClick={() => setSidebarOpen(false)} className="text-muted-foreground hover:text-foreground">
+            <span className="text-lg">✕</span>
+          </button>
+        </div>
         <div className="p-3 border-b border-border">
           <Button onClick={createNewConversation} size="sm" className="w-full gap-2 text-xs">
             <Plus className="w-3.5 h-3.5" /> Nueva sesión
@@ -204,10 +216,25 @@ export default function Secretary() {
         </div>
       </div>
 
+      {/* Mobile overlay */}
+      {sidebarOpen && (
+        <div 
+          className="md:hidden fixed inset-0 bg-black/30 z-30" 
+          onClick={() => setSidebarOpen(false)} 
+        />
+      )}
+
       {/* Main chat */}
-      <div className="flex-1 flex flex-col overflow-hidden">
+      <div className="flex-1 flex flex-col overflow-hidden min-w-0">
         {/* Header */}
-        <div className="px-5 py-3 border-b border-border flex items-center gap-3">
+        <div className="px-4 md:px-5 py-3 border-b border-border flex items-center gap-3">
+          {/* Mobile menu button */}
+          <button 
+            onClick={() => setSidebarOpen(!sidebarOpen)} 
+            className="md:hidden text-muted-foreground hover:text-foreground flex-shrink-0"
+          >
+            <MessageSquare className="w-5 h-5" />
+          </button>
           <div className="w-8 h-8 rounded-xl bg-primary/10 flex items-center justify-center">
             <Bot className="w-4 h-4 text-primary" />
           </div>
@@ -220,7 +247,7 @@ export default function Secretary() {
         </div>
 
         {/* Messages */}
-        <div className="flex-1 overflow-y-auto p-5 space-y-4">
+        <div className="flex-1 overflow-y-auto p-4 md:p-5 space-y-4">
           {messages.length === 0 && !sending && (
             <div className="flex flex-col items-center justify-center h-full text-center gap-4">
               <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center">
@@ -265,11 +292,11 @@ export default function Secretary() {
             <Input
               value={input}
               onChange={e => setInput(e.target.value)}
-              placeholder={`Pregunta a tu ${agentLabel}...`}
-              className="flex-1"
+              placeholder={`Pregunta...`}
+              className="flex-1 text-sm"
               disabled={sending}
             />
-            <Button type="submit" disabled={sending || !input.trim()} size="icon">
+            <Button type="submit" disabled={sending || !input.trim()} size="icon" className="flex-shrink-0">
               <Send className="w-4 h-4" />
             </Button>
           </form>
