@@ -70,17 +70,26 @@ export default function CompanyManagement() {
 
   const { data: companies = [] } = useQuery({
     queryKey: ["companies"],
-    queryFn: () => base44.entities.Company.list("-created_date"),
+    queryFn: async () => {
+      const user = await base44.auth.me();
+      return base44.entities.Company.filter({ created_by: user.email }, "-created_date");
+    },
   });
 
   const { data: pilots = [] } = useQuery({
     queryKey: ["pilots"],
-    queryFn: () => base44.entities.Pilot.list("-created_date"),
+    queryFn: async () => {
+      const user = await base44.auth.me();
+      return base44.entities.Pilot.filter({ created_by: user.email }, "-created_date");
+    },
   });
 
   const { data: drones = [] } = useQuery({
     queryKey: ["drones"],
-    queryFn: () => base44.entities.Drone.list("-created_date"),
+    queryFn: async () => {
+      const user = await base44.auth.me();
+      return base44.entities.Drone.filter({ created_by: user.email }, "-created_date");
+    },
   });
 
   const createMutation = useMutation({
