@@ -16,9 +16,17 @@ export default function Admin() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
+  const queryClient = useQueryClient();
+  const [expandedId, setExpandedId] = useState(null);
+
   const { data: consultations = [] } = useQuery({
     queryKey: ["certificationConsults"],
     queryFn: () => base44.entities.CertificationConsult.list("-created_date"),
+  });
+
+  const updateStatusMutation = useMutation({
+    mutationFn: ({ id, status }) => base44.entities.CertificationConsult.update(id, { status }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["certificationConsults"] }),
   });
 
   if (user?.role !== "admin") {
