@@ -28,6 +28,7 @@ import MaintenanceManagement from './pages/drone_pilot/MaintenanceManagement';
 import AirspaceMap from './pages/drone_pilot/AirspaceMap';
 import CompanyManagement from './pages/drone_pilot/CompanyManagement';
 import FlightLogBook from './pages/drone_pilot/FlightLogBook';
+import TraderJournal from './pages/trader/TraderJournal';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -82,6 +83,7 @@ const AuthenticatedApp = () => {
         <Route path="/AirspaceMap" element={<AirspaceMap />} />
         <Route path="/CompanyManagement" element={<CompanyManagement />} />
         <Route path="/FlightLogBook" element={<FlightLogBook />} />
+        <Route path="/TraderJournal" element={<TraderJournal />} />
       </Route>
       <Route path="*" element={<PageNotFound />} />
     </Routes>
