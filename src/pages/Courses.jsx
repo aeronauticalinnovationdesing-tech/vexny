@@ -68,15 +68,9 @@ export default function Courses() {
   });
 
   const isAdmin = user?.role === "admin";
+  const displayCourses = isAdmin ? allCoursesAdmin : courses;
 
-  // Para usuarios: filtrar por perfil activo si el curso tiene target_profiles definidos
-  const profileFilteredCourses = isAdmin
-    ? allCoursesAdmin
-    : courses.filter(c =>
-        !c.target_profiles?.length || c.target_profiles.includes(activeProfileId)
-      );
-
-  const filteredCourses = profileFilteredCourses.filter(c =>
+  const filteredCourses = displayCourses.filter(c =>
     c.title?.toLowerCase().includes(search.toLowerCase()) ||
     c.description?.toLowerCase().includes(search.toLowerCase())
   );
