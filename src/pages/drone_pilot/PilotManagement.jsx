@@ -13,16 +13,22 @@ import { es } from "date-fns/locale";
 import { cn } from "@/lib/utils";
 
 const HABILITACIONES = [
-  { value: "bvlos", label: "BVLOS", icon: "🛰️", desc: "Fuera de Línea Visual de Visión" },
-  { value: "nocturno", label: "Nocturno", icon: "🌙", desc: "Operaciones nocturnas" },
-  { value: "zona_urbana", label: "Zona Urbana", icon: "🏙️", desc: "Operación en zonas urbanizadas" },
-  { value: "zona_restringida", label: "Zona Restringida", icon: "🚫", desc: "Zonas de control CTR/TMA" },
-  { value: "carga_peligrosa", label: "Carga Peligrosa", icon: "⚠️", desc: "Transporte materiales especiales" },
-  { value: "inspeccion_infraestructura", label: "Inspección", icon: "🔍", desc: "Inspección técnica" },
-  { value: "fotogrametria", label: "Fotogrametría", icon: "🗺️", desc: "Mapeo y fotogrametría" },
-  { value: "agricultura", label: "Agricultura", icon: "🌾", desc: "Aplicaciones agrícolas" },
-  { value: "multirotor_grande", label: "Multirotor >25kg", icon: "🚁", desc: "Equipos pesados" },
-  { value: "ala_fija", label: "Ala Fija", icon: "✈️", desc: "Aeronaves de ala fija" },
+  { value: "nocturno", label: "Vuelo nocturno", icon: "🌙", desc: "Operaciones en horario nocturno" },
+  { value: "zona_urbana", label: "Vuelo en zona urbana", icon: "🏙️", desc: "Operación en zonas urbanizadas" },
+  { value: "autonomo", label: "Vuelo autónomo", icon: "🤖", desc: "Operación sin control manual continuo" },
+  { value: "demostracion_comercial", label: "Demostraciones comerciales UAS", icon: "📡", desc: "Vuelo para demostración de capacidad tecnológica de UAS" },
+  { value: "competencias_deportivas", label: "Competencias y actividades deportivas", icon: "🏆", desc: "Vuelos en competencias y actividades deportivas y recreativas al aire libre" },
+  { value: "ua_cautiva", label: "Vuelos de UA cautiva", icon: "🪁", desc: "Aeronave unida a una línea o cable" },
+  { value: "espacios_cerrados", label: "Espacios cerrados o confinados", icon: "🏠", desc: "Operación indoor o en zonas confinadas" },
+  // Categoría Específica RAC 100
+  { value: "captura_imagenes", label: "Captura de imágenes o datos", icon: "📸", desc: "Simple captura de imágenes o datos" },
+  { value: "vigilancia_seguridad", label: "Vigilancia y seguridad privada", icon: "👁️", desc: "Captura de imágenes con fines de vigilancia o seguridad privada" },
+  { value: "medios_comunicacion", label: "Medios de comunicación masiva", icon: "📺", desc: "Captura de imágenes o datos para medios de comunicación" },
+  { value: "aspersion", label: "Aspersión", icon: "💧", desc: "Aplicación de líquidos o sustancias" },
+  { value: "dispersion", label: "Dispersión", icon: "🌬️", desc: "Dispersión de materiales" },
+  { value: "enjambre", label: "Enjambre (Swarm)", icon: "🐝", desc: "Operación coordinada de múltiples UAS" },
+  { value: "transporte_carga", label: "Transporte de Carga (Drone Delivery)", icon: "📦", desc: "Entrega o transporte de carga" },
+  { value: "entidades_publicas", label: "Actividades misionales entidades públicas", icon: "🏛️", desc: "Vuelos en apoyo a misiones de entidades públicas" },
 ];
 
 const emptyForm = {
