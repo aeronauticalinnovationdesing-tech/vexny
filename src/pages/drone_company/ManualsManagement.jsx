@@ -165,6 +165,24 @@ export default function ManualsManagement() {
         )}
       </div>
 
+      <Dialog open={showPdfPreview} onOpenChange={setShowPdfPreview}>
+        <DialogContent className="w-full h-[90vh] p-0 flex flex-col">
+          <DialogHeader className="border-b p-6">
+            <div className="flex items-center justify-between">
+              <DialogTitle>Vista Previa PDF</DialogTitle>
+              <Button variant="ghost" size="icon" onClick={() => setShowPdfPreview(false)}>
+                <X className="w-4 h-4" />
+              </Button>
+            </div>
+          </DialogHeader>
+          <div className="flex-1 overflow-auto">
+            {form.pdf_url && (
+              <iframe src={form.pdf_url} className="w-full h-full" />
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
+
       <Dialog open={showForm} onOpenChange={open => !open && closeForm()}>
         <DialogContent className="sm:max-w-2xl">
           <DialogHeader>
