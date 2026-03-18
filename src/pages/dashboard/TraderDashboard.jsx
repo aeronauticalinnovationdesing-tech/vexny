@@ -8,7 +8,7 @@ import { TrendingUp, TrendingDown, DollarSign, BarChart2, BookOpen, Bot, StickyN
 import TrialBanner from "@/components/dashboard/TrialBanner";
 import { Link } from "react-router-dom";
 import StatCard from "@/components/dashboard/StatCard";
-import PriceManager from "@/components/dashboard/PriceManager";
+
 import { IncomeExpenseChart, CashFlowChart } from "@/components/dashboard/DashboardCharts";
 import MoneyGoalBars from "@/components/dashboard/MoneyGoalBars";
 import ForexFactoryWidget from "@/components/trader/ForexFactoryWidget";
