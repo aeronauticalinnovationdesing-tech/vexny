@@ -12,7 +12,7 @@ Deno.serve(async (req) => {
     const body = await req.json();
     const { form } = body;
 
-    // Guardar toda la información del formulario en la base de datos
+    // Guardar en la base de datos
     const certificationData = {
       company_name: form.name,
       nit: form.nit,
@@ -26,13 +26,12 @@ Deno.serve(async (req) => {
       aac_cert_phase: form.aac_cert_phase,
       activity_type: form.activity_type,
       operation_category_type: form.operation_category_type,
-      special_flights: Array.isArray(form.special_flights) ? form.special_flights : [],
-      tech_equipment: Array.isArray(form.tech_equipment) ? form.tech_equipment : [],
-      other_equipment: form.other_equipment || "",
-      drone_references: Array.isArray(form.drone_references) ? form.drone_references : [],
+      special_flights: form.special_flights || [],
+      tech_equipment: form.tech_equipment || [],
+      other_equipment: form.other_equipment,
+      drone_references: form.drone_references || [],
       insurance_policy_number: form.insurance_policy_number,
       insurance_expiry: form.insurance_expiry,
-      notes: form.notes || "",
       status: "nuevo"
     };
 
