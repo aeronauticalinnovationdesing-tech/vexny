@@ -20,10 +20,12 @@ export default function Courses() {
   const { activeProfileId } = useProfile();
   const [search, setSearch] = useState("");
   const [showUpload, setShowUpload] = useState(false);
+  const [editingCourse, setEditingCourse] = useState(null);
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [viewingPdf, setViewingPdf] = useState(null);
   const [verifying, setVerifying] = useState(false);
   const [paymentResult, setPaymentResult] = useState(null);
+  const [activeTab, setActiveTab] = useState("explore");
 
   // Verificar si viene de una redirección de Wompi
   useEffect(() => {
