@@ -28,6 +28,11 @@ const PAIRS = [
   { id: "MSFT", label: "MSFT", type: "stock" },
   { id: "GOOGL", label: "GOOGL", type: "stock" },
   { id: "TSLA", label: "TSLA", type: "stock" },
+  { id: "ES", label: "ES (S&P 500)", type: "futures" },
+  { id: "NQ", label: "NQ (NASDAQ)", type: "futures" },
+  { id: "YM", label: "YM (DOW)", type: "futures" },
+  { id: "CL", label: "CL (Petróleo)", type: "commodity" },
+  { id: "GC", label: "GC (Oro)", type: "commodity" },
 ];
 
 // Genera datos de prueba realistas
