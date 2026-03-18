@@ -18,6 +18,7 @@ import { ProfitLossChart, WinRateAnalysis, PerformanceMetrics } from "@/componen
 import ForexFactoryWidget from "@/components/trader/ForexFactoryWidget";
 import StrategyAnalyzer from "@/components/trader/StrategyAnalyzer";
 import AccountTypeBadge, { ACCOUNT_CONFIG } from "@/components/trader/AccountTypeBadge";
+import TradingViewLite from "@/components/trader/TradingViewLite";
 
 const PAIRS_FOREX = ["EUR/USD", "GBP/USD", "USD/JPY", "USD/CHF", "AUD/USD", "USD/CAD", "NZD/USD", "GBP/JPY", "EUR/JPY"];
 const PAIRS_CRIPTO = ["BTC/USDT", "ETH/USDT", "SOL/USDT", "BNB/USDT", "XRP/USDT", "ADA/USDT"];
@@ -249,11 +250,17 @@ export default function TraderJournal() {
       {/* Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList className="w-full sm:w-auto">
+          <TabsTrigger value="charts">📈 Charts</TabsTrigger>
           <TabsTrigger value="journal">📓 Bitácora</TabsTrigger>
           <TabsTrigger value="analytics">📊 Analytics</TabsTrigger>
           <TabsTrigger value="strategy">🧠 Estrategia IA</TabsTrigger>
           <TabsTrigger value="news">📰 Noticias</TabsTrigger>
         </TabsList>
+
+        {/* CHARTS TAB */}
+        <TabsContent value="charts" className="mt-4">
+          <TradingViewLite />
+        </TabsContent>
 
         {/* JOURNAL TAB */}
         <TabsContent value="journal" className="space-y-4 mt-4">
