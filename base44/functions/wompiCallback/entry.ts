@@ -12,7 +12,8 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { reference, transactionId } = await req.json();
+    const body = await req.json();
+    const { reference, transactionId } = body;
     
     if (!reference || !reference.startsWith('VEXNY-SUB-')) {
       return Response.json({ error: 'Invalid reference' }, { status: 400 });

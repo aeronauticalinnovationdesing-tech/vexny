@@ -6,6 +6,7 @@ import { PROFILES } from "@/lib/ProfileContext";
 import { CheckCircle, Clock, AlertTriangle, CreditCard, Loader2, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { toast } from "sonner";
 
 function useCountdown(endDateISO) {
   const [remaining, setRemaining] = useState(null);
@@ -177,28 +178,36 @@ export default function Subscription() {
 
   // Check for Wompi redirect with transaction
   useEffect(() => {
+    if (!user?.email) return;
     const params = new URLSearchParams(window.location.search);
     const txId = params.get("id");
     const ref = params.get("reference") || params.get("sub_ref");
 
-    if (txId && ref) {
-      // Extract profile from reference: VEXNY-SUB-{profile}-{timestamp}
-      const parts = ref.split("-");
-      // reference format: VEXNY-SUB-drone_pilot-123 or VEXNY-SUB-trader-123
-      const profileId = parts.slice(2, parts.length - 1).join("-");
-      if (profileId) {
-        base44.functions.invoke("activateSubscription", {
-          transactionId: txId,
-          reference: ref,
-          profile: profileId,
-        }).then(() => {
-          queryClient.invalidateQueries({ queryKey: ["all-subscriptions"] });
-          // Clean URL
-          window.history.replaceState({}, "", "/Subscription");
-        });
-      }
+    if (txId && ref && ref.startsWith("VEXNY-SUB-")) {
+      base44.functions.invoke("wompiCallback", {
+        transactionId: txId,
+        reference: ref,
+      }).then((res) => {
+        const { activated, status } = res.data || {};
+        if (activated || status === "APPROVED") {
+          toast.success("¡Suscripción activada!", {
+            description: "Tu acceso mensual está activo. ¡Bienvenido!",
+          });
+        } else {
+          toast.info("Pago en proceso", {
+            description: "Tu pago está siendo procesado. Puede tardar unos minutos.",
+          });
+        }
+        queryClient.invalidateQueries({ queryKey: ["user-subscriptions", user.email] });
+        queryClient.invalidateQueries({ queryKey: ["global-subscription-prices"] });
+        window.history.replaceState({}, "", "/Subscription");
+      }).catch((err) => {
+        console.error("Error activating subscription:", err);
+        toast.error("Error al verificar el pago", { description: err.message });
+        window.history.replaceState({}, "", "/Subscription");
+      });
     }
-  }, []);
+  }, [user?.email]);
 
   const handlePay = async (profileId, monthlyPrice) => {
     setPaying(profileId);
