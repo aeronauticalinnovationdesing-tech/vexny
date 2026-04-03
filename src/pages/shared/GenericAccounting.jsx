@@ -67,11 +67,6 @@ export default function GenericAccounting() {
   const createAcc = useMutation({ mutationFn: (d) => base44.entities.BankAccount.create(d), onSuccess: () => { queryClient.invalidateQueries({ queryKey: ["accounts", user?.email, activeProfileId] }); setShowAccount(false); } });
   const deleteAcc = useMutation({ mutationFn: (id) => base44.entities.BankAccount.delete(id), onSuccess: () => queryClient.invalidateQueries({ queryKey: ["accounts", user?.email, activeProfileId] }) });
 
-  if (!activeProfileId) {
-    navigate("/");
-    return null;
-  }
-
   const totalAccountBalance = accounts.reduce((s, a) => s + (a.balance || 0), 0);
   const totalIncome = transactions.filter(t => t.type === "income").reduce((s, t) => s + (t.amount || 0), 0);
   const totalExpense = transactions.filter(t => t.type === "expense").reduce((s, t) => s + (t.amount || 0), 0);
@@ -86,6 +81,11 @@ export default function GenericAccounting() {
   }, [transactions]);
 
   const accent = activeProfile?.accent || "#f59e0b";
+
+  if (!activeProfileId) {
+    navigate("/");
+    return null;
+  }
 
   return (
     <div className="p-4 lg:p-8 max-w-6xl mx-auto space-y-6">

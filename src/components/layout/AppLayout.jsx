@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import Sidebar from "./Sidebar";
+import SubscriptionGate from "@/components/subscription/SubscriptionGate";
 import BottomNavigation from "./BottomNavigation";
 import RouteAnimation from "./RouteAnimation";
 import { Menu } from "lucide-react";
@@ -34,6 +35,7 @@ export default function AppLayout() {
             </RouteAnimation>
           </AnimatePresence>
         </main>
+      <SubscriptionGate>{null}</SubscriptionGate>
       </div>
 
       {/* Mobile bottom navigation */}
