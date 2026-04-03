@@ -56,8 +56,8 @@ export default function SubscriptionGate({ children }) {
 
   const isAllowedPath = ALLOWED_PATHS.some(p => location.pathname.startsWith(p));
 
-  // If not blocked or on allowed path, render children normally
-  if (!user || !activeProfileId || loadingSub || !isBlocked || isAllowedPath) {
+  // If not blocked or on allowed path or admin, render children normally
+  if (!user || !activeProfileId || loadingSub || !isBlocked || isAllowedPath || user?.role === 'admin') {
     return children;
   }
 
