@@ -27,6 +27,14 @@ function useTrialStatus(profile, user) {
     enabled: !!profile,
   });
 
+  // Check admin-granted access
+  const { data: adminAccesses = [] } = useQuery({
+    queryKey: ["admin-access", profile, user?.email],
+    queryFn: () => base44.asServiceRole.entities.AdminAccess.filter({ user_email: user.email, profile, is_active: true }),
+    enabled: !!profile && !!user?.email,
+    refetchInterval: 10000,
+  });
+
   const userSub = userSubs[0] || null;
   const globalSub = globalSubs[0] || null;
   const sub = userSub || globalSub || null;
@@ -34,13 +42,17 @@ function useTrialStatus(profile, user) {
 
   const isPaid = !!sub?.is_active;
 
+  // Check admin access grant
+  const adminAccess = adminAccesses.find(a => a.is_active && a.paid_until && new Date(a.paid_until) > new Date());
+  const hasAdminAccess = !!adminAccess;
+
   let trialExpired = false;
   if (trialStartDate && !isPaid) {
     const trialEnd = new Date(trialStartDate).getTime() + trialHours * 60 * 60 * 1000;
     trialExpired = Date.now() > trialEnd;
   }
 
-  const isBlocked = trialExpired && !isPaid;
+  const isBlocked = trialExpired && !isPaid && !hasAdminAccess;
 
   return { isBlocked, sub, isPaid, trialExpired, loadingSub };
 }

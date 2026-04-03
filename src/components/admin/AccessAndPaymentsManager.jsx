@@ -1,11 +1,11 @@
-import React, { useState, useCallback } from "react";
+import React, { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { CreditCard, UserCheck, CheckCircle, Clock, Search, Unlock } from "lucide-react";
+import { CreditCard, UserCheck, CheckCircle, Clock, Search, Unlock, ShieldCheck } from "lucide-react";
 import { format } from "date-fns";
 
 const PROFILE_LABELS = {
@@ -36,11 +36,18 @@ export default function AccessAndPaymentsManager() {
   });
 
   const subs = data?.subs || [];
+  const adminAccesses = data?.adminAccesses || [];
 
   const filtered = subs.filter(s =>
     !search ||
     s.created_by?.toLowerCase().includes(search.toLowerCase()) ||
     s.profile?.toLowerCase().includes(search.toLowerCase())
+  );
+
+  const filteredAdmin = adminAccesses.filter(a =>
+    !search ||
+    a.user_email?.toLowerCase().includes(search.toLowerCase()) ||
+    a.profile?.toLowerCase().includes(search.toLowerCase())
   );
 
   const handleActivate = async (sub) => {
@@ -53,6 +60,13 @@ export default function AccessAndPaymentsManager() {
   const handleDeactivate = async (sub) => {
     setActionLoading(sub.id);
     await invoke("deactivate", { subId: sub.id });
+    refetch();
+    setActionLoading(null);
+  };
+
+  const handleRevokeAccess = async (access) => {
+    setActionLoading(access.id);
+    await invoke("revokeAccess", { accessId: access.id });
     refetch();
     setActionLoading(null);
   };
@@ -85,7 +99,7 @@ export default function AccessAndPaymentsManager() {
 
         <form onSubmit={handleGrantAccess} className="bg-card border border-border rounded-xl p-5 space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <div className="sm:col-span-1">
+            <div>
               <label className="text-xs font-medium text-muted-foreground mb-1 block">Email del usuario</label>
               <Input
                 type="email"
@@ -98,9 +112,7 @@ export default function AccessAndPaymentsManager() {
             <div>
               <label className="text-xs font-medium text-muted-foreground mb-1 block">App / Perfil</label>
               <Select value={grantProfile} onValueChange={setGrantProfile}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
+                <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
                   {Object.entries(PROFILE_LABELS).map(([id, label]) => (
                     <SelectItem key={id} value={id}>{label}</SelectItem>
@@ -110,12 +122,7 @@ export default function AccessAndPaymentsManager() {
             </div>
             <div>
               <label className="text-xs font-medium text-muted-foreground mb-1 block">Días de acceso</label>
-              <Input
-                type="number"
-                min="1"
-                value={grantDays}
-                onChange={e => setGrantDays(e.target.value)}
-              />
+              <Input type="number" min="1" value={grantDays} onChange={e => setGrantDays(e.target.value)} />
             </div>
           </div>
           <Button type="submit" disabled={granting} className="gap-2">
@@ -129,6 +136,45 @@ export default function AccessAndPaymentsManager() {
           )}
         </form>
       </div>
+
+      {/* === ADMIN GRANTED ACCESSES === */}
+      {filteredAdmin.length > 0 && (
+        <div className="space-y-3">
+          <div className="flex items-center gap-2">
+            <ShieldCheck className="w-5 h-5 text-emerald-600" />
+            <h3 className="font-semibold text-base">Accesos otorgados por Admin</h3>
+          </div>
+          {filteredAdmin.map(access => {
+            const isActive = access.is_active && access.paid_until && new Date(access.paid_until) > new Date();
+            return (
+              <div key={access.id} className="bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800 rounded-xl px-4 py-3 flex items-center justify-between gap-4">
+                <div className="flex-1 space-y-1">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="font-medium text-sm">{access.user_email}</span>
+                    <Badge variant="secondary" className="text-xs">{PROFILE_LABELS[access.profile] || access.profile}</Badge>
+                    {isActive
+                      ? <Badge className="bg-emerald-100 text-emerald-700 text-xs">Activo</Badge>
+                      : <Badge variant="outline" className="text-xs text-muted-foreground">Expirado</Badge>
+                    }
+                  </div>
+                  {access.paid_until && (
+                    <p className="text-xs text-muted-foreground">Vence: {format(new Date(access.paid_until), "dd/MM/yyyy HH:mm")}</p>
+                  )}
+                </div>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  disabled={actionLoading === access.id}
+                  className="text-destructive border-destructive/30 hover:bg-destructive/10 text-xs"
+                  onClick={() => handleRevokeAccess(access)}
+                >
+                  {actionLoading === access.id ? "..." : "Revocar"}
+                </Button>
+              </div>
+            );
+          })}
+        </div>
+      )}
 
       {/* === PAYMENTS LIST === */}
       <div className="space-y-4">
@@ -150,9 +196,7 @@ export default function AccessAndPaymentsManager() {
         {isLoading ? (
           <div className="text-center py-8 text-muted-foreground text-sm">Cargando...</div>
         ) : filtered.length === 0 ? (
-          <div className="text-center py-8 bg-muted/30 rounded-lg text-muted-foreground text-sm">
-            No hay pagos registrados
-          </div>
+          <div className="text-center py-8 bg-muted/30 rounded-lg text-muted-foreground text-sm">No hay pagos registrados</div>
         ) : (
           <div className="space-y-2">
             {filtered.map(sub => {
@@ -163,49 +207,29 @@ export default function AccessAndPaymentsManager() {
                   <div className="flex-1 min-w-0 space-y-1">
                     <div className="flex items-center gap-2 flex-wrap">
                       <span className="font-medium text-sm">{sub.created_by}</span>
-                      <Badge variant="secondary" className="text-xs">
-                        {PROFILE_LABELS[sub.profile] || sub.profile}
-                      </Badge>
-                      {isActive ? (
-                        <Badge className="bg-emerald-100 text-emerald-700 text-xs gap-1">
-                          <CheckCircle className="w-3 h-3" /> Activo
-                        </Badge>
-                      ) : (
-                        <Badge variant="outline" className="text-xs gap-1 text-muted-foreground">
-                          <Clock className="w-3 h-3" /> Inactivo
-                        </Badge>
-                      )}
+                      <Badge variant="secondary" className="text-xs">{PROFILE_LABELS[sub.profile] || sub.profile}</Badge>
+                      {isActive
+                        ? <Badge className="bg-emerald-100 text-emerald-700 text-xs gap-1"><CheckCircle className="w-3 h-3" /> Activo</Badge>
+                        : <Badge variant="outline" className="text-xs gap-1 text-muted-foreground"><Clock className="w-3 h-3" /> Inactivo</Badge>
+                      }
                     </div>
                     <div className="flex flex-wrap gap-3 text-xs text-muted-foreground">
-                      {sub.monthly_price_cop > 0 && (
-                        <span>💰 ${sub.monthly_price_cop.toLocaleString("es-CO")} COP/mes</span>
-                      )}
-                      {sub.last_renewal_date && (
-                        <span>Último pago: {format(new Date(sub.last_renewal_date), "dd/MM/yyyy HH:mm")}</span>
-                      )}
-                      {sub.paid_until && (
-                        <span>Vence: {format(new Date(sub.paid_until), "dd/MM/yyyy HH:mm")}</span>
-                      )}
+                      {sub.monthly_price_cop > 0 && <span>💰 ${sub.monthly_price_cop.toLocaleString("es-CO")} COP/mes</span>}
+                      {sub.last_renewal_date && <span>Último pago: {format(new Date(sub.last_renewal_date), "dd/MM/yyyy HH:mm")}</span>}
+                      {sub.paid_until && <span>Vence: {format(new Date(sub.paid_until), "dd/MM/yyyy HH:mm")}</span>}
                     </div>
                   </div>
                   <div className="flex gap-2 flex-shrink-0">
                     {isActive ? (
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        disabled={loading}
+                      <Button size="sm" variant="outline" disabled={loading}
                         className="text-destructive border-destructive/30 hover:bg-destructive/10 text-xs"
-                        onClick={() => handleDeactivate(sub)}
-                      >
+                        onClick={() => handleDeactivate(sub)}>
                         {loading ? "..." : "Revocar"}
                       </Button>
                     ) : (
-                      <Button
-                        size="sm"
-                        disabled={loading}
+                      <Button size="sm" disabled={loading}
                         className="bg-emerald-600 hover:bg-emerald-700 text-xs gap-1"
-                        onClick={() => handleActivate(sub)}
-                      >
+                        onClick={() => handleActivate(sub)}>
                         <CheckCircle className="w-3.5 h-3.5" />
                         {loading ? "..." : "Activar"}
                       </Button>

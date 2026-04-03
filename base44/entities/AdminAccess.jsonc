@@ -1,0 +1,38 @@
+{
+  "name": "AdminAccess",
+  "type": "object",
+  "properties": {
+    "user_email": {
+      "type": "string",
+      "description": "Email del usuario al que se le da acceso"
+    },
+    "profile": {
+      "type": "string",
+      "enum": [
+        "trader",
+        "drone_pilot",
+        "drone_company",
+        "startup",
+        "elite_human"
+      ],
+      "description": "Perfil/app al que se da acceso"
+    },
+    "paid_until": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Fecha hasta la cual tiene acceso"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "user_email",
+    "profile",
+    "paid_until"
+  ]
+}
