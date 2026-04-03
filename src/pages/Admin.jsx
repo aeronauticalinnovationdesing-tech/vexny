@@ -12,6 +12,7 @@ import SubscriptionDebugger from "@/components/dashboard/SubscriptionDebugger";
 import PaymentVerifier from "@/components/dashboard/PaymentVerifier";
 import CompanySubscriptionsManager from "@/components/admin/CompanySubscriptionsManager";
 import CourseAccessManager from "@/components/admin/CourseAccessManager";
+import DroneCompanyUsersManager from "@/components/admin/DroneCompanyUsersManager";
 
 export default function Admin() {
   const user = useCurrentUser();
@@ -145,6 +146,10 @@ export default function Admin() {
       <div className="border-t" />
 
       <CompanySubscriptionsManager />
+
+      <div className="border-t" />
+
+      <DroneCompanyUsersManager />
 
       <div className="border-t" />
 
