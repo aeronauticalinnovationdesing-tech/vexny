@@ -69,7 +69,7 @@ export default function Courses() {
 
   const { data: purchases = [] } = useQuery({
     queryKey: ["purchases", user?.email],
-    queryFn: () => base44.entities.CoursePurchase.filter({ user_email: user.email, status: "approved" }),
+    queryFn: () => base44.entities.CoursePurchase.filter({ user_email: user.email }),
     enabled: !!user,
   });
 
